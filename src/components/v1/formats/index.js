@@ -36,7 +36,6 @@ formatsRouter.put('/:id', async (request, response) => {
   try {
     const { id } = request.params
     const { name } = request.body
-    console.log({ id, name })
     const location = await Format.findByIdAndUpdate(id, { name }, { new: true })
     response.status(200).json({ statusCode: 200, location })
   } catch (error) {

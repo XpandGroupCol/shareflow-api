@@ -63,6 +63,11 @@ const PublisherSchema = new Schema({
     type: Object,
     required: true,
     default: DEVICE[0]
+  },
+  status: {
+    type: Boolean,
+    required: true,
+    default: true
   }
 })
 

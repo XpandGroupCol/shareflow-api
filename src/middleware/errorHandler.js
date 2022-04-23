@@ -20,7 +20,6 @@ const notFoundHandler = (_, res) => {
 }
 
 const logError = (err, req, res, next) => {
-  console.log({ err })
   const status = err.isBoom || 500
   res.status(status).json({
     status,

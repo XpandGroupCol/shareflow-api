@@ -1,6 +1,6 @@
 const campaignRouter = require('express').Router()
 const Campaign = require('../../../models/Campaign')
-const { rgx, perPage } = require('../../../utils')
+const { rgx, perPage, defaultResponse } = require('../../../utils')
 
 campaignRouter.get('/', async (request, response) => {
   try {
@@ -32,17 +32,27 @@ campaignRouter.get('/', async (request, response) => {
       .populate('sector')
       .populate('objective')
       .limit(perPage)
-      .skip(perPage * currentPage).lean()
+      .skip(perPage * currentPage)
 
     const total = await Campaign.countDocuments(query)
 
     response.status(200).json({ statusCode: 200, data, total, page: currentPage, pages: Math.ceil(total / perPage) })
   } catch (error) {
-    response.status(400).json({
-      statusCode: 400,
-      error: 'bad request',
-      message: 'bad request'
-    })
+    response.status(400).json(defaultResponse)
+  }
+})
+
+campaignRouter.get('/:id', async (request, response) => {
+  try {
+    const { id } = request.params
+    if (!id) response.status(400).json(defaultResponse)
+    const data = await Campaign.findById(id)
+      .populate('user')
+      .populate('sector')
+      .populate('objective')
+    response.status(200).json({ statusCode: 200, data })
+  } catch (error) {
+    response.status(400).json(defaultResponse)
   }
 })
 

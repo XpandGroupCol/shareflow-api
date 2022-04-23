@@ -51,8 +51,8 @@ const userSchema = new Schema({
     default: ROLES[2]?.id
   },
   status: {
-    type: String,
-    default: STATUS[2]?.id,
+    type: Boolean,
+    default: true,
     required: true
   },
   deletedAt: {
@@ -70,7 +70,7 @@ userSchema.set('toJSON', {
     user.id = user._id
     user.fullName = `${user.name} ${user.lastName}`
     user.role = ROLES.find(({ id }) => user.role === id) || {}
-    user.status = STATUS.find(({ id }) => user.status === id) || {}
+    user.status = STATUS.find(({ id }) => user.status === !!id) || {}
     delete user.password
     delete user.createdAt
     delete user.updatedAt

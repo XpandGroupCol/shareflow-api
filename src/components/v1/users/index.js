@@ -55,7 +55,6 @@ userRouter.get('/', async (request, response) => {
 
     response.status(200).json({ statusCode: 200, data, total, page: currentPage, pages: Math.ceil(total / perPage) })
   } catch (error) {
-    console.log({ error })
     response.status(400).json(defaultResponse)
   }
 })
@@ -66,7 +65,6 @@ userRouter.post('/', async (request, response) => {
     const data = await User.create(body)
     response.status(200).json({ statusCode: 200, data })
   } catch (error) {
-    console.log({ error })
     response.status(400).json(defaultResponse)
   }
 })
@@ -81,7 +79,6 @@ userRouter.put('/:id', async (request, response) => {
     const data = await User.findByIdAndUpdate(id, { role, status }, { new: true })
     response.status(200).json({ statusCode: 200, data })
   } catch (error) {
-    console.log({ error })
     response.status(400).json(defaultResponse)
   }
 })
@@ -92,7 +89,6 @@ userRouter.delete('/:id', async (request, response) => {
     const data = await User.findByIdAndUpdate(id, { status: STATUS[1].id }, { new: true })
     response.status(200).json({ statusCode: 200, data })
   } catch (error) {
-    console.log({ error })
     response.status(400).json(defaultResponse)
   }
 })

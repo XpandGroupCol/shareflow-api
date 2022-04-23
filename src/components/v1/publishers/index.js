@@ -1,6 +1,6 @@
 const publisherRouter = require('express').Router()
 const Publisher = require('../../../models/Publisher')
-const { rgx, perPage } = require('../../../utils')
+const { rgx, perPage, defaultResponse } = require('../../../utils')
 
 const extractToBody = ({
   ageRange,
@@ -58,12 +58,7 @@ publisherRouter.get('/', async (request, response) => {
 
     response.status(200).json({ statusCode: 200, data, total, page: currentPage, pages: Math.ceil(total / perPage) })
   } catch (error) {
-    console.log({ error })
-    response.status(400).json({
-      statusCode: 400,
-      error: 'bad request',
-      message: 'bad request'
-    })
+    response.status(400).json(defaultResponse)
   }
 })
 
@@ -73,12 +68,44 @@ publisherRouter.post('/', async (request, response) => {
     const data = await Publisher.create(body)
     response.status(200).json({ statusCode: 200, data })
   } catch (error) {
-    console.log({ error })
-    response.status(400).json({
-      statusCode: 400,
-      error: 'bad request',
-      message: 'bad request'
-    })
+    response.status(400).json(defaultResponse)
+  }
+})
+
+publisherRouter.put('/:id', async (request, response) => {
+  try {
+    const { id } = request.params
+    const body = extractToBody(request.body)
+    const data = await Publisher.findByIdAndUpdate(id, body, { new: true })
+    response.status(200).json({ statusCode: 200, data })
+  } catch (error) {
+    response.status(400).json(defaultResponse)
+  }
+})
+
+publisherRouter.get('/:id', async (request, response) => {
+  try {
+    const { id } = request.params
+    if (!id) response.status(400).json(defaultResponse)
+    const data = await Publisher.findById(id)
+      .populate('locations')
+      .populate('ageRange')
+      .populate('formats')
+      .populate('objective')
+    response.status(200).json({ statusCode: 200, data })
+  } catch (error) {
+    response.status(400).json(defaultResponse)
+  }
+})
+
+publisherRouter.delete('/:id', async (request, response) => {
+  try {
+    const { id } = request.params
+    const { status } = request.body
+    const data = await Publisher.findByIdAndUpdate(id, { status }, { new: true })
+    response.status(200).json({ statusCode: 200, data })
+  } catch (error) {
+    response.status(400).json(defaultResponse)
   }
 })
 

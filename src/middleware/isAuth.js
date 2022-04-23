@@ -9,7 +9,6 @@ const loggedIn = (req, res, next) => {
   const [, bearer] = token.split(' ')
   const { id: userId } = jwt.verify(bearer, process.env.AUTH_SECRET) || {}
   // validar el usuario
-  console.log({ userId })
   req.userId = userId
   next()
 }

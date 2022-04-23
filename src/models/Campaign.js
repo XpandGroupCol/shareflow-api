@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose')
+const { CAMPAING_STATUS } = require('../config')
 
 const CampaignSchema = new Schema({
   logo: {
@@ -41,10 +42,10 @@ const CampaignSchema = new Schema({
     type: String,
     required: true
   },
-  draft: {
-    type: Boolean,
-    required: false,
-    default: false
+  status: {
+    type: String,
+    required: true,
+    default: CAMPAING_STATUS[0]?.id
   },
   user: {
     type: Schema.Types.ObjectId,
@@ -57,6 +58,16 @@ const CampaignSchema = new Schema({
   }
 }, {
   timestamps: true
+})
+
+CampaignSchema.set('toJSON', {
+  transform: (_, campaign) => {
+    campaign.id = campaign._id
+    delete campaign.createdAt
+    delete campaign.updatedAt
+    delete campaign._id
+    delete campaign.__v
+  }
 })
 
 const Campaign = model('Campaign', CampaignSchema)

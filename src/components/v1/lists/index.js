@@ -1,6 +1,6 @@
 
 const listRouter = require('express').Router()
-const { SEX, DEVICE, ROLES, STATUS } = require('../../../config')
+const { SEX, DEVICE, ROLES, STATUS, CAMPAING_STATUS } = require('../../../config')
 const Age = require('../../../models/Age')
 const Format = require('../../../models/Format')
 const Location = require('../../../models/Location')
@@ -26,7 +26,8 @@ listRouter.get('/', async (request, response) => {
       sex: SEX,
       devices: DEVICE,
       roles: ROLES,
-      statuses: STATUS
+      statuses: STATUS,
+      campaignStatuses: CAMPAING_STATUS
     })
   } catch (e) {
     response.status(400).json({

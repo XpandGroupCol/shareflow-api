@@ -47,14 +47,24 @@ const SEX = [
 
 const STATUS = [
   {
-    id: 'active',
+    id: 0,
     label: 'Activo'
   }, {
-    id: 'inactive',
+    id: 1,
     label: 'Inactivo'
+  }
+]
+
+const CAMPAING_STATUS = [
+  {
+    id: 'draft',
+    label: 'Borrador'
   }, {
     id: 'pending',
-    label: 'Verificando email'
+    label: 'Pendiente'
+  }, {
+    id: 'paid',
+    label: 'Pagada'
   }
 ]
 
@@ -62,5 +72,6 @@ module.exports = {
   ROLES,
   DEVICE,
   SEX,
-  STATUS
+  STATUS,
+  CAMPAING_STATUS
 }
