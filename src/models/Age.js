@@ -19,10 +19,10 @@ const AgeSchema = new Schema({
 AgeSchema.set('toJSON', {
   transform: (_, returnedObject) => {
     returnedObject.id = returnedObject._id
-    returnedObject.label = returnedObject.range
+    returnedObject.label = returnedObject.name
     delete returnedObject.createdAt
     delete returnedObject.updatedAt
-    delete returnedObject.range
+    delete returnedObject.name
     delete returnedObject._id
     delete returnedObject.__v
   }

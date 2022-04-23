@@ -1,5 +1,5 @@
 const formatsRouter = require('express').Router()
-const { getListData } = require('../../../utils')
+const { getListData, defaultResponse } = require('../../../utils')
 const Format = require('../../../models/Format')
 
 formatsRouter.get('/', async (request, response) => {
@@ -7,54 +7,40 @@ formatsRouter.get('/', async (request, response) => {
     const data = await getListData(Format, request.query)
     return response.status(200).json({ statusCode: 200, ...data })
   } catch (error) {
-    return response.status(400).json({
-      statusCode: 400,
-      error: 'bad request',
-      message: 'bad request'
-    })
+    return response.status(400).json(defaultResponse)
   }
 })
 
 formatsRouter.post('/', async (request, response) => {
   try {
-    const data = await Format.create(request.body)
+    const { name } = request.body
+    const data = await Format.create({ name })
     response.status(200).json({ statusCode: 200, data })
   } catch (error) {
-    response.status(400).json({
-      statusCode: 400,
-      error: 'bad request',
-      message: 'bad request'
-    })
+    response.status(400).json(defaultResponse)
   }
 })
 
 formatsRouter.delete('/:id', async (request, response) => {
   try {
-    const { id } = request.query
+    const { id } = request.params
     const { status } = request.body
     const data = await Format.findByIdAndUpdate(id, { status }, { new: true })
     response.status(200).json({ statusCode: 200, data })
   } catch (error) {
-    response.status(400).json({
-      statusCode: 400,
-      error: 'bad request',
-      message: 'bad request'
-    })
+    response.status(400).json(defaultResponse)
   }
 })
 
 formatsRouter.put('/:id', async (request, response) => {
   try {
-    const { id } = request.query
-    const { ...updateData } = request.body
-    const location = await Format.findByIdAndUpdate(id, updateData, { new: true })
+    const { id } = request.params
+    const { name } = request.body
+    console.log({ id, name })
+    const location = await Format.findByIdAndUpdate(id, { name }, { new: true })
     response.status(200).json({ statusCode: 200, location })
   } catch (error) {
-    response.status(400).json({
-      statusCode: 400,
-      error: 'bad request',
-      message: 'bad request'
-    })
+    response.status(400).json(defaultResponse)
   }
 })
 

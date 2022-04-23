@@ -19,8 +19,15 @@ const getListData = async (model, { page = 1, search = null } = {}) => {
   }
 }
 
+const defaultResponse = {
+  statusCode: 400,
+  error: 'bad request',
+  message: 'bad request'
+}
+
 module.exports = {
   rgx,
   getListData,
-  perPage: PER_PAGE
+  perPage: PER_PAGE,
+  defaultResponse
 }

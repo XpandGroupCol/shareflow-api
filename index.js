@@ -29,8 +29,8 @@ app.use('/lists', listRouter)
 app.use('/ages', agesRouter)
 app.use('/sectors', sectorsRouter)
 app.use('/objetives', objectivesRouter)
-app.use('/locations', formatsRouter)
-app.use('/formats', locationsRouter)
+app.use('/locations', locationsRouter)
+app.use('/formats', formatsRouter)
 
 app.listen(process.env.PORT, () => {
   console.log(`${process.env.PORT} is the magic port`)

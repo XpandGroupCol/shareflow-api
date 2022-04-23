@@ -1,6 +1,26 @@
 const userRouter = require('express').Router()
+const { STATUS } = require('../../../config')
 const User = require('../../../models/User')
-const { rgx, perPage } = require('../../../utils')
+const { rgx, perPage, defaultResponse } = require('../../../utils')
+
+const extractToBody = ({
+  company,
+  email,
+  lastName,
+  name,
+  nit,
+  phone,
+  role
+
+}) => ({
+  company,
+  email,
+  lastName,
+  name,
+  nit,
+  phone,
+  role
+})
 
 userRouter.get('/', async (request, response) => {
   try {
@@ -29,18 +49,51 @@ userRouter.get('/', async (request, response) => {
 
     const data = await User.find(query)
       .limit(perPage)
-      .skip(perPage * currentPage).lean()
+      .skip(perPage * currentPage)
 
     const total = await User.countDocuments(query)
 
     response.status(200).json({ statusCode: 200, data, total, page: currentPage, pages: Math.ceil(total / perPage) })
   } catch (error) {
     console.log({ error })
-    response.status(400).json({
-      statusCode: 400,
-      error: 'bad request',
-      message: 'bad request'
-    })
+    response.status(400).json(defaultResponse)
+  }
+})
+
+userRouter.post('/', async (request, response) => {
+  try {
+    const body = extractToBody(request.body)
+    const data = await User.create(body)
+    response.status(200).json({ statusCode: 200, data })
+  } catch (error) {
+    console.log({ error })
+    response.status(400).json(defaultResponse)
+  }
+})
+
+userRouter.put('/:id', async (request, response) => {
+  try {
+    const { id } = request.params
+    const { role, status } = request.body
+
+    console.log({ id, role, status })
+
+    const data = await User.findByIdAndUpdate(id, { role, status }, { new: true })
+    response.status(200).json({ statusCode: 200, data })
+  } catch (error) {
+    console.log({ error })
+    response.status(400).json(defaultResponse)
+  }
+})
+
+userRouter.delete('/:id', async (request, response) => {
+  try {
+    const { id } = request.params
+    const data = await User.findByIdAndUpdate(id, { status: STATUS[1].id }, { new: true })
+    response.status(200).json({ statusCode: 200, data })
+  } catch (error) {
+    console.log({ error })
+    response.status(400).json(defaultResponse)
   }
 })
 

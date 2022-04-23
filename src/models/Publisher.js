@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose')
+const { SEX, DEVICE } = require('../config')
 
 const PublisherSchema = new Schema({
   publisher: {
@@ -33,7 +34,7 @@ const PublisherSchema = new Schema({
   sex: {
     type: Object,
     required: true,
-    default: {}
+    default: SEX[0]
   },
   pricePerUnit: {
     type: String,
@@ -61,7 +62,17 @@ const PublisherSchema = new Schema({
   device: {
     type: Object,
     required: true,
-    default: {}
+    default: DEVICE[0]
+  }
+})
+
+PublisherSchema.set('toJSON', {
+  transform: (_, publisher) => {
+    publisher.id = publisher._id
+    delete publisher.createdAt
+    delete publisher.updatedAt
+    delete publisher._id
+    delete publisher.__v
   }
 })
 

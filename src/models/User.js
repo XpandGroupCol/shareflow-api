@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose')
+const { ROLES, STATUS } = require('../config')
 
 const userSchema = new Schema({
   email: {
@@ -30,7 +31,7 @@ const userSchema = new Schema({
   },
   emailVerified: {
     type: Boolean,
-    default: true,
+    default: false,
     required: false
   },
   company: {
@@ -47,11 +48,11 @@ const userSchema = new Schema({
   },
   role: {
     type: String,
-    default: ''
+    default: ROLES[2]?.id
   },
   status: {
     type: String,
-    default: '',
+    default: STATUS[2]?.id,
     required: true
   },
   deletedAt: {
@@ -63,6 +64,20 @@ const userSchema = new Schema({
   timestamps: true
 }
 )
+
+userSchema.set('toJSON', {
+  transform: (_, user) => {
+    user.id = user._id
+    user.fullName = `${user.name} ${user.lastName}`
+    user.role = ROLES.find(({ id }) => user.role === id) || {}
+    user.status = STATUS.find(({ id }) => user.status === id) || {}
+    delete user.password
+    delete user.createdAt
+    delete user.updatedAt
+    delete user._id
+    delete user.__v
+  }
+})
 
 const User = model('User', userSchema)
 
