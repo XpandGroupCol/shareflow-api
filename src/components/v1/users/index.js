@@ -1,7 +1,9 @@
+
 const userRouter = require('express').Router()
 const { STATUS } = require('../../../config')
 const User = require('../../../models/User')
 const { rgx, perPage, defaultResponse } = require('../../../utils')
+const { uploadFile, receiveFile } = require('../../../utils/aws-upload')
 
 const extractToBody = ({
   company,
@@ -10,7 +12,8 @@ const extractToBody = ({
   name,
   nit,
   phone,
-  role
+  role,
+  image = ''
 
 }) => ({
   company,
@@ -19,7 +22,8 @@ const extractToBody = ({
   name,
   nit,
   phone,
-  role
+  role,
+  image
 })
 
 userRouter.get('/', async (request, response) => {
@@ -59,10 +63,19 @@ userRouter.get('/', async (request, response) => {
   }
 })
 
-userRouter.post('/', async (request, response) => {
+userRouter.post('/', receiveFile, async (request, response) => {
   try {
-    const body = extractToBody(request.body)
-    const data = await User.create(body)
+    const { file, body } = request
+
+    if (file) {
+      body.image = await uploadFile({
+        fileName: `${Date.now()}-avater`,
+        mimetype: file.mimetype,
+        body: file.buffer
+      })
+    }
+
+    const data = await User.create({ ...extractToBody(request.body), emailVerified: true })
     response.status(200).json({ statusCode: 200, data })
   } catch (error) {
     response.status(400).json(defaultResponse)

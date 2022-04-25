@@ -7,6 +7,10 @@ const PublisherSchema = new Schema({
     required: true,
     unique: true
   },
+  image: {
+    type: String,
+    required: false
+  },
   locations: {
     type: [{
       type: Schema.Types.ObjectId,

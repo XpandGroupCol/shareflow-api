@@ -1,6 +1,8 @@
 const publisherRouter = require('express').Router()
+const { SEX, DEVICE } = require('../../../config')
 const Publisher = require('../../../models/Publisher')
 const { rgx, perPage, defaultResponse } = require('../../../utils')
+const { receiveFile, uploadFile } = require('../../../utils/aws-upload')
 
 const extractToBody = ({
   ageRange,
@@ -11,17 +13,19 @@ const extractToBody = ({
   objective,
   pricePerUnit,
   publisher,
-  sex
+  sex,
+  image = ''
 }) => ({
   ageRange,
-  device,
+  device: DEVICE.find(({ id }) => id === device),
   formats,
   locations,
   miniBudget,
   objective,
   pricePerUnit,
   publisher,
-  sex
+  sex: SEX.find(({ id }) => id === sex),
+  image
 })
 
 publisherRouter.get('/', async (request, response) => {
@@ -62,12 +66,22 @@ publisherRouter.get('/', async (request, response) => {
   }
 })
 
-publisherRouter.post('/', async (request, response) => {
+publisherRouter.post('/', receiveFile, async (request, response) => {
   try {
-    const body = extractToBody(request.body)
-    const data = await Publisher.create(body)
+    const { file, body } = request
+
+    if (file) {
+      body.image = await uploadFile({
+        fileName: `${Date.now()}-avater`,
+        mimetype: file.mimetype,
+        body: file.buffer
+      })
+    }
+
+    const data = await Publisher.create(extractToBody(request.body))
     response.status(200).json({ statusCode: 200, data })
   } catch (error) {
+    console.log({ error })
     response.status(400).json(defaultResponse)
   }
 })
