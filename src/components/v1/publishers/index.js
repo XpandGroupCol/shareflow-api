@@ -81,7 +81,6 @@ publisherRouter.post('/', receiveFile, async (request, response) => {
     const data = await Publisher.create(extractToBody(request.body))
     response.status(200).json({ statusCode: 200, data })
   } catch (error) {
-    console.log({ error })
     response.status(400).json(defaultResponse)
   }
 })

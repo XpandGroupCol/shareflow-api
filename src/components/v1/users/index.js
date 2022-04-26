@@ -87,8 +87,6 @@ userRouter.put('/:id', async (request, response) => {
     const { id } = request.params
     const { role, status } = request.body
 
-    console.log({ id, role, status })
-
     const data = await User.findByIdAndUpdate(id, { role, status }, { new: true })
     response.status(200).json({ statusCode: 200, data })
   } catch (error) {
