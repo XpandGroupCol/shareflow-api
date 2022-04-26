@@ -1,6 +1,7 @@
 
 const userRouter = require('express').Router()
 const { STATUS } = require('../../../config')
+const loggedIn = require('../../../middleware/isAuth')
 const User = require('../../../models/User')
 const { rgx, perPage, defaultResponse } = require('../../../utils')
 const { uploadFile, receiveFile } = require('../../../utils/aws-upload')
@@ -26,7 +27,7 @@ const extractToBody = ({
   image
 })
 
-userRouter.get('/', async (request, response) => {
+userRouter.get('/', loggedIn, async (request, response) => {
   try {
     const { page = 1, search = null, role = null, status = null } = request.query
     const currentPage = page < 1 ? 0 : page - 1
@@ -63,7 +64,7 @@ userRouter.get('/', async (request, response) => {
   }
 })
 
-userRouter.post('/', receiveFile, async (request, response) => {
+userRouter.post('/', loggedIn, receiveFile, async (request, response) => {
   try {
     const { file, body } = request
 
@@ -82,7 +83,7 @@ userRouter.post('/', receiveFile, async (request, response) => {
   }
 })
 
-userRouter.put('/:id', async (request, response) => {
+userRouter.put('/:id', loggedIn, async (request, response) => {
   try {
     const { id } = request.params
     const { role, status } = request.body
@@ -94,7 +95,7 @@ userRouter.put('/:id', async (request, response) => {
   }
 })
 
-userRouter.delete('/:id', async (request, response) => {
+userRouter.delete('/:id', loggedIn, async (request, response) => {
   try {
     const { id } = request.params
     const data = await User.findByIdAndUpdate(id, { status: STATUS[1].id }, { new: true })

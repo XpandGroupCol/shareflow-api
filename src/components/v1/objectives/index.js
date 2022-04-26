@@ -1,8 +1,9 @@
 const objectivesRouter = require('express').Router()
 const { getListData, defaultResponse } = require('../../../utils')
 const Objetive = require('../../../models/Objetive')
+const loggedIn = require('../../../middleware/isAuth')
 
-objectivesRouter.get('/', async (request, response) => {
+objectivesRouter.get('/', loggedIn, async (request, response) => {
   try {
     const data = await getListData(Objetive, request.query)
     return response.status(200).json({ statusCode: 200, ...data })
@@ -11,7 +12,7 @@ objectivesRouter.get('/', async (request, response) => {
   }
 })
 
-objectivesRouter.post('/', async (request, response) => {
+objectivesRouter.post('/', loggedIn, async (request, response) => {
   try {
     const data = await Objetive.create(request.body)
     response.status(200).json({ statusCode: 200, data })
@@ -20,7 +21,7 @@ objectivesRouter.post('/', async (request, response) => {
   }
 })
 
-objectivesRouter.delete('/:id', async (request, response) => {
+objectivesRouter.delete('/:id', loggedIn, async (request, response) => {
   try {
     const { id } = request.params
     const { status } = request.body
@@ -31,7 +32,7 @@ objectivesRouter.delete('/:id', async (request, response) => {
   }
 })
 
-objectivesRouter.put('/:id', async (request, response) => {
+objectivesRouter.put('/:id', loggedIn, async (request, response) => {
   try {
     const { id } = request.params
     const { name } = request.body

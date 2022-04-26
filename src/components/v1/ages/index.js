@@ -1,8 +1,9 @@
 const agesRouter = require('express').Router()
 const { getListData, defaultResponse } = require('../../../utils')
 const Age = require('../../../models/Age')
+const loggedIn = require('../../../middleware/isAuth')
 
-agesRouter.get('/', async (request, response) => {
+agesRouter.get('/', loggedIn, async (request, response) => {
   try {
     const data = await getListData(Age, request.query)
     return response.status(200).json({ statusCode: 200, ...data })
@@ -11,7 +12,7 @@ agesRouter.get('/', async (request, response) => {
   }
 })
 
-agesRouter.post('/', async (request, response) => {
+agesRouter.post('/', loggedIn, async (request, response) => {
   try {
     const data = await Age.create(request.body)
     response.status(200).json({ statusCode: 200, data })
@@ -20,7 +21,7 @@ agesRouter.post('/', async (request, response) => {
   }
 })
 
-agesRouter.delete('/:id', async (request, response) => {
+agesRouter.delete('/:id', loggedIn, async (request, response) => {
   try {
     const { id } = request.params
     const { status } = request.body
@@ -31,7 +32,7 @@ agesRouter.delete('/:id', async (request, response) => {
   }
 })
 
-agesRouter.put('/:id', async (request, response) => {
+agesRouter.put('/:id', loggedIn, async (request, response) => {
   try {
     const { id } = request.params
     const { name } = request.body

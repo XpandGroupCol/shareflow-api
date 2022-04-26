@@ -1,13 +1,14 @@
 
 const listRouter = require('express').Router()
 const { SEX, DEVICE, ROLES, STATUS, CAMPAING_STATUS } = require('../../../config')
+const loggedIn = require('../../../middleware/isAuth')
 const Age = require('../../../models/Age')
 const Format = require('../../../models/Format')
 const Location = require('../../../models/Location')
 const Objetive = require('../../../models/Objetive')
 const Sector = require('../../../models/Sector')
 
-listRouter.get('/', async (request, response) => {
+listRouter.get('/', loggedIn, async (request, response) => {
   try {
     const [sectors, objectives, ages, locations, formats] = await Promise.allSettled([
       Sector.find({ status: true }),

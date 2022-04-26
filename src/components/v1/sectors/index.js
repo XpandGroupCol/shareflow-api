@@ -1,8 +1,9 @@
 const sectorsRouter = require('express').Router()
 const { getListData, defaultResponse } = require('../../../utils')
 const Sector = require('../../../models/Sector')
+const loggedIn = require('../../../middleware/isAuth')
 
-sectorsRouter.get('/', async (request, response) => {
+sectorsRouter.get('/', loggedIn, async (request, response) => {
   try {
     const data = await getListData(Sector, request.query)
     return response.status(200).json({ statusCode: 200, ...data })
@@ -11,7 +12,7 @@ sectorsRouter.get('/', async (request, response) => {
   }
 })
 
-sectorsRouter.post('/', async (request, response) => {
+sectorsRouter.post('/', loggedIn, async (request, response) => {
   try {
     const data = await Sector.create(request.body)
     response.status(200).json({ statusCode: 200, data })
@@ -20,7 +21,7 @@ sectorsRouter.post('/', async (request, response) => {
   }
 })
 
-sectorsRouter.delete('/:id', async (request, response) => {
+sectorsRouter.delete('/:id', loggedIn, async (request, response) => {
   try {
     const { id } = request.params
     const { status } = request.body
@@ -31,7 +32,7 @@ sectorsRouter.delete('/:id', async (request, response) => {
   }
 })
 
-sectorsRouter.put('/:id', async (request, response) => {
+sectorsRouter.put('/:id', loggedIn, async (request, response) => {
   try {
     const { id } = request.params
     const { name } = request.body

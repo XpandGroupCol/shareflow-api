@@ -1,5 +1,6 @@
 const publisherRouter = require('express').Router()
 const { SEX, DEVICE } = require('../../../config')
+const loggedIn = require('../../../middleware/isAuth')
 const Publisher = require('../../../models/Publisher')
 const { rgx, perPage, defaultResponse } = require('../../../utils')
 const { receiveFile, uploadFile } = require('../../../utils/aws-upload')
@@ -28,7 +29,7 @@ const extractToBody = ({
   image
 })
 
-publisherRouter.get('/', async (request, response) => {
+publisherRouter.get('/', loggedIn, async (request, response) => {
   try {
     const { page = 1, search = null, objective = null, location = null } = request.query
     const currentPage = page < 1 ? 0 : page - 1
@@ -66,7 +67,7 @@ publisherRouter.get('/', async (request, response) => {
   }
 })
 
-publisherRouter.post('/', receiveFile, async (request, response) => {
+publisherRouter.post('/', loggedIn, receiveFile, async (request, response) => {
   try {
     const { file, body } = request
 
@@ -85,7 +86,7 @@ publisherRouter.post('/', receiveFile, async (request, response) => {
   }
 })
 
-publisherRouter.put('/:id', async (request, response) => {
+publisherRouter.put('/:id', loggedIn, async (request, response) => {
   try {
     const { id } = request.params
     const body = extractToBody(request.body)
@@ -96,7 +97,7 @@ publisherRouter.put('/:id', async (request, response) => {
   }
 })
 
-publisherRouter.get('/:id', async (request, response) => {
+publisherRouter.get('/:id', loggedIn, async (request, response) => {
   try {
     const { id } = request.params
     if (!id) response.status(400).json(defaultResponse)
@@ -111,7 +112,7 @@ publisherRouter.get('/:id', async (request, response) => {
   }
 })
 
-publisherRouter.delete('/:id', async (request, response) => {
+publisherRouter.delete('/:id', loggedIn, async (request, response) => {
   try {
     const { id } = request.params
     const { status } = request.body

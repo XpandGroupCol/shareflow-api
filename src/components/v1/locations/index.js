@@ -1,8 +1,9 @@
 const locationsRouter = require('express').Router()
 const { getListData, defaultResponse } = require('../../../utils')
 const Location = require('../../../models/Location')
+const loggedIn = require('../../../middleware/isAuth')
 
-locationsRouter.get('/', async (request, response) => {
+locationsRouter.get('/', loggedIn, async (request, response) => {
   try {
     const data = await getListData(Location, request.query)
     return response.status(200).json({ statusCode: 200, ...data })
@@ -11,7 +12,7 @@ locationsRouter.get('/', async (request, response) => {
   }
 })
 
-locationsRouter.post('/', async (request, response) => {
+locationsRouter.post('/', loggedIn, async (request, response) => {
   try {
     const data = await Location.create(request.body)
     response.status(200).json({ statusCode: 200, data })
@@ -20,7 +21,7 @@ locationsRouter.post('/', async (request, response) => {
   }
 })
 
-locationsRouter.delete('/:id', async (request, response) => {
+locationsRouter.delete('/:id', loggedIn, async (request, response) => {
   try {
     const { id } = request.params
     const { status } = request.body
@@ -31,7 +32,7 @@ locationsRouter.delete('/:id', async (request, response) => {
   }
 })
 
-locationsRouter.put('/:id', async (request, response) => {
+locationsRouter.put('/:id', loggedIn, async (request, response) => {
   try {
     const { id } = request.params
     const { name } = request.body

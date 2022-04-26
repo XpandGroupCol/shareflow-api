@@ -1,8 +1,9 @@
 const campaignRouter = require('express').Router()
+const loggedIn = require('../../../middleware/isAuth')
 const Campaign = require('../../../models/Campaign')
 const { rgx, perPage, defaultResponse } = require('../../../utils')
 
-campaignRouter.get('/', async (request, response) => {
+campaignRouter.get('/', loggedIn, async (request, response) => {
   try {
     const { page = 1, search = null, objective = null, sector = null } = request.query
     const currentPage = page < 1 ? 0 : page - 1
@@ -42,7 +43,7 @@ campaignRouter.get('/', async (request, response) => {
   }
 })
 
-campaignRouter.get('/:id', async (request, response) => {
+campaignRouter.get('/:id', loggedIn, async (request, response) => {
   try {
     const { id } = request.params
     if (!id) response.status(400).json(defaultResponse)

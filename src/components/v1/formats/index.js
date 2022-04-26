@@ -1,8 +1,9 @@
 const formatsRouter = require('express').Router()
 const { getListData, defaultResponse } = require('../../../utils')
 const Format = require('../../../models/Format')
+const loggedIn = require('../../../middleware/isAuth')
 
-formatsRouter.get('/', async (request, response) => {
+formatsRouter.get('/', loggedIn, async (request, response) => {
   try {
     const data = await getListData(Format, request.query)
     return response.status(200).json({ statusCode: 200, ...data })
@@ -11,7 +12,7 @@ formatsRouter.get('/', async (request, response) => {
   }
 })
 
-formatsRouter.post('/', async (request, response) => {
+formatsRouter.post('/', loggedIn, async (request, response) => {
   try {
     const { name } = request.body
     const data = await Format.create({ name })
@@ -21,7 +22,7 @@ formatsRouter.post('/', async (request, response) => {
   }
 })
 
-formatsRouter.delete('/:id', async (request, response) => {
+formatsRouter.delete('/:id', loggedIn, async (request, response) => {
   try {
     const { id } = request.params
     const { status } = request.body
@@ -32,7 +33,7 @@ formatsRouter.delete('/:id', async (request, response) => {
   }
 })
 
-formatsRouter.put('/:id', async (request, response) => {
+formatsRouter.put('/:id', loggedIn, async (request, response) => {
   try {
     const { id } = request.params
     const { name } = request.body
