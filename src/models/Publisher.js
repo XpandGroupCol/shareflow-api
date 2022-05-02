@@ -1,15 +1,19 @@
 const { Schema, model } = require('mongoose')
-const { SEX, DEVICE } = require('../config')
+const { SEX } = require('../config')
 
 const PublisherSchema = new Schema({
+  image: {
+    type: String,
+    required: false
+  },
   publisher: {
     type: String,
     required: true,
     unique: true
   },
-  image: {
+  miniBudget: {
     type: String,
-    required: false
+    default: 0
   },
   locations: {
     type: [{
@@ -19,14 +23,11 @@ const PublisherSchema = new Schema({
     required: true,
     default: []
   },
-  formats: {
-    type: [{
-      type: Schema.Types.ObjectId,
-      ref: 'Format'
-    }],
-    required: true
+  sex: {
+    type: Object,
+    required: true,
+    default: SEX[0]
   },
-  share: String,
   ageRange: {
     type: [{
       type: Schema.Types.ObjectId,
@@ -35,45 +36,37 @@ const PublisherSchema = new Schema({
     required: true,
     default: []
   },
-  sex: {
-    type: Object,
-    required: true,
-    default: SEX[0]
-  },
-  pricePerUnit: {
-    type: String,
-    required: true
-  },
-  biddingModel: { // este tambien sirve para calcular
-    type: String,
-    required: true,
-    default: '??'
-  },
-  miniBudget: {
-    type: String,
-    default: 0
-  },
   kpi: {
     type: String,
     required: true,
-    default: '??'
-  },
-  objective: {
-    type: Schema.Types.ObjectId,
-    ref: 'Objetive',
-    required: true
-  },
-  device: {
-    type: Object,
-    required: true,
-    default: DEVICE[0]
+    default: '?'
   },
   status: {
     type: Boolean,
     required: true,
     default: true
+  },
+  formats: {
+    type: [{
+      format: {
+        type: Schema.Types.ObjectId,
+        ref: 'Format'
+      },
+      objective: {
+        type: Schema.Types.ObjectId,
+        ref: 'Objetive'
+      },
+      biddingModel: {
+        type: Object
+      },
+      device: {
+        type: Object
+      },
+      pricePerUnit: ''
+    }],
+    default: []
   }
-})
+}, { timestamps: true })
 
 PublisherSchema.set('toJSON', {
   transform: (_, publisher) => {

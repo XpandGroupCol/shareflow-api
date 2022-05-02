@@ -1,5 +1,5 @@
 require('dotenv').config()
-require('./mongo')
+const Mongo = require('./mongo')
 
 const express = require('express')
 const cors = require('cors')
@@ -15,6 +15,8 @@ const sectorsRouter = require('./src/components/v1/sectors')
 const objectivesRouter = require('./src/components/v1/objectives')
 const formatsRouter = require('./src/components/v1/formats')
 const locationsRouter = require('./src/components/v1/locations')
+
+const mongoDB = new Mongo()
 
 const app = express()
 app.use(cors())
@@ -32,6 +34,22 @@ app.use('/objetives', objectivesRouter)
 app.use('/locations', locationsRouter)
 app.use('/formats', formatsRouter)
 
-app.listen(process.env.PORT, () => {
-  console.log(`${process.env.PORT} is the magic port`)
-})
+const startApp = async () => {
+  try {
+    app.listen(process.env.PORT, () => {
+      console.log(`${process.env.PORT} is the magic port`)
+    })
+    await mongoDB.connectMongoDB()
+  } catch (e) {
+    process.on('uncaughtException', console.log({ e }))
+    process.on('unhandledRejection', console.log({ e }))
+
+    // Handled DB exceptions - MongoDB
+    process.on('SIGINT', mongoDB.closeConnectionCrashNodeProcess())
+    process.on('SIGTERM', mongoDB.closeConnectionCrashNodeProcess())
+
+    console.error(e)
+  }
+}
+
+startApp()

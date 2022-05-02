@@ -1,21 +1,36 @@
 
 const listRouter = require('express').Router()
-const { SEX, DEVICE, ROLES, STATUS, CAMPAING_STATUS } = require('../../../config')
+const { SEX, DEVICE, ROLES, STATUS, CAMPAING_STATUS, BIDDING_MODEL } = require('../../../config')
 const loggedIn = require('../../../middleware/isAuth')
 const Age = require('../../../models/Age')
 const Format = require('../../../models/Format')
 const Location = require('../../../models/Location')
 const Objetive = require('../../../models/Objetive')
 const Sector = require('../../../models/Sector')
+const Publisher = require('../../../models/Publisher')
 
-listRouter.get('/', loggedIn, async (request, response) => {
+const mapList = (list = []) => list.map(({ _id: id, name: label }) => ({ id, label }))
+
+const mapPublishers = (data = []) =>
+  data.map(({ _id: id, publisher: label, formats, locations, ageRange, ...restOfPublisher }) =>
+    ({
+      id,
+      label,
+      formats: mapList(formats),
+      locations: mapList(formats),
+      ageRange: mapList(formats),
+      ...restOfPublisher
+    }))
+
+listRouter.get('/', loggedIn, async (_, response) => {
   try {
-    const [sectors, objectives, ages, locations, formats] = await Promise.allSettled([
+    const [sectors, objectives, ages, locations, formats, publisher] = await Promise.allSettled([
       Sector.find({ status: true }),
       Objetive.find({ status: true }),
       Age.find({ status: true }),
       Location.find({ status: true }),
-      Format.find({ status: true })
+      Format.find({ status: true }),
+      Publisher.find({ status: true }).populate('locations').populate('formats').populate('ageRange').lean()
     ])
 
     response.status(200).json({
@@ -28,7 +43,9 @@ listRouter.get('/', loggedIn, async (request, response) => {
       devices: DEVICE,
       roles: ROLES,
       statuses: STATUS,
-      campaignStatuses: CAMPAING_STATUS
+      campaignStatuses: CAMPAING_STATUS,
+      publisher: mapPublishers(publisher?.value || []),
+      biddingModel: BIDDING_MODEL
     })
   } catch (e) {
     response.status(400).json({
@@ -38,5 +55,7 @@ listRouter.get('/', loggedIn, async (request, response) => {
     })
   }
 })
+
+module.exports = listRouter
 
 module.exports = listRouter

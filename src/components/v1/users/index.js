@@ -64,6 +64,17 @@ userRouter.get('/', loggedIn, async (request, response) => {
   }
 })
 
+userRouter.get('/:id', loggedIn, async (request, response) => {
+  try {
+    const { id } = request.params
+    // TODO: validar el ID
+    const data = await User.findById(id)
+    response.status(200).json({ statusCode: 200, data })
+  } catch (error) {
+    response.status(400).json(defaultResponse)
+  }
+})
+
 userRouter.post('/', loggedIn, receiveFile, async (request, response) => {
   try {
     const { file, body } = request

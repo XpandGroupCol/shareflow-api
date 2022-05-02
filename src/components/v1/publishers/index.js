@@ -1,33 +1,8 @@
 const publisherRouter = require('express').Router()
-const { SEX, DEVICE } = require('../../../config')
 const loggedIn = require('../../../middleware/isAuth')
 const Publisher = require('../../../models/Publisher')
 const { rgx, perPage, defaultResponse } = require('../../../utils')
 const { receiveFile, uploadFile } = require('../../../utils/aws-upload')
-
-const extractToBody = ({
-  ageRange,
-  device,
-  formats,
-  locations,
-  miniBudget,
-  objective,
-  pricePerUnit,
-  publisher,
-  sex,
-  image = ''
-}) => ({
-  ageRange,
-  device: DEVICE.find(({ id }) => id === device),
-  formats,
-  locations,
-  miniBudget,
-  objective,
-  pricePerUnit,
-  publisher,
-  sex: SEX.find(({ id }) => id === sex),
-  image
-})
 
 publisherRouter.get('/', loggedIn, async (request, response) => {
   try {
@@ -54,8 +29,8 @@ publisherRouter.get('/', loggedIn, async (request, response) => {
     const data = await Publisher.find(query)
       .populate('locations')
       .populate('ageRange')
-      .populate('formats')
-      .populate('objective')
+      .populate('formats.format')
+      .populate('formats.objective')
       .limit(perPage)
       .skip(perPage * currentPage)
 
@@ -69,7 +44,9 @@ publisherRouter.get('/', loggedIn, async (request, response) => {
 
 publisherRouter.post('/', loggedIn, receiveFile, async (request, response) => {
   try {
-    const { file, body } = request
+    let { file, body } = request
+
+    body = JSON.parse(body?.publisher)
 
     if (file) {
       body.image = await uploadFile({
@@ -79,9 +56,10 @@ publisherRouter.post('/', loggedIn, receiveFile, async (request, response) => {
       })
     }
 
-    const data = await Publisher.create(extractToBody(request.body))
+    const data = await Publisher.create(body)
     response.status(200).json({ statusCode: 200, data })
   } catch (error) {
+    console.log({ error })
     response.status(400).json(defaultResponse)
   }
 })
@@ -89,8 +67,11 @@ publisherRouter.post('/', loggedIn, receiveFile, async (request, response) => {
 publisherRouter.put('/:id', loggedIn, async (request, response) => {
   try {
     const { id } = request.params
-    const body = extractToBody(request.body)
-    const data = await Publisher.findByIdAndUpdate(id, body, { new: true })
+    const { body } = request
+    const data = await Publisher.findByIdAndUpdate(id, body, { new: true }).populate('locations')
+      .populate('ageRange')
+      .populate('formats.format')
+      .populate('formats.objective')
     response.status(200).json({ statusCode: 200, data })
   } catch (error) {
     response.status(400).json(defaultResponse)
@@ -104,8 +85,8 @@ publisherRouter.get('/:id', loggedIn, async (request, response) => {
     const data = await Publisher.findById(id)
       .populate('locations')
       .populate('ageRange')
-      .populate('formats')
-      .populate('objective')
+      .populate('formats.format')
+      .populate('formats.objective')
     response.status(200).json({ statusCode: 200, data })
   } catch (error) {
     response.status(400).json(defaultResponse)

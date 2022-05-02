@@ -68,10 +68,30 @@ const CAMPAING_STATUS = [
   }
 ]
 
+const BIDDING_MODEL = [
+  {
+    id: 'CPM',
+    label: 'CPM'
+  },
+  {
+    id: 'CPC',
+    label: 'CPC'
+  },
+  {
+    id: 'CPV',
+    label: 'CPV'
+  },
+  {
+    id: 'CPA',
+    label: 'CPA'
+  }
+]
+
 module.exports = {
   ROLES,
   DEVICE,
   SEX,
   STATUS,
-  CAMPAING_STATUS
+  CAMPAING_STATUS,
+  BIDDING_MODEL
 }

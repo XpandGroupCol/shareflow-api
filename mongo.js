@@ -6,20 +6,35 @@ const connectionString = NODE_ENV === 'test'
   ? MONGO_DB_URI_TEST
   : MONGO_DB_URI
 
-if (!connectionString) {
-  console.error('Recuerda que tienes que tener un archivo .env con las variables de entorno definidas y el MONGO_DB_URI que servirá de connection string. En las clases usamos MongoDB Atlas pero puedes usar cualquier base de datos de MongoDB (local incluso).')
+class Mongo {
+  constructor () {
+    this.connectionUri = connectionString
+  }
+
+  async connectMongoDB () {
+    try {
+      const connection = await mongoose.connect(this.connectionUri, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+      })
+
+      console.info(`MongoDB Connected ${connection.connection.host}`)
+    } catch (error) {
+      console.error(`MongoDB connection error: ${error}`)
+    }
+  }
+
+  async closeDBConnection () {
+    try {
+      await mongoose.disconnect()
+    } catch (error) {
+      console.error(`Error trying to dissconect: ${error}`)
+    }
+  }
+
+  closeConnectionCrashNodeProcess () {
+    mongoose.connection.close(() => process.exit(0))
+  }
 }
 
-mongoose.connect(connectionString, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-  .then(() => {
-    console.log('Database connect')
-  }).catch(err => {
-    console.error(err)
-  })
-
-process.on('uncaughtException', () => mongoose.disconnect())
-
-process.on('unhandledRejection', () => mongoose.disconnect())
+module.exports = Mongo

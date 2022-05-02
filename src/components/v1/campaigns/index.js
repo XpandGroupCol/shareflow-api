@@ -2,6 +2,29 @@ const campaignRouter = require('express').Router()
 const loggedIn = require('../../../middleware/isAuth')
 const Campaign = require('../../../models/Campaign')
 const { rgx, perPage, defaultResponse } = require('../../../utils')
+const { receiveFile, uploadFile } = require('../../../utils/aws-upload')
+
+const extractToBody = ({
+  endDate,
+  startDate,
+  name,
+  brand,
+  image = '',
+  sector,
+  objective,
+  amount,
+  user
+}) => ({
+  endDate,
+  startDate,
+  name,
+  brand,
+  logo: image,
+  sector,
+  objective,
+  amount,
+  user
+})
 
 campaignRouter.get('/', loggedIn, async (request, response) => {
   try {
@@ -53,6 +76,27 @@ campaignRouter.get('/:id', loggedIn, async (request, response) => {
       .populate('objective')
     response.status(200).json({ statusCode: 200, data })
   } catch (error) {
+    response.status(400).json(defaultResponse)
+  }
+})
+
+campaignRouter.post('/', loggedIn, receiveFile, async (request, response) => {
+  try {
+    const { file, body, userId } = request
+    console.log(userId)
+
+    if (file) {
+      body.logo = await uploadFile({
+        fileName: `${Date.now()}-logo`,
+        mimetype: file.mimetype,
+        body: file.buffer
+      })
+    }
+
+    const campaign = await Campaign.create(extractToBody({ ...request.body, user: userId }))
+    response.status(200).json({ statusCode: 200, data: campaign?._id })
+  } catch (error) {
+    console.log({ error })
     response.status(400).json(defaultResponse)
   }
 })
