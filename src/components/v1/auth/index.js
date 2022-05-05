@@ -98,8 +98,6 @@ loginRouter.post('/login', async (request, response) => {
       })
     }
 
-    console.log('llego aqui')
-
     if (user && !user?.emailVerified) {
       return response.status(401).json({
         code: 401,

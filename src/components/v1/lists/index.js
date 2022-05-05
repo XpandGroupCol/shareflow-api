@@ -9,16 +9,14 @@ const Objetive = require('../../../models/Objetive')
 const Sector = require('../../../models/Sector')
 const Publisher = require('../../../models/Publisher')
 
-const mapList = (list = []) => list.map(({ _id: id, name: label }) => ({ id, label }))
-
 const mapPublishers = (data = []) =>
   data.map(({ _id: id, publisher: label, formats, locations, ageRange, ...restOfPublisher }) =>
     ({
       id,
       label,
-      formats: mapList(formats),
-      locations: mapList(formats),
-      ageRange: mapList(formats),
+      formats: formats.map(({ format, device, pricePerUnit, biddingModel }) => ({ id: format._id, label: format.name, device: device.label, pricePerUnit: parseInt(pricePerUnit), biddingModel: biddingModel.id })),
+      locations,
+      ageRange,
       ...restOfPublisher
     }))
 
@@ -30,7 +28,11 @@ listRouter.get('/', loggedIn, async (_, response) => {
       Age.find({ status: true }),
       Location.find({ status: true }),
       Format.find({ status: true }),
-      Publisher.find({ status: true }).populate('locations').populate('formats').populate('ageRange').lean()
+      Publisher.find({ status: true })
+        .populate('locations')
+        .populate('ageRange')
+        .populate('formats.format')
+        .populate('formats.objective').lean()
     ])
 
     response.status(200).json({
@@ -55,7 +57,5 @@ listRouter.get('/', loggedIn, async (_, response) => {
     })
   }
 })
-
-module.exports = listRouter
 
 module.exports = listRouter

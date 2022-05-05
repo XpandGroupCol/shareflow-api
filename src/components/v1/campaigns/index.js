@@ -4,28 +4,6 @@ const Campaign = require('../../../models/Campaign')
 const { rgx, perPage, defaultResponse } = require('../../../utils')
 const { receiveFile, uploadFile } = require('../../../utils/aws-upload')
 
-const extractToBody = ({
-  endDate,
-  startDate,
-  name,
-  brand,
-  image = '',
-  sector,
-  objective,
-  amount,
-  user
-}) => ({
-  endDate,
-  startDate,
-  name,
-  brand,
-  logo: image,
-  sector,
-  objective,
-  amount,
-  user
-})
-
 campaignRouter.get('/', loggedIn, async (request, response) => {
   try {
     const { page = 1, search = null, objective = null, sector = null } = request.query
@@ -55,12 +33,31 @@ campaignRouter.get('/', loggedIn, async (request, response) => {
       .populate('user')
       .populate('sector')
       .populate('objective')
+      .populate('locations')
+      .populate('ages')
       .limit(perPage)
       .skip(perPage * currentPage)
 
     const total = await Campaign.countDocuments(query)
 
     response.status(200).json({ statusCode: 200, data, total, page: currentPage, pages: Math.ceil(total / perPage) })
+  } catch (error) {
+    response.status(400).json(defaultResponse)
+  }
+})
+
+campaignRouter.get('/byUser', loggedIn, async (request, response) => {
+  try {
+    const { userId } = request
+
+    const data = await Campaign.find({ user: userId })
+      .populate('user')
+      .populate('sector')
+      .populate('objective')
+      .populate('locations')
+      .populate('ages')
+
+    response.status(200).json({ statusCode: 200, data })
   } catch (error) {
     response.status(400).json(defaultResponse)
   }
@@ -82,8 +79,9 @@ campaignRouter.get('/:id', loggedIn, async (request, response) => {
 
 campaignRouter.post('/', loggedIn, receiveFile, async (request, response) => {
   try {
-    const { file, body, userId } = request
-    console.log(userId)
+    let { file, body, userId } = request
+
+    body = JSON.parse(body?.campaign)
 
     if (file) {
       body.logo = await uploadFile({
@@ -92,8 +90,7 @@ campaignRouter.post('/', loggedIn, receiveFile, async (request, response) => {
         body: file.buffer
       })
     }
-
-    const campaign = await Campaign.create(extractToBody({ ...request.body, user: userId }))
+    const campaign = await Campaign.create({ ...body, user: userId })
     response.status(200).json({ statusCode: 200, data: campaign?._id })
   } catch (error) {
     console.log({ error })

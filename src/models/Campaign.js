@@ -1,5 +1,5 @@
 const { Schema, model } = require('mongoose')
-const { CAMPAING_STATUS } = require('../config')
+const { CAMPAING_STATUS, SEX } = require('../config')
 
 const CampaignSchema = new Schema({
   logo: {
@@ -34,12 +34,28 @@ const CampaignSchema = new Schema({
     ref: 'Sector',
     required: true
   },
+  locations: {
+    type: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Location'
+    }],
+    required: true,
+    default: []
+  },
+  ages: {
+    type: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Age'
+    }],
+    required: true,
+    default: []
+  },
   url: {
     type: String,
     required: false
   },
   amount: {
-    type: String,
+    type: Number,
     required: true
   },
   status: {
@@ -55,6 +71,11 @@ const CampaignSchema = new Schema({
   publishers: {
     type: Array,
     default: []
+  },
+  sex: {
+    type: String,
+    required: true,
+    default: SEX[0]?.id
   }
 }, {
   timestamps: true
