@@ -87,11 +87,27 @@ const BIDDING_MODEL = [
   }
 ]
 
+const TARGET_TYPE = [
+  {
+    id: 'click',
+    label: 'Click'
+  },
+  {
+    id: 'reproductions',
+    label: 'Reproducciones'
+  },
+  {
+    id: 'prints',
+    label: 'Impresiones'
+  }
+]
+
 module.exports = {
   ROLES,
   DEVICE,
   SEX,
   STATUS,
   CAMPAING_STATUS,
-  BIDDING_MODEL
+  BIDDING_MODEL,
+  TARGET_TYPE
 }

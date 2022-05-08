@@ -1,5 +1,6 @@
 
 const userRouter = require('express').Router()
+const bcryptjs = require('bcryptjs')
 const { STATUS } = require('../../../config')
 const loggedIn = require('../../../middleware/isAuth')
 const User = require('../../../models/User')
@@ -14,7 +15,8 @@ const extractToBody = ({
   nit,
   phone,
   role,
-  image = ''
+  image = '',
+  password
 
 }) => ({
   company,
@@ -24,7 +26,8 @@ const extractToBody = ({
   nit,
   phone,
   role,
-  image
+  image,
+  password: bcryptjs.hash(password, 10)
 })
 
 userRouter.get('/', loggedIn, async (request, response) => {
@@ -67,7 +70,6 @@ userRouter.get('/', loggedIn, async (request, response) => {
 userRouter.get('/profile', loggedIn, async (request, response) => {
   try {
     const { userId } = request
-    // TODO: validar el ID
     const data = await User.findById(userId)
     response.status(200).json({ statusCode: 200, data })
   } catch (error) {
@@ -91,6 +93,31 @@ userRouter.post('/', loggedIn, receiveFile, async (request, response) => {
     response.status(200).json({ statusCode: 200, data })
   } catch (error) {
     response.status(400).json(defaultResponse)
+  }
+})
+
+userRouter.put('/company-profile', loggedIn, async (request, response) => {
+  try {
+    const { userId: id } = request
+    const { company, nit, phone, address, companyEmail, rut = '' } = request.body
+
+    const data = await User.findByIdAndUpdate(id, { company, nit, phone, address, companyEmail, rut }, { new: true })
+    response.status(200).json({ statusCode: 200, data })
+  } catch (error) {
+    response.status(500).json(defaultResponse)
+  }
+})
+
+userRouter.put('/change-password', loggedIn, async (request, response) => {
+  try {
+    const { userId: id } = request
+    const { password } = request.body
+    const newPassword = await bcryptjs.hash(password, 10)
+
+    const data = await User.findByIdAndUpdate(id, { password: newPassword }, { new: true })
+    response.status(200).json({ statusCode: 200, data })
+  } catch (error) {
+    response.status(500).json(defaultResponse)
   }
 })
 

@@ -52,9 +52,9 @@ const PublisherSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Format'
       },
-      objective: {
+      target: {
         type: Schema.Types.ObjectId,
-        ref: 'Objetive'
+        ref: 'Target'
       },
       biddingModel: {
         type: Object

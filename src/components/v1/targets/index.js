@@ -1,46 +1,46 @@
-const objectivesRouter = require('express').Router()
+const TargetRouter = require('express').Router()
 const { getListData, defaultResponse } = require('../../../utils')
-const Objetive = require('../../../models/Objetive')
+const Target = require('../../../models/Target')
 const loggedIn = require('../../../middleware/isAuth')
 
-objectivesRouter.get('/', loggedIn, async (request, response) => {
+TargetRouter.get('/', loggedIn, async (request, response) => {
   try {
-    const data = await getListData(Objetive, request.query)
+    const data = await getListData(Target, request.query)
     return response.status(200).json({ statusCode: 200, ...data })
   } catch (error) {
     return response.status(400).json(defaultResponse)
   }
 })
 
-objectivesRouter.post('/', loggedIn, async (request, response) => {
+TargetRouter.post('/', loggedIn, async (request, response) => {
   try {
-    const data = await Objetive.create(request.body)
+    const data = await Target.create(request.body)
     response.status(200).json({ statusCode: 200, data })
   } catch (error) {
     response.status(400).json(defaultResponse)
   }
 })
 
-objectivesRouter.delete('/:id', loggedIn, async (request, response) => {
+TargetRouter.delete('/:id', loggedIn, async (request, response) => {
   try {
     const { id } = request.params
     const { status } = request.body
-    const data = await Objetive.findByIdAndUpdate(id, { status }, { new: true })
+    const data = await Target.findByIdAndUpdate(id, { status }, { new: true })
     response.status(200).json({ statusCode: 200, data })
   } catch (error) {
     response.status(400).json(defaultResponse)
   }
 })
 
-objectivesRouter.put('/:id', loggedIn, async (request, response) => {
+TargetRouter.put('/:id', loggedIn, async (request, response) => {
   try {
     const { id } = request.params
     const { name } = request.body
-    const location = await Objetive.findByIdAndUpdate(id, { name }, { new: true })
+    const location = await Target.findByIdAndUpdate(id, { name }, { new: true })
     response.status(200).json({ statusCode: 200, location })
   } catch (error) {
     response.status(400).json(defaultResponse)
   }
 })
 
-module.exports = objectivesRouter
+module.exports = TargetRouter

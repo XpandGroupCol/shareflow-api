@@ -6,7 +6,7 @@ const { receiveFile, uploadFile } = require('../../../utils/aws-upload')
 
 campaignRouter.get('/', loggedIn, async (request, response) => {
   try {
-    const { page = 1, search = null, objective = null, sector = null } = request.query
+    const { page = 1, search = null, target = null, sector = null } = request.query
     const currentPage = page < 1 ? 0 : page - 1
 
     let query = {}
@@ -21,8 +21,8 @@ campaignRouter.get('/', loggedIn, async (request, response) => {
       }
     }
 
-    if (objective) {
-      query = { ...query, objective }
+    if (target) {
+      query = { ...query, target }
     }
 
     if (sector) {
@@ -32,7 +32,7 @@ campaignRouter.get('/', loggedIn, async (request, response) => {
     const data = await Campaign.find(query)
       .populate('user')
       .populate('sector')
-      .populate('objective')
+      .populate('target')
       .populate('locations')
       .populate('ages')
       .limit(perPage)
@@ -53,7 +53,7 @@ campaignRouter.get('/byUser', loggedIn, async (request, response) => {
     const data = await Campaign.find({ user: userId })
       .populate('user')
       .populate('sector')
-      .populate('objective')
+      .populate('target')
       .populate('locations')
       .populate('ages')
 
@@ -70,7 +70,7 @@ campaignRouter.get('/:id', loggedIn, async (request, response) => {
     const data = await Campaign.findById(id)
       .populate('user')
       .populate('sector')
-      .populate('objective')
+      .populate('target')
     response.status(200).json({ statusCode: 200, data })
   } catch (error) {
     response.status(400).json(defaultResponse)

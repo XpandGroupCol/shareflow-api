@@ -5,7 +5,7 @@ const loggedIn = require('../../../middleware/isAuth')
 const Age = require('../../../models/Age')
 const Format = require('../../../models/Format')
 const Location = require('../../../models/Location')
-const Objetive = require('../../../models/Objetive')
+const Target = require('../../../models/Target')
 const Sector = require('../../../models/Sector')
 const Publisher = require('../../../models/Publisher')
 
@@ -22,9 +22,9 @@ const mapPublishers = (data = []) =>
 
 listRouter.get('/', loggedIn, async (_, response) => {
   try {
-    const [sectors, objectives, ages, locations, formats, publisher] = await Promise.allSettled([
+    const [sectors, targets, ages, locations, formats, publisher] = await Promise.allSettled([
       Sector.find({ status: true }),
-      Objetive.find({ status: true }),
+      Target.find({ status: true }),
       Age.find({ status: true }),
       Location.find({ status: true }),
       Format.find({ status: true }),
@@ -32,12 +32,12 @@ listRouter.get('/', loggedIn, async (_, response) => {
         .populate('locations')
         .populate('ageRange')
         .populate('formats.format')
-        .populate('formats.objective').lean()
+        .populate('formats.target').lean()
     ])
 
     response.status(200).json({
       sectors: sectors?.value || [],
-      objectives: objectives?.value || [],
+      targets: targets?.value || [],
       ages: ages?.value || [],
       locations: locations.value || [],
       formats: formats.value || [],

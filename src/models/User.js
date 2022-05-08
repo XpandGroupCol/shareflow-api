@@ -14,15 +14,17 @@ const userSchema = new Schema({
   },
   lastName: {
     type: String,
-    required: false
+    required: false,
+    default: ''
   },
   image: {
     type: String,
-    required: false
+    required: false,
+    default: ''
   },
   password: {
     type: String,
-    required: false
+    required: true
   },
   provider: {
     type: String,
@@ -34,26 +36,60 @@ const userSchema = new Schema({
     default: false,
     required: false
   },
-  company: {
-    type: String,
-    required: false
-  },
-  nit: {
-    type: String,
-    required: false
-  },
-  phone: {
-    type: String,
-    required: false
-  },
   role: {
     type: String,
+    required: true,
     default: ROLES[2]?.id
   },
   status: {
     type: Boolean,
     default: true,
     required: true
+  },
+  company: {
+    type: String,
+    required: false,
+    default: ''
+  },
+  nit: {
+    type: String,
+    required: false,
+    default: ''
+  },
+  phonePrefixed: {
+    type: String,
+    required: false,
+    default: ''
+  },
+  phone: {
+    type: Number,
+    required: false,
+    default: ''
+  },
+  address: {
+    type: String,
+    required: false,
+    default: ''
+  },
+  companyEmail: {
+    type: String,
+    required: false,
+    default: ''
+  },
+  rut: {
+    type: String,
+    required: false,
+    default: ''
+  },
+  checkRut: {
+    type: Boolean,
+    required: false,
+    default: false
+  },
+  expirationRutDate: {
+    type: Date,
+    required: false,
+    default: null
   },
   deletedAt: {
     type: Date,

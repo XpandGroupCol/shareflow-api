@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose')
 
-const ObjetiveSchema = new Schema({
+const TargetSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -11,12 +11,16 @@ const ObjetiveSchema = new Schema({
     type: Boolean,
     required: true,
     default: true
+  },
+  type: {
+    type: String,
+    required: true
   }
 }, {
   timestamps: true
 })
 
-ObjetiveSchema.set('toJSON', {
+TargetSchema.set('toJSON', {
   transform: (_, returnedObject) => {
     returnedObject.id = returnedObject._id
     returnedObject.label = returnedObject.name
@@ -28,6 +32,6 @@ ObjetiveSchema.set('toJSON', {
   }
 })
 
-const Objetive = model('Objetive', ObjetiveSchema)
+const Target = model('Target', TargetSchema)
 
-module.exports = Objetive
+module.exports = Target

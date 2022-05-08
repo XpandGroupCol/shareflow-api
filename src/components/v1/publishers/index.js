@@ -6,7 +6,7 @@ const { receiveFile, uploadFile } = require('../../../utils/aws-upload')
 
 publisherRouter.get('/', loggedIn, async (request, response) => {
   try {
-    const { page = 1, search = null, objective = null, location = null } = request.query
+    const { page = 1, search = null, target = null, location = null } = request.query
     const currentPage = page < 1 ? 0 : page - 1
 
     let query = {}
@@ -18,8 +18,8 @@ publisherRouter.get('/', loggedIn, async (request, response) => {
       }
     }
 
-    if (objective) {
-      query = { ...query, objective }
+    if (target) {
+      query = { ...query, target }
     }
 
     if (location) {
@@ -30,7 +30,7 @@ publisherRouter.get('/', loggedIn, async (request, response) => {
       .populate('locations')
       .populate('ageRange')
       .populate('formats.format')
-      .populate('formats.objective')
+      .populate('formats.target')
       .limit(perPage)
       .skip(perPage * currentPage)
 
@@ -71,7 +71,7 @@ publisherRouter.put('/:id', loggedIn, async (request, response) => {
     const data = await Publisher.findByIdAndUpdate(id, body, { new: true }).populate('locations')
       .populate('ageRange')
       .populate('formats.format')
-      .populate('formats.objective')
+      .populate('formats.target')
     response.status(200).json({ statusCode: 200, data })
   } catch (error) {
     response.status(400).json(defaultResponse)
@@ -86,7 +86,7 @@ publisherRouter.get('/:id', loggedIn, async (request, response) => {
       .populate('locations')
       .populate('ageRange')
       .populate('formats.format')
-      .populate('formats.objective')
+      .populate('formats.target')
     response.status(200).json({ statusCode: 200, data })
   } catch (error) {
     response.status(400).json(defaultResponse)

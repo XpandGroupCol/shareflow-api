@@ -24,9 +24,9 @@ const CampaignSchema = new Schema({
     type: Date,
     required: true
   },
-  objective: {
+  target: {
     type: Schema.Types.ObjectId,
-    ref: 'Objetive',
+    ref: 'Target',
     required: true
   },
   sector: {
