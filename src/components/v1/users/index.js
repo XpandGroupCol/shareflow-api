@@ -1,146 +1,37 @@
 
 const userRouter = require('express').Router()
-const bcryptjs = require('bcryptjs')
-const { STATUS } = require('../../../config')
 const loggedIn = require('../../../middleware/isAuth')
-const User = require('../../../models/User')
-const { rgx, perPage, defaultResponse } = require('../../../utils')
-const { uploadFile, receiveFile } = require('../../../utils/aws-upload')
+const { receiveFile } = require('../../../utils/aws-upload')
+const asyncHandler = require('../../../middleware/asynHandler')
+const controller = require('./controller')
 
-const extractToBody = ({
-  company,
-  email,
-  lastName,
-  name,
-  nit,
-  phone,
-  role,
-  image = '',
-  password
+userRouter.get('/',
+  loggedIn,
+  asyncHandler(controller.getUsers))
 
-}) => ({
-  company,
-  email,
-  lastName,
-  name,
-  nit,
-  phone,
-  role,
-  image,
-  password: bcryptjs.hash(password, 10)
-})
+userRouter.get('/profile',
+  loggedIn,
+  asyncHandler(controller.getProfile))
 
-userRouter.get('/', loggedIn, async (request, response) => {
-  try {
-    const { page = 1, search = null, role = null, status = null } = request.query
-    const currentPage = page < 1 ? 0 : page - 1
+userRouter.post('/',
+  loggedIn,
+  receiveFile,
+  asyncHandler(controller.createUser))
 
-    let query = {}
+userRouter.put('/company-profile',
+  loggedIn,
+  asyncHandler(controller.updateProfileCompany))
 
-    if (search) {
-      query = {
-        ...query,
-        $or: [
-          { name: { $regex: rgx(search), $options: 'i' } },
-          { email: { $regex: rgx(search), $options: 'i' } }
-        ]
-      }
-    }
+userRouter.put('/change-password',
+  loggedIn,
+  asyncHandler(controller.changePassword))
 
-    if (role) {
-      query = { ...query, role }
-    }
+userRouter.put('/:id',
+  loggedIn,
+  asyncHandler(controller.updateUser))
 
-    if (status) {
-      query = { ...query, status }
-    }
-
-    const data = await User.find(query)
-      .limit(perPage)
-      .skip(perPage * currentPage)
-
-    const total = await User.countDocuments(query)
-
-    response.status(200).json({ statusCode: 200, data, total, page: currentPage, pages: Math.ceil(total / perPage) })
-  } catch (error) {
-    response.status(400).json(defaultResponse)
-  }
-})
-
-userRouter.get('/profile', loggedIn, async (request, response) => {
-  try {
-    const { userId } = request
-    const data = await User.findById(userId)
-    response.status(200).json({ statusCode: 200, data })
-  } catch (error) {
-    response.status(400).json(defaultResponse)
-  }
-})
-
-userRouter.post('/', loggedIn, receiveFile, async (request, response) => {
-  try {
-    const { file, body } = request
-
-    if (file) {
-      body.image = await uploadFile({
-        fileName: `${Date.now()}-avater`,
-        mimetype: file.mimetype,
-        body: file.buffer
-      })
-    }
-
-    const data = await User.create({ ...extractToBody(request.body), emailVerified: true })
-    response.status(200).json({ statusCode: 200, data })
-  } catch (error) {
-    response.status(400).json(defaultResponse)
-  }
-})
-
-userRouter.put('/company-profile', loggedIn, async (request, response) => {
-  try {
-    const { userId: id } = request
-    const { company, nit, phone, address, companyEmail, rut = '' } = request.body
-
-    const data = await User.findByIdAndUpdate(id, { company, nit, phone, address, companyEmail, rut }, { new: true })
-    response.status(200).json({ statusCode: 200, data })
-  } catch (error) {
-    response.status(500).json(defaultResponse)
-  }
-})
-
-userRouter.put('/change-password', loggedIn, async (request, response) => {
-  try {
-    const { userId: id } = request
-    const { password } = request.body
-    const newPassword = await bcryptjs.hash(password, 10)
-
-    const data = await User.findByIdAndUpdate(id, { password: newPassword }, { new: true })
-    response.status(200).json({ statusCode: 200, data })
-  } catch (error) {
-    response.status(500).json(defaultResponse)
-  }
-})
-
-userRouter.put('/:id', loggedIn, async (request, response) => {
-  try {
-    const { id } = request.params
-    const { role, status } = request.body
-
-    const data = await User.findByIdAndUpdate(id, { role, status }, { new: true })
-    response.status(200).json({ statusCode: 200, data })
-  } catch (error) {
-    response.status(400).json(defaultResponse)
-  }
-})
-
-userRouter.delete('/:id', loggedIn, async (request, response) => {
-  try {
-    const { id } = request.params
-    const data = await User.findByIdAndUpdate(id, { status: STATUS[1].id }, { new: true })
-    response.status(200).json({ statusCode: 200, data })
-  } catch (error) {
-    response.status(400).json(defaultResponse)
-  }
-})
+userRouter.delete('/:id',
+  loggedIn,
+  asyncHandler(controller.deleteUser))
 
 module.exports = userRouter
