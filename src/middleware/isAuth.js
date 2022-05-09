@@ -10,10 +10,8 @@ const loggedIn = (req, res, next) => {
   try {
     const { id: userId } = jwt.verify(bearer, process.env.AUTH_SECRET) || {}
     req.userId = userId
-    console.log({ userId })
     next()
   } catch (e) {
-    console.log({ e })
     return res.status(401).json({ error: true, code: 401, message: 'Token invalido' })
   }
   // validar el usuario

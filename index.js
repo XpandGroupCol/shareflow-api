@@ -15,6 +15,7 @@ const sectorsRouter = require('./src/components/v1/sectors')
 const targetRouter = require('./src/components/v1/targets')
 const formatsRouter = require('./src/components/v1/formats')
 const locationsRouter = require('./src/components/v1/locations')
+const { notFoundHandler, logError } = require('./src/middleware/errorHandler')
 
 const mongoDB = new Mongo()
 
@@ -33,6 +34,9 @@ app.use('/sectors', sectorsRouter)
 app.use('/targets', targetRouter)
 app.use('/locations', locationsRouter)
 app.use('/formats', formatsRouter)
+
+app.use(notFoundHandler)
+app.use(logError)
 
 const startApp = async () => {
   try {

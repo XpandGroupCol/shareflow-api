@@ -20,9 +20,10 @@ const notFoundHandler = (_, res) => {
 }
 
 const logError = (err, req, res, next) => {
-  const status = err.isBoom || 500
-  res.status(status).json({
-    status,
+  const statusCode = err.isBoom ? err.output.statusCode : 500
+
+  res.status(statusCode).json({
+    statusCode,
     error: true,
     message: err?.output?.payload?.message || err?.message.trim() || 'Internal server error'
   })

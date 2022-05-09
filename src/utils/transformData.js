@@ -1,6 +1,6 @@
 const { ROLES } = require('../config')
 
-const getUserAuth = ({ _id, name, lastName, image, role, company, nit, phone, address, companyEmail, checkRut } = {}) => ({
+const getUserAuth = ({ _id, name, lastName, image, role, company = '', nit = '', phone = '', address = '', companyEmail = '', checkRut = false } = {}) => ({
   id: _id,
   name: `${name} ${lastName}`,
   image: image,

@@ -94,6 +94,11 @@ const userSchema = new Schema({
   deletedAt: {
     type: Date,
     default: null
+  },
+  percentage: {
+    type: Schema.Types.Decimal128,
+    required: true,
+    default: 15
   }
 },
 {

@@ -19,7 +19,7 @@ const uploadFile = async ({ fileName, body, mimetype }) => {
   }
 
   try {
-    const { Location } = await s3.upload(params).promise()
+    const { Location = null } = await s3.upload(params).promise()
     return Location
   } catch (e) {
     return Promise.reject(e)
