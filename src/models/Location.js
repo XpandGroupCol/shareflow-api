@@ -7,6 +7,10 @@ const LocationSchema = new Schema({
     lowercase: true,
     unique: true
   },
+  country: {
+    type: String,
+    required: true
+  },
   status: {
     type: Boolean,
     required: true,

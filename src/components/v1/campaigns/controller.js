@@ -1,4 +1,5 @@
 const boom = require('@hapi/boom')
+const { CAMPAING_STATUS } = require('../../../config')
 const Campaign = require('../../../models/Campaign')
 const { rgx, perPage } = require('../../../utils')
 const { uploadFile } = require('../../../utils/aws-upload')
@@ -62,6 +63,7 @@ const getCampaignById = async (request, response) => {
     .populate('target')
     .populate('locations')
     .populate('ages')
+
   response.status(200).json({ statusCode: 200, data })
 }
 
@@ -81,9 +83,26 @@ const createCampaing = async (request, response) => {
   response.status(200).json({ statusCode: 200, data: campaign?._id })
 }
 
+const addPublishers = async (request, response) => {
+  const { publishers } = request.body
+  const { id } = request.params
+  const campaign = await Campaign.findByIdAndUpdate(id, { publishers, status: CAMPAING_STATUS[1]?.id }, { new: true })
+  response.status(200).json({ statusCode: 200, data: campaign })
+}
+
+const addPayment = async (request, response) => {
+  const { payment } = request.body
+  console.log({ payment }, request.body)
+  const { id } = request.params
+  const campaign = await Campaign.findByIdAndUpdate(id, { payment, status: CAMPAING_STATUS[2]?.id }, { new: true })
+  response.status(200).json({ statusCode: 200, data: campaign })
+}
+
 module.exports = {
   getCampaigns,
   getCampaignByUser,
   getCampaignById,
-  createCampaing
+  createCampaing,
+  addPublishers,
+  addPayment
 }

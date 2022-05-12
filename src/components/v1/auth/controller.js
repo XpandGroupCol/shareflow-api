@@ -1,18 +1,18 @@
 
 const boom = require('@hapi/boom')
 const bcryptjs = require('bcryptjs')
-const jwt = require('jsonwebtoken')
 const { ROLES } = require('../../../config')
 const User = require('../../../models/User')
 const { sendMail, verifyEmal, forgotPassword } = require('../../../utils/sendMail')
 const { getUserAuth } = require('../../../utils/transformData')
+const jwt = require('jsonwebtoken')
 
 const adminLogin = async (request, response) => {
   const { email, password } = request.body
   const user = await User.findOne({
     email,
     status: true,
-    role: { $ne: ROLES[2].id }
+    role: { $ne: ROLES[1].id }
   })
 
   if (!user ||
@@ -24,14 +24,9 @@ const adminLogin = async (request, response) => {
     throw boom.unauthorized('Su cuenta no ha sido verificada.')
   }
 
-  const data = getUserAuth(user)
-
-  const token = jwt.sign(data, process.env.AUTH_SECRET)
-
   response.status(200).json({
     statusCode: 200,
-    data: { ...data, token }
-
+    data: getUserAuth(user)
   })
 }
 
@@ -41,7 +36,7 @@ const login = async (request, response) => {
   const user = await User.findOne({
     email,
     statusCode: true,
-    role: ROLES[2].id
+    role: ROLES[1].id
   })
 
   if (!user ||
@@ -53,13 +48,9 @@ const login = async (request, response) => {
     throw boom.unauthorized('Su cuenta no ha sido verificada.')
   }
 
-  const data = getUserAuth(user)
-
-  const token = jwt.sign(data, process.env.AUTH_SECRET)
-
   response.status(200).json({
     statusCode: 200,
-    data: { ...data, token }
+    data: getUserAuth(user)
 
   })
 }
@@ -79,15 +70,12 @@ const socialAuth = async (request, response) => {
   }
 
   if (!user) {
-    user = await User.create({ name, lastName, provider, password, email, image, role: ROLES[2]?.id, emailVerified: true })
+    user = await User.create({ name, lastName, provider, password, email, image, role: ROLES[1]?.id, emailVerified: true })
   }
-
-  const data = getUserAuth(user)
-  const token = jwt.sign(data, process.env.AUTH_SECRET)
 
   response.status(200).json({
     statusCode: 200,
-    data: { ...data, token }
+    data: getUserAuth(user)
   })
 }
 
@@ -102,11 +90,8 @@ const verifyEmail = async (request, response) => {
     throw boom.badRequest('El enlace de verificación no es valido.')
   }
 
-  const data = getUserAuth(user)
-  const _token = jwt.sign(data, process.env.AUTH_SECRET)
-
   response.status(200).json({
-    statusCode: 200, data: { ...data, token: _token }
+    statusCode: 200, data: getUserAuth(user)
   })
 }
 

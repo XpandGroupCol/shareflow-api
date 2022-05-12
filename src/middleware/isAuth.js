@@ -8,7 +8,7 @@ const loggedIn = (req, res, next) => {
 
   const [, bearer] = token.split(' ')
 
-  const { id: userId } = jwt.verify(bearer, process.env.AUTH_SECRET) || {}
+  const { id: userId } = jwt.verify(bearer, process.env.ACCESS_TOKEN) || {}
   req.userId = userId
   next()
 }

@@ -1,19 +1,11 @@
 const ROLES = [
   {
-    id: 'SUPER_ADMIN',
-    label: 'Super Admin'
-  },
-  {
     id: 'ADMIN',
     label: 'Admin'
   },
   {
     id: 'CLIENT',
     label: 'Client'
-  },
-  {
-    id: 'SEO',
-    label: 'Seo'
   }
 ]
 
@@ -42,16 +34,6 @@ const SEX = [
   }, {
     id: 'women',
     label: 'Mujeres'
-  }
-]
-
-const STATUS = [
-  {
-    id: 0,
-    label: 'Activo'
-  }, {
-    id: 1,
-    label: 'Inactivo'
   }
 ]
 
@@ -89,7 +71,7 @@ const BIDDING_MODEL = [
 
 const TARGET_TYPE = [
   {
-    id: 'click',
+    id: 'clicks',
     label: 'Click'
   },
   {
@@ -102,12 +84,37 @@ const TARGET_TYPE = [
   }
 ]
 
+const PUBLISHER_CATEGORY = [
+  {
+    id: 'platform',
+    label: 'Plataforma'
+  },
+  {
+    id: 'medium',
+    label: 'Medio'
+  }
+]
+
+const MEDIA_FORMATS = [
+  { id: 'mp4', label: 'MP4', isVideo: true },
+  { id: 'avi', label: 'AVI', isVideo: true },
+  { id: 'vod', label: 'VOB', isVideo: true },
+  { id: 'wmv', label: 'WMV', isVideo: true },
+  { id: 'gif', label: 'GIF', isVideo: false },
+  { id: 'jpg', label: 'JPG', isVideo: false },
+  { id: 'tif', label: 'TIF', isVideo: false },
+  { id: 'png', label: 'PNG', isVideo: false },
+  { id: 'svg', label: 'SVG', isVideo: false },
+  { id: 'jpeg', label: 'JPEG', isVideo: false }
+]
+
 module.exports = {
   ROLES,
   DEVICE,
   SEX,
-  STATUS,
+  PUBLISHER_CATEGORY,
   CAMPAING_STATUS,
   BIDDING_MODEL,
-  TARGET_TYPE
+  TARGET_TYPE,
+  MEDIA_FORMATS
 }

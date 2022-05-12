@@ -29,7 +29,6 @@ const verifyTokenSchema = joi.object({
 const signupSchema = joi.object({
   name: joi.string().required(),
   lastName: joi.string().required(),
-  provider: joi.string().required(),
   password: joi.string().required(),
   email: joi.string().email().required(),
   image: joi.string()

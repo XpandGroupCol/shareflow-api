@@ -20,6 +20,18 @@ const validateRequestSchema = (schema, requestProperty = 'body') =>
     }
   }
 
+const validateRequest = (schema, requestProperty = 'body') =>
+  async function (req, res, next) {
+    try {
+      await schema.validate(req[requestProperty])
+      next()
+    } catch ({ message }) {
+      const { statusCode } = boom.badRequest().output
+      res.status(statusCode).json({ message, statusCode, error: message })
+    }
+  }
+
 module.exports = {
-  validateRequestSchema
+  validateRequestSchema,
+  validateRequest
 }

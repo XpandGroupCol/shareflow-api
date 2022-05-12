@@ -4,6 +4,8 @@ const loggedIn = require('../../../middleware/isAuth')
 const { receiveFile } = require('../../../utils/aws-upload')
 const asyncHandler = require('../../../middleware/asynHandler')
 const controller = require('./controller')
+const { validateRequestSchema } = require('../../../middleware/requestSchemaHandler')
+const schemas = require('./schemas')
 
 userRouter.get('/',
   loggedIn,
@@ -13,9 +15,14 @@ userRouter.get('/profile',
   loggedIn,
   asyncHandler(controller.getProfile))
 
+userRouter.get('/:id',
+  loggedIn,
+  asyncHandler(controller.getUserById))
+
 userRouter.post('/',
   loggedIn,
   receiveFile,
+  validateRequestSchema(schemas.createUserSchema),
   asyncHandler(controller.createUser))
 
 userRouter.put('/company-profile',
@@ -28,6 +35,8 @@ userRouter.put('/change-password',
 
 userRouter.put('/:id',
   loggedIn,
+  receiveFile,
+  validateRequestSchema(schemas.createUserSchema),
   asyncHandler(controller.updateUser))
 
 userRouter.delete('/:id',

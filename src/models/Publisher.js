@@ -1,8 +1,7 @@
 const { Schema, model } = require('mongoose')
-const { SEX } = require('../config')
 
 const PublisherSchema = new Schema({
-  image: {
+  logo: {
     type: String,
     required: false
   },
@@ -12,7 +11,7 @@ const PublisherSchema = new Schema({
     unique: true
   },
   miniBudget: {
-    type: String,
+    type: Number,
     default: 0
   },
   locations: {
@@ -24,9 +23,9 @@ const PublisherSchema = new Schema({
     default: []
   },
   sex: {
-    type: Object,
-    required: true,
-    default: SEX[0]
+    type: String,
+    enum: ['all', 'male', 'women'],
+    required: true
   },
   ageRange: {
     type: [{
@@ -38,13 +37,16 @@ const PublisherSchema = new Schema({
   },
   kpi: {
     type: String,
-    required: true,
-    default: '?'
+    required: false
   },
   status: {
     type: Boolean,
     required: true,
     default: true
+  },
+  category: {
+    type: String,
+    required: true
   },
   formats: {
     type: [{
@@ -57,13 +59,20 @@ const PublisherSchema = new Schema({
         ref: 'Target'
       },
       biddingModel: {
-        type: Object
+        type: String,
+        enum: ['CPM', 'CPC', 'CPV', 'CPA']
       },
       device: {
-        type: Object
+        type: String,
+        enum: ['all', 'mobile', 'desktop']
       },
-      pricePerUnit: ''
+      pricePerUnit: {
+        type: Number,
+        required: true
+      }
     }],
+    required: true,
+    minlength: 1,
     default: []
   }
 }, { timestamps: true })

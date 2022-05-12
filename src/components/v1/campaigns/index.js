@@ -22,4 +22,12 @@ campaignRouter.post('/',
   receiveFile,
   asyncHandler(controller.createCampaing))
 
+campaignRouter.put('/payment/:id',
+  loggedIn,
+  asyncHandler(controller.addPayment))
+
+campaignRouter.put('/:id',
+  loggedIn,
+  asyncHandler(controller.addPublishers))
+
 module.exports = campaignRouter

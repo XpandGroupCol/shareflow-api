@@ -20,8 +20,8 @@ const deleteLocation = async (request, response) => {
 
 const updateLocation = async (request, response) => {
   const { id } = request.params
-  const { name } = request.body
-  const location = await Location.findByIdAndUpdate(id, { name }, { new: true })
+  const { name, country } = request.body
+  const location = await Location.findByIdAndUpdate(id, { name, country }, { new: true })
   response.status(200).json({ statusCode: 200, location })
 }
 

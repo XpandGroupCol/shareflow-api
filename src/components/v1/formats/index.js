@@ -13,7 +13,7 @@ formatsRouter.post('/',
 
 formatsRouter.delete('/:id',
   loggedIn,
-  asyncHandler(controller.getFormatById))
+  asyncHandler(controller.deleteFormat))
 
 formatsRouter.put('/:id',
   loggedIn,

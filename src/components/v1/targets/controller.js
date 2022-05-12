@@ -1,10 +1,17 @@
 
 const { getListData } = require('../../../utils')
 const Target = require('../../../models/Target')
+const { TARGET_TYPE } = require('../../../config/index')
 
 const getTargets = async (request, response) => {
-  const data = await getListData(Target, request.query)
-  return response.status(200).json({ statusCode: 200, ...data })
+  const { data: targets, ...restOfTargtes } = await getListData(Target, request.query)
+
+  const data = targets.map(({ category = [], ...values }) => ({
+    ...values,
+    category: category.map(t => TARGET_TYPE.find(({ id }) => id === t))
+  }))
+
+  return response.status(200).json({ statusCode: 200, data, ...restOfTargtes })
 }
 
 const createTarget = async (request, response) => {
@@ -21,8 +28,8 @@ const deleteTarget = async (request, response) => {
 
 const updateTarget = async (request, response) => {
   const { id } = request.params
-  const { name } = request.body
-  const location = await Target.findByIdAndUpdate(id, { name }, { new: true })
+  const { name, category } = request.body
+  const location = await Target.findByIdAndUpdate(id, { name, category }, { new: true })
   response.status(200).json({ statusCode: 200, location })
 }
 

@@ -7,14 +7,15 @@ const TargetSchema = new Schema({
     lowercase: true,
     unique: true
   },
+  category: {
+    type: [String],
+    enum: ['clicks', 'prints', 'reproductions'],
+    required: true
+  },
   status: {
     type: Boolean,
     required: true,
     default: true
-  },
-  type: {
-    type: String,
-    required: true
   }
 }, {
   timestamps: true

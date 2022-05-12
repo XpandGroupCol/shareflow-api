@@ -1,4 +1,5 @@
 const boom = require('@hapi/boom')
+const { SEX, BIDDING_MODEL, DEVICE, PUBLISHER_CATEGORY } = require('../../../config')
 const Publisher = require('../../../models/Publisher')
 const { rgx, perPage } = require('../../../utils')
 const { uploadFile } = require('../../../utils/aws-upload')
@@ -62,17 +63,36 @@ const updatePublisher = async (request, response) => {
     .populate('ageRange')
     .populate('formats.format')
     .populate('formats.target')
+
   response.status(200).json({ statusCode: 200, data })
 }
 
 const getPublisherById = async (request, response) => {
   const { id } = request.params
   if (!id) throw boom.notFound()
-  const data = await Publisher.findById(id)
+  const { _id, publisher, miniBudget, locations, sex, ageRange, category, formats } = await Publisher.findById(id)
     .populate('locations')
     .populate('ageRange')
     .populate('formats.format')
     .populate('formats.target')
+
+  const data = {
+    id: _id,
+    publisher,
+    miniBudget,
+    locations,
+    sex: SEX.find(({ id }) => id === sex),
+    ageRange,
+    category: PUBLISHER_CATEGORY.find(({ id }) => id === category),
+    formats: formats.map(({ biddingModel, device, format, target, pricePerUnit }) => ({
+      format,
+      target,
+      pricePerUnit,
+      biddingModel: BIDDING_MODEL.find(({ id }) => id === biddingModel),
+      device: DEVICE.find(({ id }) => id === device)
+    }))
+  }
+
   response.status(200).json({ statusCode: 200, data })
 }
 

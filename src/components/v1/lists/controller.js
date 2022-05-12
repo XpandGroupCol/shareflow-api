@@ -1,10 +1,14 @@
-const { SEX, DEVICE, ROLES, STATUS, CAMPAING_STATUS, BIDDING_MODEL } = require('../../../config')
+const { SEX, DEVICE, ROLES, STATUS, CAMPAING_STATUS, BIDDING_MODEL, MEDIA_FORMATS, TARGET_TYPE, PUBLISHER_CATEGORY } = require('../../../config')
 const Age = require('../../../models/Age')
 const Format = require('../../../models/Format')
 const Location = require('../../../models/Location')
 const Target = require('../../../models/Target')
 const Sector = require('../../../models/Sector')
 const Publisher = require('../../../models/Publisher')
+
+// todo
+
+// servicios, objetivos, publishers => debe ser autocomplete
 
 const mapPublishers = (data = []) =>
   data.map(({ _id: id, publisher: label, formats, locations, ageRange, ...restOfPublisher }) =>
@@ -43,7 +47,10 @@ const getLists = async (_, response) => {
     statuses: STATUS,
     campaignStatuses: CAMPAING_STATUS,
     publisher: mapPublishers(publisher?.value || []),
-    biddingModel: BIDDING_MODEL
+    biddingModel: BIDDING_MODEL,
+    mediaFormats: MEDIA_FORMATS,
+    targetTypes: TARGET_TYPE,
+    publisherCategory: PUBLISHER_CATEGORY
   })
 }
 

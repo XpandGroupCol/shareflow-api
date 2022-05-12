@@ -4,29 +4,7 @@ const { STATUS } = require('../../../config')
 const User = require('../../../models/User')
 const { rgx, perPage } = require('../../../utils')
 const { uploadFile } = require('../../../utils/aws-upload')
-
-const extractToBody = ({
-  company,
-  email,
-  lastName,
-  name,
-  nit,
-  phone,
-  role,
-  image = '',
-  password
-
-}) => ({
-  company,
-  email,
-  lastName,
-  name,
-  nit,
-  phone,
-  role,
-  image,
-  password: bcryptjs.hash(password, 10)
-})
+const boom = require('@hapi/boom')
 
 const getUsers = async (request, response) => {
   const { page = 1, search = null, role = null, status = null } = request.query
@@ -67,6 +45,13 @@ const getProfile = async (request, response) => {
   response.status(200).json({ statusCode: 200, data })
 }
 
+const getUserById = async (request, response) => {
+  const { id } = request.params
+  if (!id) return boom.notFound('Usuario no encontrado')
+  const data = await User.findById(id)
+  response.status(200).json({ statusCode: 200, data })
+}
+
 const createUser = async (request, response) => {
   const { file, body } = request
 
@@ -78,7 +63,9 @@ const createUser = async (request, response) => {
     })
   }
 
-  const data = await User.create({ ...extractToBody(request.body), emailVerified: true })
+  body.password = await bcryptjs.hash(body.password, 10)
+
+  const data = await User.create({ ...body, emailVerified: true })
   response.status(200).json({ statusCode: 200, data })
 }
 
@@ -100,13 +87,15 @@ const changePassword = async (request, response) => {
 
 const updateUser = async (request, response) => {
   const { id } = request.params
-  const { role, status } = request.body
-  const data = await User.findByIdAndUpdate(id, { role, status }, { new: true })
+  if (!id) return boom.notFound('Usuario no encontrado')
+  const { password, ...restOfUser } = request.body
+  const data = await User.findByIdAndUpdate(id, { ...restOfUser }, { new: true })
   response.status(200).json({ statusCode: 200, data })
 }
 
 const deleteUser = async (request, response) => {
   const { id } = request.params
+  if (!id) return boom.notFound('Usuario no encontrado')
   const data = await User.findByIdAndUpdate(id, { status: STATUS[1].id }, { new: true })
   response.status(200).json({ statusCode: 200, data })
 }
@@ -114,6 +103,7 @@ const deleteUser = async (request, response) => {
 module.exports = {
   getUsers,
   getProfile,
+  getUserById,
   createUser,
   updateProfileCompany,
   changePassword,
