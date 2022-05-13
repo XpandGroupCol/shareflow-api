@@ -54,7 +54,6 @@ const getUserById = async (request, response) => {
 
 const createUser = async (request, response) => {
   const { files, body } = request
-
   await Promise.all(
     files.map(async ({ fieldname, mimetype, buffer }) => {
       const location = await uploadFile({
@@ -62,7 +61,6 @@ const createUser = async (request, response) => {
         mimetype: mimetype,
         body: buffer
       })
-
       body[fieldname] = location
     })
 
