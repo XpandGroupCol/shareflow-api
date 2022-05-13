@@ -53,15 +53,20 @@ const getUserById = async (request, response) => {
 }
 
 const createUser = async (request, response) => {
-  const { file, body } = request
+  const { files, body } = request
 
-  if (file) {
-    body.image = await uploadFile({
-      fileName: `${Date.now()}-avater`,
-      mimetype: file.mimetype,
-      body: file.buffer
+  await Promise.all(
+    files.map(async ({ fieldname, mimetype, buffer }) => {
+      const location = await uploadFile({
+        fileName: `${Date.now()}-${fieldname}`,
+        mimetype: mimetype,
+        body: buffer
+      })
+
+      body[fieldname] = location
     })
-  }
+
+  )
 
   body.password = await bcryptjs.hash(body.password, 10)
 

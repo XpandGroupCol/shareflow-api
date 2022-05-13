@@ -6,6 +6,7 @@ const asyncHandler = require('../../../middleware/asynHandler')
 const controller = require('./controller')
 const { validateRequestSchema } = require('../../../middleware/requestSchemaHandler')
 const schemas = require('./schemas')
+const { receiveMultipleFiles } = require('../../../middleware/fileManager')
 
 userRouter.get('/',
   loggedIn,
@@ -21,7 +22,7 @@ userRouter.get('/:id',
 
 userRouter.post('/',
   loggedIn,
-  receiveFile,
+  receiveMultipleFiles,
   validateRequestSchema(schemas.createUserSchema),
   asyncHandler(controller.createUser))
 
