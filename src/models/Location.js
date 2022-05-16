@@ -23,7 +23,7 @@ const LocationSchema = new Schema({
 LocationSchema.set('toJSON', {
   transform: (_, returnedObject) => {
     returnedObject.id = returnedObject._id
-    returnedObject.label = returnedObject.name
+    returnedObject.label = `${returnedObject.name}, ${returnedObject.country ?? ''}`
     delete returnedObject.createdAt
     delete returnedObject.updatedAt
     delete returnedObject.name

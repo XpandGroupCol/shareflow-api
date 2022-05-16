@@ -82,7 +82,7 @@ const socialAuth = async (request, response) => {
 const verifyEmail = async (request, response) => {
   const { token } = request.body
 
-  const { email } = jwt.verify(token, process.env.AUTH_SECRET)
+  const { email } = jwt.verify(token, process.env.ACCESS_TOKEN)
 
   const user = await User.findOneAndUpdate({ email }, { emailVerified: true })
 
@@ -103,7 +103,7 @@ const forgot = async (request, response) => {
   if (user) {
     const data = { id: user?._id, email: user?.email }
 
-    const token = jwt.sign(data, process.env.AUTH_SECRET)
+    const token = jwt.sign(data, process.env.ACCESS_TOKEN)
     sendMail(forgotPassword(token), async (error) => {
       if (error) {
         throw boom.internal('Algo salio mal, por favor intenta nuevamente.')
@@ -117,7 +117,7 @@ const forgot = async (request, response) => {
 const verifyPassword = async (request, response) => {
   const { token } = request.body
 
-  const { email } = jwt.verify(token, process.env.AUTH_SECRET)
+  const { email } = jwt.verify(token, process.env.ACCESS_TOKEN)
 
   const user = await User.findOne({ email })
 
@@ -147,7 +147,7 @@ const signup = async (request, response) => {
     email: user?.email
   }
 
-  const token = jwt.sign(data, process.env.AUTH_SECRET)
+  const token = jwt.sign(data, process.env.ACCESS_TOKEN)
 
   sendMail(verifyEmal(token), async (error) => {
     if (error) {
@@ -161,7 +161,7 @@ const signup = async (request, response) => {
 
 const changePassword = async (request, response) => {
   const { password, token } = request.body
-  const { id } = jwt.verify(token, process.env.AUTH_SECRET)
+  const { id } = jwt.verify(token, process.env.ACCESS_TOKEN)
   const newPassword = await bcryptjs.hash(password, 10)
 
   const data = await User.findByIdAndUpdate(id, { password: newPassword })

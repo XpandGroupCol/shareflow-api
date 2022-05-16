@@ -1,6 +1,6 @@
 
 const bcryptjs = require('bcryptjs')
-const { STATUS } = require('../../../config')
+const { STATUS, ROLES } = require('../../../config')
 const User = require('../../../models/User')
 const { rgx, perPage } = require('../../../utils')
 const { uploadFile } = require('../../../utils/aws-upload')
@@ -49,7 +49,11 @@ const getUserById = async (request, response) => {
   const { id } = request.params
   if (!id) return boom.notFound('Usuario no encontrado')
   const data = await User.findById(id)
-  response.status(200).json({ statusCode: 200, data })
+  const { address, avatar, checkRut, company, companyEmail, email, name, lastName, nit, percentage, phone, role, rut, id: userId } = data
+  response.status(200).json({
+    statusCode: 200,
+    data: { address, avatar, checkRut, company, companyEmail, email, name, nit, percentage, phone, lastName, role: ROLES.find(({ id }) => role === id), rut, id: userId }
+  })
 }
 
 const createUser = async (request, response) => {
@@ -91,8 +95,8 @@ const changePassword = async (request, response) => {
 const updateUser = async (request, response) => {
   const { id } = request.params
   if (!id) return boom.notFound('Usuario no encontrado')
-  const { password, ...restOfUser } = request.body
-  const data = await User.findByIdAndUpdate(id, { ...restOfUser }, { new: true })
+  const { address, avatar, checkRut, company, companyEmail, email, name, lastName, nit, percentage, phone, provider, role, rut } = request.body
+  const data = await User.findByIdAndUpdate(id, { address, avatar, checkRut, company, companyEmail, email, name, lastName, nit, percentage, phone, provider, role, rut }, { new: true })
   response.status(200).json({ statusCode: 200, data })
 }
 

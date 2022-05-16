@@ -37,7 +37,7 @@ userRouter.put('/change-password',
 userRouter.put('/:id',
   loggedIn,
   receiveFile,
-  validateRequestSchema(schemas.createUserSchema),
+  validateRequestSchema(schemas.editUserSchema),
   asyncHandler(controller.updateUser))
 
 userRouter.delete('/:id',

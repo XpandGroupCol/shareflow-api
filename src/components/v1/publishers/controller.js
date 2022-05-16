@@ -39,13 +39,11 @@ const getPublishers = async (request, response) => {
 }
 
 const createPublisher = async (request, response) => {
-  let { file, body } = request
-
-  body = JSON.parse(body?.publisher)
+  const { file, body } = request
 
   if (file) {
-    body.image = await uploadFile({
-      fileName: `${Date.now()}-avater`,
+    body.logo = await uploadFile({
+      fileName: `${Date.now()}-logo`,
       mimetype: file.mimetype,
       body: file.buffer
     })
@@ -70,7 +68,7 @@ const updatePublisher = async (request, response) => {
 const getPublisherById = async (request, response) => {
   const { id } = request.params
   if (!id) throw boom.notFound()
-  const { _id, publisher, miniBudget, locations, sex, ageRange, category, formats } = await Publisher.findById(id)
+  const { _id, publisher, miniBudget, locations, sex, ageRange, category, formats, logo } = await Publisher.findById(id)
     .populate('locations')
     .populate('ageRange')
     .populate('formats.format')
@@ -79,6 +77,7 @@ const getPublisherById = async (request, response) => {
   const data = {
     id: _id,
     publisher,
+    logo,
     miniBudget,
     locations,
     sex: SEX.find(({ id }) => id === sex),
