@@ -65,7 +65,7 @@ const socialAuth = async (request, response) => {
     throw boom.unauthorized('Ya tiene un usuario con otro proveedor de autenticacion')
   }
 
-  if (user && (user?.role !== ROLES[2].id || !user?.status)) {
+  if (user && (user?.role !== ROLES[1].id || !user?.status)) {
     throw boom.unauthorized(`No pudimos acceder con su cuenta de ${provider}.Si necesitas que te rescatemos, escribemos a support@mediax.com`)
   }
 
@@ -130,7 +130,7 @@ const verifyPassword = async (request, response) => {
 
 const signup = async (request, response) => {
   let user = null
-  const { name, lastName, provider, password = '@', email, image } = request.body
+  const { name, lastName, password, email } = request.body
 
   user = await User.findOne({ email })
 
@@ -140,7 +140,9 @@ const signup = async (request, response) => {
 
   const hashPassword = await bcryptjs.hash(password, 10)
 
-  user = await User.create({ name, lastName, provider, password: hashPassword, email, image, emailVerified: false, role: ROLES[2].id })
+  user = await User.create({ name, lastName, password: hashPassword, email, emailVerified: false, role: ROLES[1].id })
+
+  console.log({ user })
 
   const data = {
     id: user?._id,

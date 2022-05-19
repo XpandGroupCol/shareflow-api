@@ -15,7 +15,15 @@ const mapPublishers = (data = []) =>
     ({
       id,
       label,
-      formats: formats.map(({ format, device, pricePerUnit, biddingModel }) => ({ id: format._id, label: format.name, device: device.label, pricePerUnit: parseInt(pricePerUnit), biddingModel: biddingModel.id })),
+      formats: formats.map(({ format, device, pricePerUnit, biddingModel, targets }) =>
+        ({
+          id: format._id,
+          label: format.name,
+          device: DEVICE.find(({ id }) => id === device)?.label || '',
+          pricePerUnit: parseInt(pricePerUnit),
+          biddingModel: biddingModel.id,
+          targets
+        })),
       locations,
       ageRange,
       ...restOfPublisher
