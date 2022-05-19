@@ -78,6 +78,18 @@ const createUser = async (request, response) => {
 
 const updateProfileCompany = async (request, response) => {
   const { userId: id } = request
+
+  const { files, body } = request
+  await Promise.all(
+    files.map(async ({ fieldname, mimetype, buffer }) => {
+      const location = await uploadFile({
+        fileName: `${Date.now()}-${fieldname}`,
+        mimetype: mimetype,
+        body: buffer
+      })
+      body[fieldname] = location
+    }))
+
   const { company, nit, phone, address, companyEmail, rut = '' } = request.body
 
   const data = await User.findByIdAndUpdate(id, { company, nit, phone, address, companyEmail, rut }, { new: true })

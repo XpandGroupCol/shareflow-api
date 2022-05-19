@@ -28,6 +28,7 @@ userRouter.post('/',
 
 userRouter.put('/company-profile',
   loggedIn,
+  receiveMultipleFiles,
   asyncHandler(controller.updateProfileCompany))
 
 userRouter.put('/change-password',

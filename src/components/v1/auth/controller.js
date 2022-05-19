@@ -142,8 +142,6 @@ const signup = async (request, response) => {
 
   user = await User.create({ name, lastName, password: hashPassword, email, emailVerified: false, role: ROLES[1].id })
 
-  console.log({ user })
-
   const data = {
     id: user?._id,
     email: user?.email
