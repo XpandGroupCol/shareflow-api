@@ -1,30 +1,46 @@
 const boom = require('@hapi/boom')
-const { SEX, BIDDING_MODEL, DEVICE, PUBLISHER_CATEGORY } = require('../../../config')
-const Publisher = require('../../../models/Publisher')
 const { rgx, perPage } = require('../../../utils')
+const Publisher = require('../../../models/Publisher')
 const { uploadFile } = require('../../../utils/aws-upload')
+const { SEX, BIDDING_MODEL, DEVICE, PUBLISHER_CATEGORY } = require('../../../config')
 
 const getPublishers = async (request, response) => {
-  const { page = 1, search = null, target = null, location = null } = request.query
+  const { page = 1, search = null, target = null, location = null, miniBudget = null } = request.query
   const currentPage = page < 1 ? 0 : page - 1
+  const conditions = []
 
   let query = {}
 
   if (search) {
-    query = {
+    conditions.push({
       ...query,
       publisher: { $regex: rgx(search), $options: 'i' }
-    }
+    })
   }
 
   if (target) {
-    query = { ...query, target }
+    conditions.push({
+      ...query,
+      'formats.target':
+      { $in: target.split(',') }
+    })
   }
 
   if (location) {
-    query = { ...query, location }
+    conditions.push({ ...query, location })
   }
 
+  if (miniBudget) {
+    conditions.push({
+      ...query,
+      miniBudget:
+        { $gte: parseInt(miniBudget) }
+    })
+  }
+
+  query = {
+    $or: conditions
+  }
   const data = await Publisher.find(query)
     .populate('locations')
     .populate('ageRange')
