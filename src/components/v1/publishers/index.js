@@ -1,6 +1,6 @@
 const controller = require('./controller')
 const publisherRouter = require('express').Router()
-const { getPublishersSchema } = require('./schemas')
+const { getPublishersByTargetIdSchema } = require('./schemas')
 const loggedIn = require('../../../middleware/isAuth')
 const { receiveFile } = require('../../../utils/aws-upload')
 const asyncHandler = require('../../../middleware/asynHandler')
@@ -8,8 +8,13 @@ const { validateRequestSchema } = require('../../../middleware/requestSchemaHand
 
 publisherRouter.get('/',
   loggedIn,
-  validateRequestSchema(getPublishersSchema, 'query'),
   asyncHandler(controller.getPublishers))
+
+publisherRouter.get('/target',
+  loggedIn,
+  validateRequestSchema(getPublishersByTargetIdSchema, 'query'),
+  asyncHandler(controller.getPublishersByTargetId)
+)
 
 publisherRouter.post('/',
   loggedIn,

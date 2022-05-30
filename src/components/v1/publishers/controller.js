@@ -5,10 +5,44 @@ const { uploadFile } = require('../../../utils/aws-upload')
 const { SEX, BIDDING_MODEL, DEVICE, PUBLISHER_CATEGORY } = require('../../../config')
 
 const getPublishers = async (request, response) => {
-  const { page = 1, search = null, target = null, location = null, miniBudget = null } = request.query
+  const { page = 1, search = null, target = null, location = null } = request.query
+  const currentPage = page < 1 ? 0 : page - 1
+
+  let query = {}
+
+  if (search) {
+    query = {
+      ...query,
+      publisher: { $regex: rgx(search), $options: 'i' }
+    }
+  }
+
+  if (target) {
+    query = query = { ...query, target }
+  }
+
+  if (location) {
+    query = { ...query, location }
+  }
+
+  const data = await Publisher.find(query)
+    .populate('locations')
+    .populate('ageRange')
+    .populate('formats.format')
+    .populate('formats.target')
+    .limit(perPage)
+    .skip(perPage * currentPage)
+
+  const total = await Publisher.countDocuments(query)
+
+  response.status(200).json({ statusCode: 200, data, total, page: currentPage, pages: Math.ceil(total / perPage) })
+}
+
+const getPublishersByTargetId = async (request, response) => {
+  const { page = 1, search = null, target = null, miniBudget = null } = request.query
   const currentPage = page < 1 ? 0 : page - 1
   const conditions = []
-
+  const data = []
   let query = {}
 
   if (search) {
@@ -26,10 +60,6 @@ const getPublishers = async (request, response) => {
     })
   }
 
-  if (location) {
-    conditions.push({ ...query, location })
-  }
-
   if (miniBudget) {
     conditions.push({
       ...query,
@@ -41,17 +71,43 @@ const getPublishers = async (request, response) => {
   query = {
     $or: conditions
   }
-  const data = await Publisher.find(query)
-    .populate('locations')
-    .populate('ageRange')
+
+  const publishers = await Publisher.find(query)
     .populate('formats.format')
     .populate('formats.target')
     .limit(perPage)
     .skip(perPage * currentPage)
+    .lean()
+    .exec()
+
+  if (publishers.length) {
+    publishers.map(publisher => {
+      if (publisher.formats.length) {
+        publisher.formats.map(format => {
+          return data.push({
+            id: `${publisher._id}-${format._id}`,
+            publisherId: publisher._id,
+            formatId: format._id,
+            logo: publisher.logo || '',
+            label: format.format.name || '',
+            width: format.format.width,
+            height: format.format.height,
+            type: format.format.type || '',
+            publisherCategory: publisher.category || '',
+            biddingModel: format.biddingModel || '',
+            device: format.device || '',
+            pricePerUnit: format.pricePerUnit,
+            targetCategories: format.target.category,
+            groupBy: publisher.publisher || ''
+          })
+        })
+      }
+      return data
+    })
+  }
 
   const total = await Publisher.countDocuments(query)
-
-  response.status(200).json({ statusCode: 200, data, total, page: currentPage, pages: Math.ceil(total / perPage) })
+  response.status(200).json({ statusCode: 200, data, totalRecords: data.length, totalPublishers: total, page: currentPage, pages: Math.ceil(total / perPage) })
 }
 
 const createPublisher = async (request, response) => {
@@ -120,8 +176,9 @@ const deletePublisher = async (request, response) => {
 
 module.exports = {
   getPublishers,
+  deletePublisher,
   createPublisher,
   updatePublisher,
   getPublisherById,
-  deletePublisher
+  getPublishersByTargetId
 }
