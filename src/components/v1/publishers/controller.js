@@ -64,12 +64,12 @@ const getPublishersByTargetId = async (request, response) => {
     conditions.push({
       ...query,
       miniBudget:
-        { $gte: parseInt(miniBudget) }
+        { $lte: parseInt(miniBudget) }
     })
   }
 
   query = {
-    $or: conditions
+    $and: conditions
   }
 
   const publishers = await Publisher.find(query)
@@ -121,8 +121,7 @@ const createPublisher = async (request, response) => {
     })
   }
 
-  const data = await Publisher.create(body)
-  response.status(200).json({ statusCode: 200, data })
+  return await Publisher.create(body)
 }
 
 const updatePublisher = async (request, response) => {
