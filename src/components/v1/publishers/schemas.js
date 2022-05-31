@@ -7,6 +7,21 @@ const getPublishersByTargetIdSchema = joi.object({
   page: joi.string().optional()
 })
 
+const createPublisherSchema = joi.object({
+  logo: joi.string(),
+  publisher: joi.string(),
+  miniBudget: joi.number(),
+  locations: joi.array(),
+  sex: joi.string(),
+  ageRange: joi.array(),
+  kpi: joi.string(),
+  status: joi.any(),
+  category: joi.string(),
+  formats: joi.array()
+
+})
+
 module.exports = {
+  createPublisherSchema,
   getPublishersByTargetIdSchema
 }

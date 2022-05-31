@@ -1,8 +1,11 @@
 const boom = require('@hapi/boom')
-const { CAMPAING_STATUS } = require('../../../config')
-const Campaign = require('../../../models/Campaign')
 const { rgx, perPage } = require('../../../utils')
+const Campaign = require('../../../models/Campaign')
+const { CAMPAING_STATUS } = require('../../../config')
 const { uploadFile } = require('../../../utils/aws-upload')
+const { createPublisher } = require('../publishers/controller')
+const { checkFormatFile } = require('../../../utils/formatFile')
+const { fileTypes } = require('../../../libraries/constants/fileTypes')
 
 const getCampaigns = async (request, response) => {
   const { page = 1, search = null, target = null, sector = null } = request.query
@@ -68,19 +71,33 @@ const getCampaignById = async (request, response) => {
 }
 
 const createCampaing = async (request, response) => {
-  let { file, body, userId } = request
+  const { body, userId } = request
+  const { campaign, files, publisher } = body
 
-  body = JSON.parse(body?.campaign)
-
-  if (file) {
-    body.logo = await uploadFile({
-      fileName: `${Date.now()}-logo`,
-      mimetype: file.mimetype,
-      body: file.buffer
+  await Promise.all(
+    files.map(async file => {
+      if (file.name === fileTypes.PHOTO) {
+        campaign.logo = await uploadFile({
+          fileName: `${Date.now()}-${file.name}`,
+          mimetype: file.mimetype,
+          campaign: file.buffer
+        })
+      }
     })
+  )
+
+  const dataPublisher = {
+    body: publisher
   }
-  const campaign = await Campaign.create({ ...body, user: userId })
-  response.status(200).json({ statusCode: 200, data: campaign?._id })
+  const newCampaign = await Campaign.create({ ...campaign, user: userId })
+  const newPublisher = await createPublisher(dataPublisher)
+  response.status(200).json({
+    statusCode: 200,
+    data: {
+      campaign: newCampaign?._id,
+      publisher: newPublisher?._id
+    }
+  })
 }
 
 const addPublishers = async (request, response) => {
@@ -98,11 +115,25 @@ const addPayment = async (request, response) => {
   response.status(200).json({ statusCode: 200, data: campaign })
 }
 
+const validateFormatFile = async (request, response) => {
+  const { files } = request.body
+  if (files.length) {
+    await Promise.all(
+      files.map(async file => {
+        const formatValidation = await checkFormatFile(file.buffer, file.type)
+        if (formatValidation < 1) throw boom.badRequest('Invalid Format')
+        else response.status(200).json({ statusCode: 200, data: 'Files validated' })
+      })
+    )
+  }
+}
+
 module.exports = {
   getCampaigns,
   getCampaignByUser,
   getCampaignById,
   createCampaing,
   addPublishers,
-  addPayment
+  addPayment,
+  validateFormatFile
 }
