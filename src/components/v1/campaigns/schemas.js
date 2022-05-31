@@ -1,4 +1,5 @@
 const joi = require('joi')
+const { createPublisherSchema } = require('../publishers/schemas')
 
 // .regex(/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/)
 
@@ -40,11 +41,42 @@ const changePasswordSchema = joi.object({
   token: joi.string().required()
 })
 
+const campaignSchema = joi.object({
+  logo: joi.string(),
+  brand: joi.string(),
+  name: joi.string(),
+  startDate: joi.any(),
+  endDate: joi.any(),
+  target: joi.any(),
+  sector: joi.any(),
+  locations: joi.array(),
+  ages: joi.array(),
+  url: joi.string(),
+  amount: joi.number(),
+  status: joi.string(),
+  publishers: joi.array(),
+  sex: joi.string(),
+  payment: joi.any()
+})
+
+const filesSchema = joi.array().items({
+  name: joi.string().trim().required(),
+  mimetype: joi.string().trim(),
+  uri: joi.string().trim().required()
+})
+
+const createCampaingSchema = joi.object({
+  files: filesSchema,
+  campaign: campaignSchema
+})
+
 module.exports = {
+  filesSchema,
   loginSchema,
-  socialLoginSchema,
-  forgotPasswordSchema,
-  verifyTokenSchema,
   signupSchema,
-  changePasswordSchema
+  socialLoginSchema,
+  verifyTokenSchema,
+  forgotPasswordSchema,
+  changePasswordSchema,
+  createCampaingSchema
 }
