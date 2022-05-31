@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose')
+const { CAMPAING_STATUS_LIST } = require('../config')
 
 const CampaignSchema = new Schema({
   logo: {
@@ -60,7 +61,7 @@ const CampaignSchema = new Schema({
   status: {
     type: String,
     required: true,
-    enum: ['draft', 'pending', 'paid'],
+    enum: CAMPAING_STATUS_LIST,
     default: 'draft'
   },
   user: {
@@ -79,13 +80,10 @@ const CampaignSchema = new Schema({
     default: 'all'
   },
   payment: {
-    type: {
-      id: String,
-      status: String,
-      date: Date,
-      paymentMethod: String
-    },
-    default: {}
+    id: String,
+    status: String,
+    date: Date,
+    paymentMethod: String
   }
 }, {
   timestamps: true

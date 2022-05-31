@@ -6,6 +6,8 @@ const s3 = new aws.S3({
   secretAccessKey: process.env.AWS_SECRECT_KEY
 })
 
+// TODO: CAMBIAR ESTE METODO
+
 const receiveFile = multer({
   storage: multer.memoryStorage()
 }).single('image')

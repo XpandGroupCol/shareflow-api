@@ -20,6 +20,7 @@ const { notFoundHandler, logError } = require('./src/middleware/errorHandler')
 const mongoDB = new Mongo()
 
 const app = express()
+
 app.use(cors())
 app.use(express.json())
 app.get('/', (_, res) => res.send('MediaX api - v1.0.0'))

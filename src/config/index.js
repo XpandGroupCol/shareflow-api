@@ -50,6 +50,17 @@ const CAMPAING_STATUS = [
   }
 ]
 
+const NEW_CAMPAIGN_STATUS = {
+  draft: 'Borrador',
+  pending: 'Pendiente',
+  paid: 'Pagada',
+  inProgress: 'En progreso',
+  cancel: 'Cancelada',
+  completed: 'Completada'
+}
+
+const CAMPAING_STATUS_LIST = Object.keys(NEW_CAMPAIGN_STATUS)
+
 const BIDDING_MODEL = [
   {
     id: 'CPM',
@@ -116,5 +127,7 @@ module.exports = {
   CAMPAING_STATUS,
   BIDDING_MODEL,
   TARGET_TYPE,
-  MEDIA_FORMATS
+  MEDIA_FORMATS,
+  CAMPAING_STATUS_LIST,
+  NEW_CAMPAIGN_STATUS
 }

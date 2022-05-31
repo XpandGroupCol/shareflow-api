@@ -100,18 +100,20 @@ const forgot = async (request, response) => {
 
   const user = await User.findOne({ email })
 
+  if (!user) throw boom.internal('No se encontrado el usuario')
+
   if (user) {
     const data = { id: user?._id, email: user?.email }
 
     const token = jwt.sign(data, process.env.ACCESS_TOKEN)
-    sendMail(forgotPassword(token), async (error) => {
-      if (error) {
-        throw boom.internal('Algo salio mal, por favor intenta nuevamente.')
-      }
-    })
-  }
 
-  response.status(200).json({ statusCode: 200, data: true })
+    try {
+      await sendMail(forgotPassword(token))
+      response.status(200).json({ statusCode: 200, data: true })
+    } catch (e) {
+      throw boom.internal('Algo salio mal, por favor intenta nuevamente.')
+    }
+  }
 }
 
 const verifyPassword = async (request, response) => {
@@ -149,14 +151,13 @@ const signup = async (request, response) => {
 
   const token = jwt.sign(data, process.env.ACCESS_TOKEN)
 
-  sendMail(verifyEmal(token), async (error) => {
-    if (error) {
-      await User.deleteOne({ email })
-      throw boom.internal('Algo salio mal, por favor intenta nuevamente.')
-    }
-  })
-
-  response.status(200).json({ statusCode: 200, data: true })
+  try {
+    await sendMail(verifyEmal(token))
+    response.status(200).json({ statusCode: 200, data: true })
+  } catch (e) {
+    await User.deleteOne({ email })
+    throw boom.badRequest('Algo salio mal, por favor intenta nuevamente.')
+  }
 }
 
 const changePassword = async (request, response) => {

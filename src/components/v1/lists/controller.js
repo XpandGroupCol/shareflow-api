@@ -15,15 +15,16 @@ const mapPublishers = (data = []) =>
     ({
       id,
       label,
-      formats: formats.map(({ format, device, pricePerUnit, biddingModel, targets }) =>
-        ({
+      formats: formats.map(({ format, device, pricePerUnit, biddingModel, target: { category } }) => {
+        return ({
           id: format._id,
           label: format.name,
           device: DEVICE.find(({ id }) => id === device)?.label || '',
           pricePerUnit: parseInt(pricePerUnit),
-          biddingModel: biddingModel.id,
-          targets
-        })),
+          biddingModel: biddingModel,
+          target: { category }
+        })
+      }),
       locations,
       ageRange,
       ...restOfPublisher
@@ -62,4 +63,24 @@ const getLists = async (_, response) => {
   })
 }
 
-module.exports = getLists
+const getCampaignList = async (_, response) => {
+  const [sectors, targets, ages, locations, publisher] = await Promise.allSettled([
+    Sector.find({ status: true }),
+    Target.find({ status: true }),
+    Age.find({ status: true }),
+    Location.find({ status: true })
+  ])
+
+  response.status(200).json({
+    sectors: sectors?.value || [],
+    targets: targets?.value || [],
+    ages: ages?.value || [],
+    locations: locations.value || [],
+    sex: SEX
+  })
+}
+
+module.exports = {
+  getCampaignList,
+  getLists
+}

@@ -35,14 +35,38 @@ userRouter.put('/change-password',
   loggedIn,
   asyncHandler(controller.changePassword))
 
+userRouter.delete('/:id',
+  loggedIn,
+  asyncHandler(controller.deleteUser))
+
 userRouter.put('/:id',
   loggedIn,
   receiveFile,
   validateRequestSchema(schemas.editUserSchema),
   asyncHandler(controller.updateUser))
 
-userRouter.delete('/:id',
+// rutas para la app
+
+userRouter.put('/site/update-profile',
   loggedIn,
-  asyncHandler(controller.deleteUser))
+  receiveFile,
+  asyncHandler(controller.siteUpdateProfile))
+
+userRouter.put('/site/update-company',
+  loggedIn,
+  receiveFile,
+  asyncHandler(controller.siteUpdateCompany))
+
+userRouter.get('/site/me',
+  loggedIn,
+  asyncHandler(controller.siteMe))
+
+userRouter.put('/site/update-avatar',
+  loggedIn,
+  asyncHandler(controller.siteUpdateAvatar))
+
+userRouter.put('/site/update-password',
+  loggedIn,
+  asyncHandler(controller.siteUpdatePassword))
 
 module.exports = userRouter

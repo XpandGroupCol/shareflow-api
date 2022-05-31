@@ -26,8 +26,8 @@ campaignRouter.put('/payment/:id',
   loggedIn,
   asyncHandler(controller.addPayment))
 
-campaignRouter.put('/:id',
+campaignRouter.put('/status/:id',
   loggedIn,
-  asyncHandler(controller.addPublishers))
+  asyncHandler(controller.updateStatus))
 
 module.exports = campaignRouter

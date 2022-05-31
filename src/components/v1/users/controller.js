@@ -119,6 +119,75 @@ const deleteUser = async (request, response) => {
   response.status(200).json({ statusCode: 200, data })
 }
 
+// por ahora los voy a separar
+
+const siteUpdateProfile = async (request, response) => {
+  const { userId: id } = request
+  if (!id) return boom.notFound('Usuario no encontrado')
+  const { body, file } = request
+
+  if (file) {
+    body.rut = await uploadFile({
+      fileName: `${Date.now()}-rut`,
+      mimetype: file.mimetype,
+      body: file.buffer
+    })
+  }
+
+  const { name, lastName, email, company, companyEmail, nit, phone, rut, address } = body
+  const data = await User.findByIdAndUpdate(id, { name, lastName, email, company, companyEmail, nit, phone, rut, address }, { new: true }).lean().exec()
+  response.status(200).json({ statusCode: 200, data })
+}
+
+const siteUpdateCompany = async (request, response) => {
+  const { userId: id } = request
+  if (!id) throw boom.notFound('Usuario no encontrado')
+  const { body, file } = request
+
+  if (file) {
+    body.rut = await uploadFile({
+      fileName: `${Date.now()}-rut`,
+      mimetype: file.mimetype,
+      body: file.buffer
+    })
+  }
+
+  const { company, companyEmail, nit, phone, rut, address } = request.body
+
+  const data = await User.findByIdAndUpdate(id, { company, companyEmail, nit, phone, rut, address }, { new: true })
+  response.status(200).json({ statusCode: 200, data })
+}
+
+const siteMe = async (request, response) => {
+  const { userId } = request
+  const data = await User.findById(userId)
+  response.status(200).json({ statusCode: 200, data })
+}
+
+const siteUpdateAvatar = async (request, response) => {
+  const { id } = request.params
+  if (!id) return boom.notFound('Usuario no encontrado')
+  const { file } = request
+
+  if (file) {
+    const avatar = await uploadFile({
+      fileName: `${Date.now()}-rut`,
+      mimetype: file.mimetype,
+      body: file.buffer
+    })
+    const data = await User.findByIdAndUpdate(id, { avatar }, { new: true })
+    response.status(200).json({ statusCode: 200, data })
+  }
+}
+
+const siteUpdatePassword = async (request, response) => {
+  const { userId: id } = request
+  const { password } = request.body
+  const newPassword = await bcryptjs.hash(password, 10)
+  const data = await User.findByIdAndUpdate(id, { password: newPassword }, { new: true })
+  response.status(200).json({ statusCode: 200, data })
+}
+
 module.exports = {
   getUsers,
   getProfile,
@@ -127,5 +196,10 @@ module.exports = {
   updateProfileCompany,
   changePassword,
   updateUser,
-  deleteUser
+  deleteUser,
+  siteUpdateProfile,
+  siteUpdateCompany,
+  siteMe,
+  siteUpdateAvatar,
+  siteUpdatePassword
 }
