@@ -119,6 +119,11 @@ const validateFormatFile = async (request, response) => {
   throw boom.badRequest('El archivo es requerido')
 }
 
+const wompiEvent = async (request, response) => {
+  console.log({ request })
+  response.status(200).json({ statusCode: 200, data: true })
+}
+
 module.exports = {
   getCampaigns,
   getCampaignByUser,
@@ -126,5 +131,6 @@ module.exports = {
   createCampaing,
   updateStatus,
   addPayment,
-  validateFormatFile
+  validateFormatFile,
+  wompiEvent
 }

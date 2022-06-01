@@ -35,6 +35,9 @@ campaignRouter.post('/validateFiles',
   asyncHandler(controller.validateFormatFile)
 )
 
+campaignRouter.post('/wompi/event',
+  asyncHandler(controller.wompiEvent))
+
 campaignRouter.put('/status/:id',
   loggedIn,
   asyncHandler(controller.updateStatus))
