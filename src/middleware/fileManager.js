@@ -1,5 +1,6 @@
 const multer = require('multer')
 const boom = require('@hapi/boom')
+const { mimeTypesVideo } = require('../libraries/constants/fileTypes.constants')
 
 const availablesFileMimeTypes = [
   'image/jpeg',
@@ -11,7 +12,8 @@ const availableFileMimeTypesAddToShipment = [
   'image/jpeg',
   'image/png',
   'application/pdf',
-  'image/tiff'
+  'image/tiff',
+  ...Object.values(mimeTypesVideo)
 ]
 
 const multerOptions = {

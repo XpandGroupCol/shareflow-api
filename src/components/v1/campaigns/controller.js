@@ -1,10 +1,8 @@
 const boom = require('@hapi/boom')
-const Campaign = require('../../../models/Campaign')
+const { hookUploadFile } = require('./hooks')
 const { rgx, perPage } = require('../../../utils')
-
-const { uploadFile } = require('../../../utils/aws-upload')
+const Campaign = require('../../../models/Campaign')
 const { checkFormatFile } = require('../../../utils/formatFile')
-const { fileTypes } = require('../../../libraries/constants/fileTypes')
 
 const getCampaigns = async (request, response) => {
   const { page = 1, search = null, target = null, sector = null } = request.query
@@ -71,19 +69,7 @@ const getCampaignById = async (request, response) => {
 
 const createCampaing = async (request, response) => {
   const { body, userId } = request
-  const { campaign, files } = body
-
-  await Promise.all(
-    files.map(async file => {
-      if (file.name === fileTypes.PHOTO) {
-        campaign.logo = await uploadFile({
-          fileName: `${Date.now()}-${file.name}`,
-          mimetype: file.mimetype,
-          campaign: file.buffer
-        })
-      }
-    })
-  )
+  const { campaign } = body
 
   const newCampaign = await Campaign.create({ ...campaign, status: 'draft', user: userId })
 
@@ -110,13 +96,22 @@ const updateStatus = async (request, response) => {
 }
 
 const validateFormatFile = async (request, response) => {
-  const { file } = request
-  if (file) {
-    const formatValidation = await checkFormatFile(file.buffer, file.type)
-    if (!formatValidation) throw boom.badRequest('Invalid Format')
-    else response.status(200).json({ statusCode: 200, data: 'Files validated' })
+  const { files } = request
+  const conditions = request.body
+
+  if (files.length) {
+    for await (const file of files) {
+      await checkFormatFile(file.buffer, file.mimetype, conditions)
+    }
   }
-  throw boom.badRequest('El archivo es requerido')
+
+  const filesUpload = []
+  for await (const file of files) {
+    const fileUpload = await hookUploadFile(file)
+    filesUpload.push(fileUpload)
+  }
+
+  response.status(200).json({ statusCode: 200, data: filesUpload })
 }
 
 const wompiEvent = async (request, response) => {
