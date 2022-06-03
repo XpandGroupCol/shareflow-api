@@ -70,6 +70,11 @@ const createCampaingSchema = joi.object({
   campaign: campaignSchema
 })
 
+const validateFormatFileSchema = joi.object({
+  width: joi.string().trim().required(),
+  height: joi.string().trim().required()
+})
+
 module.exports = {
   filesSchema,
   loginSchema,
@@ -78,5 +83,6 @@ module.exports = {
   verifyTokenSchema,
   forgotPasswordSchema,
   changePasswordSchema,
-  createCampaingSchema
+  createCampaingSchema,
+  validateFormatFileSchema
 }

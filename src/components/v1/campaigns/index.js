@@ -1,9 +1,9 @@
 const controller = require('./controller')
 const campaignRouter = require('express').Router()
-const { createCampaingSchema } = require('./schemas')
 const loggedIn = require('../../../middleware/isAuth')
-const { receiveFile } = require('../../../utils/aws-upload')
 const asyncHandler = require('../../../middleware/asynHandler')
+const { receiveMultipleFiles } = require('../../../middleware/fileManager')
+const { createCampaingSchema, validateFormatFileSchema } = require('./schemas')
 const { validateRequestSchema } = require('../../../middleware/requestSchemaHandler')
 
 campaignRouter.get('/',
@@ -20,7 +20,6 @@ campaignRouter.get('/:id',
 
 campaignRouter.post('/',
   loggedIn,
-  receiveFile,
   validateRequestSchema(createCampaingSchema),
   asyncHandler(controller.createCampaing))
 
@@ -30,8 +29,8 @@ campaignRouter.put('/payment/:id',
 
 campaignRouter.post('/validateFiles',
   loggedIn,
-  // validateRequestSchema(createCampaingSchema),
-  receiveFile,
+  receiveMultipleFiles,
+  validateRequestSchema(validateFormatFileSchema),
   asyncHandler(controller.validateFormatFile)
 )
 
