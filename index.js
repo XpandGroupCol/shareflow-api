@@ -15,6 +15,8 @@ const sectorsRouter = require('./src/components/v1/sectors')
 const targetRouter = require('./src/components/v1/targets')
 const formatsRouter = require('./src/components/v1/formats')
 const locationsRouter = require('./src/components/v1/locations')
+require('./src/models/Payment.js')
+
 const { notFoundHandler, logError } = require('./src/middleware/errorHandler')
 
 const mongoDB = new Mongo()

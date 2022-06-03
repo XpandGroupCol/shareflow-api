@@ -46,7 +46,8 @@ const PublisherSchema = new Schema({
   },
   category: {
     type: String,
-    required: true
+    required: true,
+    enum: ['platform', 'medium']
   },
   formats: {
     type: [{

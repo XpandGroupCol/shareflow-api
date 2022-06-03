@@ -5,6 +5,7 @@ const User = require('../../../models/User')
 const { rgx, perPage } = require('../../../utils')
 const { uploadFile } = require('../../../utils/aws-upload')
 const boom = require('@hapi/boom')
+const { getRandomName } = require('../../../config/utils')
 
 const getUsers = async (request, response) => {
   const { page = 1, search = null, role = null, status = null } = request.query
@@ -61,7 +62,7 @@ const createUser = async (request, response) => {
   await Promise.all(
     files.map(async ({ fieldname, mimetype, buffer }) => {
       const location = await uploadFile({
-        fileName: `${Date.now()}-${fieldname}`,
+        fileName: getRandomName(fieldname),
         mimetype: mimetype,
         body: buffer
       })
@@ -83,7 +84,7 @@ const updateProfileCompany = async (request, response) => {
   await Promise.all(
     files.map(async ({ fieldname, mimetype, buffer }) => {
       const location = await uploadFile({
-        fileName: `${Date.now()}-${fieldname}`,
+        fileName: getRandomName(fieldname),
         mimetype: mimetype,
         body: buffer
       })

@@ -71,7 +71,23 @@ const CampaignSchema = new Schema({
   },
   publishers: {
     type: Array,
-    default: []
+    default: [{
+      formatId: { type: Schema.Types.ObjectId, ref: 'Format' },
+      publisherId: { type: Schema.Types.ObjectId, ref: 'Publisher' },
+      objectiveGoal: { type: Number, default: 0 },
+      pricePerUnit: { type: Number, default: 0 },
+      biddingModel: { Type: String, enum: ['CPM', 'CPC', 'CPV', 'CPA'] },
+      device: { Type: String, enum: ['all', 'male', 'women'] },
+      label: { Type: String },
+      publisherCategory: { Type: String, enum: ['platform', 'medium'] },
+      share: { type: String },
+      media: {
+        url: String,
+        width: Number,
+        height: Number,
+        type: String
+      }
+    }]
   },
   sex: {
     type: String,
@@ -79,11 +95,21 @@ const CampaignSchema = new Schema({
     enum: ['all', 'male', 'women'],
     default: 'all'
   },
-  payment: {
-    id: String,
-    status: String,
-    date: Date,
-    paymentMethod: String
+  payments: {
+    type: [Schema.Types.ObjectId],
+    ref: 'Payment'
+  },
+  summary: {
+    clicks: { Type: Number, default: 0 },
+    prints: { Type: Number, default: 0 },
+    reproductions: { Type: Number, default: 0 },
+    userPercentage: { Type: Number },
+    platform: { Type: Number, default: 0 },
+    medium: { Type: Number, default: 0 },
+    currency: { Type: String },
+    discount: { Type: Number, default: 0 },
+    grossValue: { Type: Number, default: 0 },
+    serviceFee: { Type: Number, default: 0 }
   }
 }, {
   timestamps: true

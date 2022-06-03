@@ -28,18 +28,21 @@ campaignRouter.put('/payment/:id',
   loggedIn,
   asyncHandler(controller.addPayment))
 
+campaignRouter.put('/status/:id',
+  loggedIn,
+  asyncHandler(controller.updateStatus))
+
+campaignRouter.put('/:id',
+  loggedIn,
+  asyncHandler(controller.updateCampaign))
+
 campaignRouter.post('/validateFiles',
   loggedIn,
-  // validateRequestSchema(createCampaingSchema),
   receiveFile,
   asyncHandler(controller.validateFormatFile)
 )
 
 campaignRouter.post('/wompi/event',
   asyncHandler(controller.wompiEvent))
-
-campaignRouter.put('/status/:id',
-  loggedIn,
-  asyncHandler(controller.updateStatus))
 
 module.exports = campaignRouter
