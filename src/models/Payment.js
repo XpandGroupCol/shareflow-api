@@ -6,11 +6,6 @@ const PaymentSchema = new Schema({
     required: true,
     unique: true
   },
-  signature: {
-    type: String,
-    required: true,
-    unique: true
-  },
   transactionId: {
     type: String
   },

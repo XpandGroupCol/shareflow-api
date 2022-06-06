@@ -1,5 +1,5 @@
 const boom = require('@hapi/boom')
-const { getRandomName, getSignature } = require('../../../config/utils')
+const { getRandomName } = require('../../../config/utils')
 const Campaign = require('../../../models/Campaign')
 const { hookUploadFile } = require('./hooks')
 const { rgx, perPage } = require('../../../utils')
@@ -126,27 +126,9 @@ const updateStatus = async (request, response) => {
 
   const { status } = request.body
 
-  if (status === 'pending') {
-    const campaign = await Campaign.findById(id).lean().exec()
-
-    const { _id, amount, payments = [] } = campaign
-    const reference = `${_id.toString().slice(0, 5)}-${Date.now().toString()}`
-    const signature = await getSignature(reference, amount)
-    const payment = await Payment.create({ reference, signature })
-    payments.push(payment._id)
-    const campaignPayment = await Campaign.findByIdAndUpdate(id, { status, payments }, { new: true })
-    return response.status(200).json({
-      statusCode: 200,
-      data: {
-        campaign: campaignPayment,
-        payment: payment
-      }
-    })
-  }
-
   const campaign = await Campaign.findByIdAndUpdate(id, { status }, { new: true })
 
-  response.status(200).json({ statusCode: 200, data: campaign, payment: {} })
+  response.status(200).json({ statusCode: 200, data: campaign })
 }
 
 const validateFormatFile = async (request, response) => {
@@ -170,9 +152,19 @@ const validateFormatFile = async (request, response) => {
 
 const wompiEvent = async (request, response) => {
   const { body } = request
-  console.log(body.data.transaction)
-  console.log(body.timestamp)
-  console.log(body)
+  const { reference, amount_in_cents: amount, id: transactionId, status, payment_method_type: paymentMethod } = body.data.transaction || {}
+  const [campaignID] = reference.split('-')
+  const campaign = await Campaign.findById(campaignID)
+  const payment = await Payment.create({
+    reference,
+    transactionId,
+    amount,
+    status,
+    paymentMethod
+  })
+  campaign.payments.push(payment._id)
+  campaign.status = 'paid'
+
   response.status(200).json({ statusCode: 200, data: true })
 }
 
