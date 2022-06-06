@@ -96,7 +96,7 @@ const getPublishersByTargetId = async (request, response) => {
             label: format.format.name || '',
             width: format.format.width,
             height: format.format.height,
-            type: format.format.type || '',
+            mimetype: format.format.type || '',
             publisherCategory: publisher.category || '',
             biddingModel: format.biddingModel || '',
             device: format.device || '',

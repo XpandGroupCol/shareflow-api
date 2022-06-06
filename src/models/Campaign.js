@@ -58,6 +58,7 @@ const CampaignSchema = new Schema({
     type: Number,
     required: true
   },
+  userPercentage: { type: Number },
   status: {
     type: String,
     required: true,
@@ -70,24 +71,24 @@ const CampaignSchema = new Schema({
     required: true
   },
   publishers: {
-    type: Array,
-    default: [{
+    type: [{
       formatId: { type: Schema.Types.ObjectId, ref: 'Format' },
       publisherId: { type: Schema.Types.ObjectId, ref: 'Publisher' },
-      objectiveGoal: { type: Number, default: 0 },
-      pricePerUnit: { type: Number, default: 0 },
-      biddingModel: { Type: String, enum: ['CPM', 'CPC', 'CPV', 'CPA'] },
-      device: { Type: String, enum: ['all', 'male', 'women'] },
-      label: { Type: String },
-      publisherCategory: { Type: String, enum: ['platform', 'medium'] },
+      publisher: { type: String },
+      objectiveGoal: { type: Number },
+      pricePerUnit: { type: Number },
+      biddingModel: { type: String, enum: ['CPM', 'CPC', 'CPV', 'CPA'] },
+      device: { type: String, enum: ['all', 'mobile', 'desktop'] },
+      label: { type: String },
+      publisherCategory: { type: String, enum: ['platform', 'medium'] },
       share: { type: String },
-      media: {
-        url: String,
-        width: Number,
-        height: Number,
-        type: String
-      }
-    }]
+      value: { type: Number },
+      imageUrl: String,
+      width: Number,
+      height: Number,
+      mimetype: String
+    }],
+    default: []
   },
   sex: {
     type: String,
@@ -100,16 +101,19 @@ const CampaignSchema = new Schema({
     ref: 'Payment'
   },
   summary: {
-    clicks: { Type: Number, default: 0 },
-    prints: { Type: Number, default: 0 },
-    reproductions: { Type: Number, default: 0 },
-    userPercentage: { Type: Number },
-    platform: { Type: Number, default: 0 },
-    medium: { Type: Number, default: 0 },
-    currency: { Type: String },
-    discount: { Type: Number, default: 0 },
-    grossValue: { Type: Number, default: 0 },
-    serviceFee: { Type: Number, default: 0 }
+    clicks: { type: Number },
+    prints: { type: Number },
+    reproductions: { type: Number },
+    platform: { type: Number },
+    medium: { type: Number },
+    currency: { type: String },
+    discount: { type: Number },
+    grossValue: { type: Number },
+    serviceFee: { type: Number }
+  },
+  isDelete: {
+    type: Boolean,
+    default: false
   }
 }, {
   timestamps: true

@@ -1,10 +1,11 @@
 const controller = require('./controller')
 const campaignRouter = require('express').Router()
-const { createCampaingSchema } = require('./schemas')
 const loggedIn = require('../../../middleware/isAuth')
-const { receiveFile } = require('../../../utils/aws-upload')
 const asyncHandler = require('../../../middleware/asynHandler')
+const { receiveMultipleFiles } = require('../../../middleware/fileManager')
+const { createCampaingSchema, validateFormatFileSchema } = require('./schemas')
 const { validateRequestSchema } = require('../../../middleware/requestSchemaHandler')
+const { receiveFile } = require('../../../utils/aws-upload')
 
 campaignRouter.get('/',
   loggedIn,
@@ -24,6 +25,13 @@ campaignRouter.post('/',
   validateRequestSchema(createCampaingSchema),
   asyncHandler(controller.createCampaing))
 
+campaignRouter.post('/validateFiles',
+  loggedIn,
+  receiveMultipleFiles,
+  validateRequestSchema(validateFormatFileSchema),
+  asyncHandler(controller.validateFormatFile)
+)
+
 campaignRouter.put('/payment/:id',
   loggedIn,
   asyncHandler(controller.addPayment))
@@ -36,11 +44,9 @@ campaignRouter.put('/:id',
   loggedIn,
   asyncHandler(controller.updateCampaign))
 
-campaignRouter.post('/validateFiles',
+campaignRouter.delete('/:id',
   loggedIn,
-  receiveFile,
-  asyncHandler(controller.validateFormatFile)
-)
+  asyncHandler(controller.removeCampaign))
 
 campaignRouter.post('/wompi/event',
   asyncHandler(controller.wompiEvent))

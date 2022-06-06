@@ -12,9 +12,9 @@ const receiveFile = multer({
   storage: multer.memoryStorage()
 }).single('image')
 
-const uploadFile = async ({ fileName, body, mimetype }) => {
+const uploadFile = async ({ fileName, body, mimetype, bucket }) => {
   const params = {
-    Bucket: process.env.AWS_BUCKET_NAME,
+    Bucket: bucket || process.env.AWS_BUCKET_NAME,
     Key: fileName,
     Body: body,
     ContentType: mimetype

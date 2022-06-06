@@ -6,6 +6,11 @@ const PaymentSchema = new Schema({
     required: true,
     unique: true
   },
+  signature: {
+    type: String,
+    required: true,
+    unique: true
+  },
   transactionId: {
     type: String
   },
@@ -16,7 +21,8 @@ const PaymentSchema = new Schema({
     type: String
   },
   status: {
-    type: ['APPROVED', 'VOIDED', 'DECLINED', 'ERROR']
+    type: String,
+    enum: ['APPROVED', 'VOIDED', 'DECLINED', 'ERROR']
   }
 }, {
   timestamps: true

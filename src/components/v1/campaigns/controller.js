@@ -1,16 +1,38 @@
 const boom = require('@hapi/boom')
-const { getRandomName } = require('../../../config/utils')
+const { getRandomName, getSignature } = require('../../../config/utils')
 const Campaign = require('../../../models/Campaign')
+const { hookUploadFile } = require('./hooks')
 const { rgx, perPage } = require('../../../utils')
-
-const { uploadFile } = require('../../../utils/aws-upload')
 const { checkFormatFile } = require('../../../utils/formatFile')
+const { uploadFile } = require('../../../utils/aws-upload')
+const { SEX } = require('../../../config')
+const Payment = require('../../../models/Payment')
+
+const leanCampaigns = (data = []) => data.map(({ locations, ages, sex, sector, target, __v, _id, ...restOfCampaign }) => ({
+  id: _id,
+  locations: locations.map(({ _id, name }) => ({ id: _id, label: name })),
+  ages: ages.map(({ _id, name }) => ({ id: _id, label: name })),
+  sector: { id: sector?._id, label: sector?.name },
+  target: { id: target?._id, label: target?.name },
+  sex: SEX.find(({ id }) => id === sex) ?? null,
+  ...restOfCampaign
+}))
+
+const leanById = ({ locations, ages, sex, sector, target, __v, _id, ...restOfCampaign }) => ({
+  id: _id,
+  locations: locations.map(({ _id, name }) => ({ id: _id, label: name })),
+  ages: ages.map(({ _id, name }) => ({ id: _id, label: name })),
+  sector: { id: sector?._id, label: sector?.name },
+  target: { id: target?._id, label: target?.name },
+  sex: SEX.find(({ id }) => id === sex) ?? null,
+  ...restOfCampaign
+})
 
 const getCampaigns = async (request, response) => {
   const { page = 1, search = null, target = null, sector = null } = request.query
   const currentPage = page < 1 ? 0 : page - 1
 
-  let query = {}
+  let query = { }
 
   if (search) {
     query = {
@@ -51,34 +73,34 @@ const getCampaigns = async (request, response) => {
 const getCampaignByUser = async (request, response) => {
   const { userId } = request
 
-  const data = await Campaign.find({ user: userId })
-    .populate('user')
+  const data = await Campaign.find({ user: userId, isDelete: false })
     .populate('sector')
     .populate('target')
     .populate('locations')
     .populate('ages')
+    .populate('user')
     .populate({
       path: 'payments',
       options: { sort: '-createdAt', limit: 1 }
-    })
+    }).lean().exec()
 
-  response.status(200).json({ statusCode: 200, data })
+  response.status(200).json({ statusCode: 200, data: leanCampaigns(data) })
 }
 const getCampaignById = async (request, response) => {
   const { id } = request.params
   if (!id) throw boom.notFound()
   const data = await Campaign.findById(id)
-    .populate('user')
     .populate('sector')
     .populate('target')
     .populate('locations')
     .populate('ages')
+    .populate('user')
     .populate({
       path: 'payments',
       options: { sort: '-createdAt', limit: 1 }
-    })
+    }).lean().exec()
 
-  response.status(200).json({ statusCode: 200, data })
+  response.status(200).json({ statusCode: 200, data: leanById(data) })
 }
 
 const createCampaing = async (request, response) => {
@@ -98,53 +120,92 @@ const createCampaing = async (request, response) => {
   response.status(200).json({ statusCode: 200, data: campaign })
 }
 
-const addPayment = async (request, response) => {
-  const { payment } = request.body
-  const { id } = request.params
-
-  if (!id) throw boom.notFound()
-
-  const campaign = await Campaign.findByIdAndUpdate(id, { payment, status: 'paid' }, { new: true })
-  response.status(200).json({ statusCode: 200, data: campaign })
-}
-
 const updateStatus = async (request, response) => {
   const { id } = request.params
   if (!id) throw boom.notFound()
 
   const { status } = request.body
+
+  if (status === 'pending') {
+    const campaign = await Campaign.findById(id).lean().exec()
+
+    const { _id, amount, payments = [] } = campaign
+    const reference = `${_id.toString().slice(0, 5)}-${Date.now().toString()}`
+    const signature = await getSignature(reference, amount)
+    const payment = await Payment.create({ reference, signature })
+    payments.push(payment._id)
+    const campaignPayment = await Campaign.findByIdAndUpdate(id, { status, payments }, { new: true })
+    return response.status(200).json({
+      statusCode: 200,
+      data: {
+        campaign: campaignPayment,
+        payment: payment
+      }
+    })
+  }
+
+  if (status === 'cancel') {
+    await Campaign.findById(id).populate({
+      path: 'payments',
+      options: { sort: '-createdAt', limit: 1 }
+    }).lean().exec()
+
+    return response.status(200).json({ statusCode: 200, data: [] })
+  }
+
   const campaign = await Campaign.findByIdAndUpdate(id, { status }, { new: true })
 
   response.status(200).json({ statusCode: 200, data: campaign })
 }
 
 const validateFormatFile = async (request, response) => {
-  const { file } = request
+  const { files } = request
+  const conditions = request.body
 
-  if (file) {
-    const formatValidation = await checkFormatFile(file.buffer, file.type)
-    if (!formatValidation) throw boom.badRequest('Invalid Format')
-    else response.status(200).json({ statusCode: 200, data: 'Files validated' })
+  if (files.length) {
+    for await (const file of files) {
+      await checkFormatFile(file.buffer, file.mimetype, conditions)
+    }
   }
 
-  throw boom.badRequest('El archivo es requerido')
+  const filesUpload = []
+  for await (const file of files) {
+    const fileUpload = await hookUploadFile(file)
+    filesUpload.push(fileUpload)
+  }
+
+  response.status(200).json({ statusCode: 200, data: filesUpload })
 }
 
 const wompiEvent = async (request, response) => {
   const { body } = request
-  console.log({ body })
+  console.log({ body }, body.data, body.signature)
   response.status(200).json({ statusCode: 200, data: true })
 }
 
 const updateCampaign = async (request, response) => {
-  const { body } = request.body
+  const { body } = request
   const { id } = request.params
 
   if (!id) throw boom.notFound()
 
-  const campaign = await Campaign.findByIdAndUpdate(id, { ...body }, { new: true })
+  const campaign = await Campaign.findByIdAndUpdate(id, { ...body, status: 'draft' }, { new: true })
 
   response.status(200).json({ statusCode: 200, data: campaign })
+}
+
+const removeCampaign = async (request, response) => {
+  const { id } = request.params
+  if (!id) throw boom.notFound()
+
+  const campaign = await Campaign.findByIdAndUpdate(id, { isDelete: true }, { new: true })
+
+  response.status(200).json({ statusCode: 200, data: campaign })
+}
+
+const downloadPDF = async (request, response) => {
+  const { id } = request.params
+  if (!id) throw boom.notFound()
 }
 
 module.exports = {
@@ -153,8 +214,9 @@ module.exports = {
   getCampaignById,
   createCampaing,
   updateStatus,
-  addPayment,
   validateFormatFile,
   wompiEvent,
-  updateCampaign
+  updateCampaign,
+  removeCampaign,
+  downloadPDF
 }

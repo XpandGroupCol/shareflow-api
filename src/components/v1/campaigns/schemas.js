@@ -1,7 +1,8 @@
 const joi = require('joi')
 
 const createCampaingSchema = joi.object({
-  logo: joi.string(),
+  logo: joi.string().allow('', null),
+  image: joi.string().optional(),
   brand: joi.string(),
   name: joi.string(),
   startDate: joi.any(),
@@ -17,9 +18,16 @@ const createCampaingSchema = joi.object({
   publishers: joi.array(),
   sex: joi.string(),
   payment: joi.any(),
-  summary: joi.object().optional()
+  summary: joi.object().optional(),
+  userPercentage: joi.any()
+})
+
+const validateFormatFileSchema = joi.object({
+  width: joi.string().trim().required(),
+  height: joi.string().trim().required()
 })
 
 module.exports = {
-  createCampaingSchema
+  createCampaingSchema,
+  validateFormatFileSchema
 }
