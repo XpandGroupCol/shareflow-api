@@ -144,18 +144,9 @@ const updateStatus = async (request, response) => {
     })
   }
 
-  if (status === 'cancel') {
-    await Campaign.findById(id).populate({
-      path: 'payments',
-      options: { sort: '-createdAt', limit: 1 }
-    }).lean().exec()
-
-    return response.status(200).json({ statusCode: 200, data: [] })
-  }
-
   const campaign = await Campaign.findByIdAndUpdate(id, { status }, { new: true })
 
-  response.status(200).json({ statusCode: 200, data: campaign })
+  response.status(200).json({ statusCode: 200, data: campaign, payment: {} })
 }
 
 const validateFormatFile = async (request, response) => {
@@ -179,7 +170,7 @@ const validateFormatFile = async (request, response) => {
 
 const wompiEvent = async (request, response) => {
   const { body } = request
-  console.log(body.signature.properties)
+  console.log(body.data.transaction)
   response.status(200).json({ statusCode: 200, data: true })
 }
 
