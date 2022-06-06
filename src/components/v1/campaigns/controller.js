@@ -163,7 +163,9 @@ const wompiEvent = async (request, response) => {
     paymentMethod
   })
   campaign.payments.push(payment._id)
-  campaign.status = 'paid'
+  if (status === 'APPROVED') {
+    campaign.status = 'paid'
+  }
   await campaign.save()
 
   response.status(200).json({ statusCode: 200, data: true })
