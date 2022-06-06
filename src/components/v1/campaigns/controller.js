@@ -179,7 +179,7 @@ const validateFormatFile = async (request, response) => {
 
 const wompiEvent = async (request, response) => {
   const { body } = request
-  console.log({ body }, body.data, body.signature)
+  console.log(body.signature.properties)
   response.status(200).json({ statusCode: 200, data: true })
 }
 
