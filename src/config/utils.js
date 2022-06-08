@@ -4,9 +4,6 @@ const getRandomName = (name) => `${Date.now().toString()}-${name}}`
 
 const getSignature = async (reference, amount, currency = 'COP') => {
   const cadenaConcatenada = `${reference}${amount}00${currency}${process.env.WOMPI_INTEGRITY}`
-  // Ejemplo
-
-  console.log(reference, amount, currency, process.env.WOMPI_INTEGRITY)
 
   const crypto = new Crypto()
 

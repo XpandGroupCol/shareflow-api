@@ -87,7 +87,9 @@ const getPublishersByTargetId = async (request, response) => {
   if (publishers.length) {
     publishers.map(publisher => {
       if (publisher.formats.length) {
-        publisher.formats.map(format => {
+        publisher.formats.filter(({ target: t }) =>
+          t._id.toString() === target
+        ).map(format => {
           return data.push({
             id: `${publisher._id}-${format._id}`,
             publisherId: publisher._id,
