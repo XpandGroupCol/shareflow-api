@@ -161,6 +161,12 @@ const siteUpdateCompany = async (request, response) => {
 
 const siteMe = async (request, response) => {
   const { userId } = request
+  const data = await User.findById(userId)
+  response.status(200).json({ statusCode: 200, data })
+}
+
+const siteUserSession = async (request, response) => {
+  const { userId } = request
   const user = await User.findById(userId).lean().exec()
   response.status(200).json({
     statusCode: 200,
@@ -209,5 +215,6 @@ module.exports = {
   siteUpdateCompany,
   siteMe,
   siteUpdateAvatar,
-  siteUpdatePassword
+  siteUpdatePassword,
+  siteUserSession
 }

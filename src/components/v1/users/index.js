@@ -60,6 +60,9 @@ userRouter.put('/site/update-company',
 userRouter.get('/site/me',
   loggedIn,
   asyncHandler(controller.siteMe))
+userRouter.get('/site/session',
+  loggedIn,
+  asyncHandler(controller.siteUserSession))
 
 userRouter.put('/site/update-avatar',
   loggedIn,
