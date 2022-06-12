@@ -161,8 +161,15 @@ const siteUpdateCompany = async (request, response) => {
 
 const siteMe = async (request, response) => {
   const { userId } = request
-  const data = await User.findById(userId)
-  response.status(200).json({ statusCode: 200, data })
+  const user = await User.findById(userId).lean().exec()
+  response.status(200).json({
+    statusCode: 200,
+    data: {
+      role: user.role ? ROLES.find(({ id }) => id === user?.role)?.label : null,
+      name: user.name,
+      avatar: user.avatar
+    }
+  })
 }
 
 const siteUpdateAvatar = async (request, response) => {
