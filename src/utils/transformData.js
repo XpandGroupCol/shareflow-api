@@ -22,6 +22,9 @@ const getUserAuth = ({ _id: id, name, lastName, image, role, company = '', nit =
   }
 }
 
+const regex = (pattern) => new RegExp(`.*${pattern}.*`)
+
 module.exports = {
-  getUserAuth
+  getUserAuth,
+  regex
 }

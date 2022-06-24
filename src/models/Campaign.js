@@ -119,16 +119,6 @@ const CampaignSchema = new Schema({
   timestamps: true
 })
 
-CampaignSchema.set('toJSON', {
-  transform: (_, campaign) => {
-    campaign.id = campaign._id
-    delete campaign.createdAt
-    delete campaign.updatedAt
-    delete campaign._id
-    delete campaign.__v
-  }
-})
-
 const Campaign = model('Campaign', CampaignSchema)
 
 module.exports = Campaign

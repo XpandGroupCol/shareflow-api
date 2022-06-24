@@ -36,19 +36,6 @@ const FormatSchema = new Schema({
   timestamps: true
 })
 
-FormatSchema.set('toJSON', {
-  transform: (_, returnedObject) => {
-    returnedObject.id = returnedObject._id
-    returnedObject.label = returnedObject.name
-    returnedObject.type = MEDIA_FORMATS.find(({ id }) => id === returnedObject.type) || null
-    delete returnedObject.createdAt
-    delete returnedObject.updatedAt
-    delete returnedObject.name
-    delete returnedObject._id
-    delete returnedObject.__v
-  }
-})
-
 const Format = model('Format', FormatSchema)
 
 module.exports = Format

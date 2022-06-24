@@ -64,8 +64,6 @@ const saveFile = async (buffer) => {
   fs.writeFile('./video.mp4', buffer, (error) => {
     if (error) {
       console.log(error)
-    } else {
-      console.log('File saved')
     }
   })
 }

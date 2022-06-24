@@ -107,19 +107,6 @@ const userSchema = new Schema({
 }
 )
 
-userSchema.set('toJSON', {
-  transform: (_, user) => {
-    user.id = user._id
-    user.fullName = `${user.name} ${user.lastName}`
-    user.role = user.role ? ROLES.find(({ id }) => id === user?.role) : null
-    delete user.password
-    delete user.createdAt
-    delete user.updatedAt
-    delete user._id
-    delete user.__v
-  }
-})
-
 const User = model('User', userSchema)
 
 module.exports = User

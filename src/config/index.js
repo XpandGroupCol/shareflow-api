@@ -119,6 +119,16 @@ const MEDIA_FORMATS = [
   { id: 'jpeg', label: 'JPEG', isVideo: false }
 ]
 
+const DEFAULT_ROLES = {
+  SUPER_ADMIN: 'SUPER_ADMIN',
+  ADMIN: 'ADMIN',
+  MEDIA_EXPERT: 'MEDIA_EXPERT',
+  ANALIST: 'ANALIST',
+  CLIENT: 'CLIENT'
+}
+
+const PER_PAGE = 10
+
 module.exports = {
   ROLES,
   DEVICE,
@@ -129,5 +139,7 @@ module.exports = {
   TARGET_TYPE,
   MEDIA_FORMATS,
   CAMPAING_STATUS_LIST,
-  NEW_CAMPAIGN_STATUS
+  NEW_CAMPAIGN_STATUS,
+  DEFAULT_ROLES,
+  PER_PAGE
 }

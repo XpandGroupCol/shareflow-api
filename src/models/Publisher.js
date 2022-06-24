@@ -78,16 +78,6 @@ const PublisherSchema = new Schema({
   }
 }, { timestamps: true })
 
-PublisherSchema.set('toJSON', {
-  transform: (_, publisher) => {
-    publisher.id = publisher._id
-    delete publisher.createdAt
-    delete publisher.updatedAt
-    delete publisher._id
-    delete publisher.__v
-  }
-})
-
 const Publisher = model('Publisher', PublisherSchema)
 
 module.exports = Publisher

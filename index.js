@@ -1,42 +1,22 @@
 require('dotenv').config()
-const Mongo = require('./mongo')
-
 const express = require('express')
 const cors = require('cors')
-
-const loginRouter = require('./src/components/v1/auth')
-const campaignRouter = require('./src/components/v1/campaigns')
-const userRouter = require('./src/components/v1/users')
-const publisherRouter = require('./src/components/v1/publishers')
-
-const listRouter = require('./src/components/v1/lists')
-const agesRouter = require('./src/components/v1/ages')
-const sectorsRouter = require('./src/components/v1/sectors')
-const targetRouter = require('./src/components/v1/targets')
-const formatsRouter = require('./src/components/v1/formats')
-const locationsRouter = require('./src/components/v1/locations')
-require('./src/models/Payment.js')
+const Mongo = require('./mongo')
 
 const { notFoundHandler, logError } = require('./src/middleware/errorHandler')
 
-const mongoDB = new Mongo()
+const adminRouter = require('./src/components/admin/router')
+const siteRouter = require('./src/components/site/router')
 
+const mongoDB = new Mongo()
 const app = express()
 
 app.use(cors())
 app.use(express.json())
-app.get('/', (_, res) => res.send('MediaX api - v1.0.0'))
-app.use('/auth', loginRouter)
-app.use('/publishers', publisherRouter)
-app.use('/users', userRouter)
-app.use('/campaigns', campaignRouter)
+app.get('/', (_, res) => res.send('Shareflow - v1.0.0'))
 
-app.use('/lists', listRouter)
-app.use('/ages', agesRouter)
-app.use('/sectors', sectorsRouter)
-app.use('/targets', targetRouter)
-app.use('/locations', locationsRouter)
-app.use('/formats', formatsRouter)
+app.use('/v1', adminRouter)
+app.use('/v1', siteRouter)
 
 app.use(notFoundHandler)
 app.use(logError)

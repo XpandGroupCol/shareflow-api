@@ -1,11 +1,9 @@
 
 const jwt = require('jsonwebtoken')
 
-const setToken = (data, options = {}) =>
-  jwt.sign(data, process.env.ACCESS_TOKEN)
+const setToken = (...arg) => jwt.sign(...arg)
 
-const verifyToken = (token) =>
-  jwt.verify(token, process.env.ACCESS_TOKEN)
+const verifyToken = (...arg) => jwt.verify(...arg)
 
 module.exports = {
   setToken,

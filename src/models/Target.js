@@ -21,18 +21,6 @@ const TargetSchema = new Schema({
   timestamps: true
 })
 
-TargetSchema.set('toJSON', {
-  transform: (_, returnedObject) => {
-    returnedObject.id = returnedObject._id
-    returnedObject.label = returnedObject.name
-    delete returnedObject.createdAt
-    delete returnedObject.updatedAt
-    delete returnedObject.name
-    delete returnedObject._id
-    delete returnedObject.__v
-  }
-})
-
 const Target = model('Target', TargetSchema)
 
 module.exports = Target

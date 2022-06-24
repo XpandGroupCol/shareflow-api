@@ -16,18 +16,6 @@ const AgeSchema = new Schema({
   timestamps: true
 })
 
-AgeSchema.set('toJSON', {
-  transform: (_, returnedObject) => {
-    returnedObject.id = returnedObject._id
-    returnedObject.label = returnedObject.name
-    delete returnedObject.createdAt
-    delete returnedObject.updatedAt
-    delete returnedObject.name
-    delete returnedObject._id
-    delete returnedObject.__v
-  }
-})
-
 const Age = model('Age', AgeSchema)
 
 module.exports = Age
