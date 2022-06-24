@@ -3,8 +3,9 @@ const boom = require('@hapi/boom')
 const bcryptjs = require('bcryptjs')
 const { ROLES } = require('../../../config')
 const User = require('../../../models/User')
-const { sendMail, verifyEmal, forgotPassword } = require('../../../utils/sendMail')
+const { sendEmail } = require('../../../utils/aws/SES')
 const { getUserAuth } = require('../../../utils/transformData')
+
 const jwt = require('jsonwebtoken')
 
 const adminLogin = async (request, response) => {
@@ -100,7 +101,7 @@ const forgot = async (request, response) => {
 
   const user = await User.findOne({ email })
 
-  if (!user) throw boom.internal('No se encontrado el usuario')
+  if (!user) throw boom.badRequest('No se encontrado el usuario')
 
   if (user) {
     const data = { id: user?._id, email: user?.email }
@@ -108,7 +109,13 @@ const forgot = async (request, response) => {
     const token = jwt.sign(data, process.env.ACCESS_TOKEN)
 
     try {
-      await sendMail(forgotPassword(token))
+      const sendEmailPayload = {
+        destinationEmails: [user.email],
+        emailSubject: 'Recuperar contraseña',
+        text: 'Recuperar contraseña',
+        htmlMessage: `<a href="${process.env.BASE_URL}/auth/forgot-password/${token}">Cambiar contraseña</a>`
+      }
+      await sendEmail(sendEmailPayload)
       response.status(200).json({ statusCode: 200, data: true })
     } catch (e) {
       throw boom.internal('Algo salio mal, por favor intenta nuevamente.')
@@ -152,7 +159,8 @@ const signup = async (request, response) => {
   const token = jwt.sign(data, process.env.ACCESS_TOKEN)
 
   try {
-    await sendMail(verifyEmal(token))
+    // TODO:  Change sendMail by SendEmail
+    // await sendMail(verifyEmal(token))
     response.status(200).json({ statusCode: 200, data: true })
   } catch (e) {
     await User.deleteOne({ email })
