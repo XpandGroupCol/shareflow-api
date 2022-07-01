@@ -6,6 +6,7 @@ const User = require('../../../../models/User')
 const { DEFAULT_ROLES } = require('../../../../config')
 const getSession = require('../../../../utils/getSession')
 const { verifyToken, setToken } = require('../../../../utils/token')
+const { sendEmail } = require('../../../../utils/aws/SES')
 
 const auth = async ({ email, password }) => {
   const user = await User.findOne({
@@ -62,10 +63,17 @@ const forgotPassword = async ({ email }) => {
     // aqui se le debe enviar un email al usuario con el token
     const token = setToken(data, `${process.env.ACCESS_TOKEN}${user.password}`, { expiresIn: '15m' })
 
+    const sendEmailPayload = {
+      destinationEmails: ['diegocontreras1219@gmail.com'],
+      emailSubject: 'Recuperar contraseña',
+      text: 'Recuperar contraseña',
+      htmlMessage: `<a href="${process.env.BASE_URL}/auth/recovery-password/${token}@u@${user?._id}">Cambiar contraseña</a>`
+    }
+    await sendEmail(sendEmailPayload)
     return `${token}@u@${user?._id}`
   }
 
-  throw boom.badRequest('Usuiario no registrado')
+  return true
 }
 
 const validateToken = async ({ token }) => {

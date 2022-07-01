@@ -28,6 +28,7 @@
     "fluent-ffmpeg": "^2.1.2",
     "handlebars": "^4.7.7",
     "joi": "17.6.0",
+    "json2csv": "5.0.7",
     "jsonwebtoken": "8.5.1",
     "mongoose": "6.3.2",
     "mongoose-paginate-v2": "^1.6.3",
@@ -38,6 +39,7 @@
     "yup": "0.32.11"
   },
   "devDependencies": {
+    "jsforce": "^1.11.0",
     "standard": "16.0.4"
   },
   "eslintConfig": {

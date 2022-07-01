@@ -57,7 +57,7 @@ const sendEmail = async (sendEmailPayload) => {
     if (sendEmailPayload.htmlMessage) payload.html = sendEmailPayload.htmlMessage
 
     const sendResult = await transporter.sendMail(payload)
-
+    console.log({ sendResult })
     if (!sendResult) return false
     return true
   } catch (error) {

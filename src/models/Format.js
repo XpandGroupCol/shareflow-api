@@ -1,5 +1,4 @@
 const { Schema, model } = require('mongoose')
-const { MEDIA_FORMATS } = require('../config')
 
 const FormatSchema = new Schema({
   name: {
@@ -23,9 +22,10 @@ const FormatSchema = new Schema({
     required: true,
     default: false
   },
-  type: {
-    type: String,
-    required: true
+  weight: {
+    type: Number,
+    required: true,
+    default: 0
   },
   status: {
     type: Boolean,

@@ -59,8 +59,6 @@ const NEW_CAMPAIGN_STATUS = {
   completed: 'Completada'
 }
 
-const CAMPAING_STATUS_LIST = Object.keys(NEW_CAMPAIGN_STATUS)
-
 const BIDDING_MODEL = [
   {
     id: 'CPM',
@@ -138,7 +136,6 @@ module.exports = {
   BIDDING_MODEL,
   TARGET_TYPE,
   MEDIA_FORMATS,
-  CAMPAING_STATUS_LIST,
   NEW_CAMPAIGN_STATUS,
   DEFAULT_ROLES,
   PER_PAGE

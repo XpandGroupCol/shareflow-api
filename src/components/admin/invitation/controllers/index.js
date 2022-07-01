@@ -1,9 +1,10 @@
 const services = require('../services')
 
 const getInvitations = async (request, response) => {
+  const data = await services.getInvitations(request.query)
   response.status(200).json({
     statusCode: 200,
-    data: await services.getInvitations(request.query)
+    ...data
   })
 }
 

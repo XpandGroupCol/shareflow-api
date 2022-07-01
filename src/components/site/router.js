@@ -1,5 +1,8 @@
-const adminRouter = require('express').Router()
+const siteRouter = require('express').Router()
 
-adminRouter.use('/site', require('./auth/route'))
+siteRouter.use('/site', require('./auth/route'))
+siteRouter.use('/site', require('./campaign/route'))
+siteRouter.use('/site', require('./user/route'))
+siteRouter.use('/site', require('./publisher/route'))
 
-module.exports = adminRouter
+module.exports = siteRouter

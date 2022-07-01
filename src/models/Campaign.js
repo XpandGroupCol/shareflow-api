@@ -1,5 +1,5 @@
 const { Schema, model } = require('mongoose')
-const { CAMPAING_STATUS_LIST } = require('../config')
+const { NEW_CAMPAIGN_STATUS } = require('../config')
 
 const CampaignSchema = new Schema({
   logo: {
@@ -62,7 +62,7 @@ const CampaignSchema = new Schema({
   status: {
     type: String,
     required: true,
-    enum: CAMPAING_STATUS_LIST,
+    enum: Object.keys(NEW_CAMPAIGN_STATUS),
     default: 'draft'
   },
   user: {

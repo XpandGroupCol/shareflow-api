@@ -1,5 +1,5 @@
 const { Schema, model } = require('mongoose')
-const { ROLES } = require('../config')
+const { DEFAULT_ROLES } = require('../config')
 
 const userSchema = new Schema({
   email: {
@@ -39,8 +39,8 @@ const userSchema = new Schema({
   role: {
     type: String,
     required: true,
-    enum: ['ADMIN', 'CLIENT'],
-    default: 'CLIENT'
+    enum: Object.keys(DEFAULT_ROLES),
+    default: DEFAULT_ROLES.CLIENT
   },
   status: {
     type: Boolean,
