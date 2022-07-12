@@ -11,6 +11,11 @@ sectorRouter.get('/targets',
   validateRequestSchema(schemas.getSchema, 'query'),
   asyncHandler(controllers.getTargets))
 
+sectorRouter.get('/targets/download',
+  loggedIn,
+  validateRequestSchema(schemas.getSchema, 'query'),
+  asyncHandler(controllers.download))
+
 sectorRouter.post('/targets',
   loggedIn,
   validateRequestSchema(schemas.createSchema),

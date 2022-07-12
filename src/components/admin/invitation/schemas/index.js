@@ -12,7 +12,7 @@ const createSchema = joi.object({
 })
 
 const sendEmailSchema = joi.object({
-  email: joi.string().email().required()
+  id: joi.string().required()
 })
 
 module.exports = {

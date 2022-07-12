@@ -49,7 +49,6 @@ const deleteUser = async ({ id, status }) => {
 
 const getProfile = async (id) => {
   const data = await User.findById(id)
-  console.log(data, id)
   return data
 }
 

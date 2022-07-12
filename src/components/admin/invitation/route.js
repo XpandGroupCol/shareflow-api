@@ -11,6 +11,11 @@ invitationRouter.get('/invitation',
   validateRequestSchema(schemas.getSchema, 'query'),
   asyncHandler(controllers.getInvitations))
 
+invitationRouter.get('/invitation/download',
+  loggedIn,
+  validateRequestSchema(schemas.getSchema, 'query'),
+  asyncHandler(controllers.download))
+
 invitationRouter.post('/invitation',
   loggedIn,
   validateRequestSchema(schemas.createSchema),

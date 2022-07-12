@@ -11,6 +11,11 @@ formatRouter.get('/formats',
   validateRequestSchema(schemas.getSchema, 'query'),
   asyncHandler(controllers.getFormats))
 
+formatRouter.get('/formats/download',
+  loggedIn,
+  validateRequestSchema(schemas.getSchema, 'query'),
+  asyncHandler(controllers.download))
+
 formatRouter.post('/formats',
   loggedIn,
   validateRequestSchema(schemas.createSchema),

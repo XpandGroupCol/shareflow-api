@@ -1,4 +1,6 @@
+const { downloadResource } = require('../../../../libraries/downloadCSV')
 const services = require('../services')
+const { fields } = require('./constants')
 
 const getInvitations = async (request, response) => {
   const data = await services.getInvitations(request.query)
@@ -18,8 +20,14 @@ const createInvitation = async (request, response) => {
 const sendEmail = async (request, response) => {
   response.status(200).json({
     statusCode: 200,
-    data: await services.sendEmail(request.body)
+    data: await services.sendInvitation(request.body)
   })
 }
 
-module.exports = { getInvitations, createInvitation, sendEmail }
+const download = async (request, response) => {
+  const data = await services.getInvitations(request.query)
+
+  return downloadResource(response, 'invitation.csv', fields, data?.data || [])
+}
+
+module.exports = { getInvitations, createInvitation, sendEmail, download }

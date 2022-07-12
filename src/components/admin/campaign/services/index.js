@@ -29,6 +29,10 @@ const getCampaigns = async ({ search, page = 1, target, sector, status }) => {
   }
 
   const data = await Campaign.find(query)
+    .populate('user')
+    .populate('sector')
+    .populate('target')
+    .populate('locations')
     .populate('ages')
     .limit(PER_PAGE).skip(PER_PAGE * currentPage).lean().exec()
 

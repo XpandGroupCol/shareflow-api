@@ -1,4 +1,6 @@
 const services = require('../services')
+const { downloadResource } = require('../../../../libraries/downloadCSV')
+const { fields } = require('./constants')
 
 const getAges = async (request, response) => {
   const data = await services.getAges(request.query)
@@ -33,4 +35,10 @@ const updateAge = async (request, response) => {
   })
 }
 
-module.exports = { getAges, createAge, deleteAge, updateAge }
+const download = async (request, response) => {
+  const data = await services.getAges(request.query)
+
+  return downloadResource(response, 'ages.csv', fields, data?.data || [])
+}
+
+module.exports = { getAges, createAge, deleteAge, updateAge, download }

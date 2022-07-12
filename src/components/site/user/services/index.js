@@ -1,10 +1,14 @@
-const { PER_PAGE } = require('../../../../config')
+
 const Campaign = require('../../../../models/Campaign')
 const { rgx } = require('../../../../utils')
+require('../../../../models/Location')
+require('../../../../models/Payment')
 
-const getCampaigns = async ({ search, page = 1, status }) => {
+const PER_PAGE = 9
+const getCampaigns = async ({ user, search, page = 1, status }) => {
+  console.log({ user })
   const currentPage = page < 1 ? 0 : page - 1
-  let query = {}
+  let query = { user }
 
   if (search) {
     query = {
@@ -24,7 +28,7 @@ const getCampaigns = async ({ search, page = 1, status }) => {
     .populate('user')
     .populate('sector')
     .populate('target')
-    .populate('locations')
+    // .populate('locations')
     .populate('ages')
     .populate({
       path: 'payments',

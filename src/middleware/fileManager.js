@@ -44,6 +44,6 @@ const multerOptionsMultipleFiles = {
   }
 }
 
-const receiveFile = multer(multerOptions).single('file')
+const receiveSingleFile = multer(multerOptions).single('file')
 const receiveMultipleFiles = multer(multerOptionsMultipleFiles).any()
-module.exports = { receiveFile, receiveMultipleFiles }
+module.exports = { receiveSingleFile, receiveMultipleFiles }

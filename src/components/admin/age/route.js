@@ -11,6 +11,11 @@ sectorRouter.get('/ages',
   validateRequestSchema(schemas.getSchema, 'query'),
   asyncHandler(controllers.getAges))
 
+sectorRouter.get('/ages/download',
+  loggedIn,
+  validateRequestSchema(schemas.getSchema, 'query'),
+  asyncHandler(controllers.download))
+
 sectorRouter.post('/ages',
   loggedIn,
   validateRequestSchema(schemas.createSchema),

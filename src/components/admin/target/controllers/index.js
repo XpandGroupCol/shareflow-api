@@ -1,4 +1,6 @@
+const { downloadResource } = require('../../../../libraries/downloadCSV')
 const services = require('../services')
+const { fields } = require('./constants')
 
 const getTargets = async (request, response) => {
   const data = await services.getTartes(request.query)
@@ -32,4 +34,10 @@ const updateTarget = async (request, response) => {
   })
 }
 
-module.exports = { getTargets, createTarget, deleteTarget, updateTarget }
+const download = async (request, response) => {
+  const data = await services.getTartes(request.query)
+
+  return downloadResource(response, 'targets.csv', fields, data?.data || [])
+}
+
+module.exports = { getTargets, createTarget, deleteTarget, updateTarget, download }

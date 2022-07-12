@@ -11,4 +11,9 @@ campaignRouter.get('/campaigns',
   validateRequestSchema(schemas.getSchema, 'query'),
   asyncHandler(controllers.getCampaigns))
 
+campaignRouter.get('/campaigns/download',
+  loggedIn,
+  validateRequestSchema(schemas.getSchema, 'query'),
+  asyncHandler(controllers.download))
+
 module.exports = campaignRouter

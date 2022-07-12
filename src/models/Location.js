@@ -1,13 +1,21 @@
 const { Schema, model } = require('mongoose')
 
 const LocationSchema = new Schema({
-  name: {
+  city: {
     type: String,
     required: true,
     lowercase: true,
     unique: true
   },
   country: {
+    type: String,
+    required: true
+  },
+  prefix: {
+    type: String,
+    required: true
+  },
+  department: {
     type: String,
     required: true
   },

@@ -3,8 +3,14 @@ const { NEW_CAMPAIGN_STATUS } = require('../config')
 
 const CampaignSchema = new Schema({
   logo: {
-    type: String,
-    required: false
+    name: {
+      type: String,
+      default: ''
+    },
+    url: {
+      type: String,
+      default: ''
+    }
   },
   brand: {
     type: String,

@@ -4,7 +4,6 @@ const cors = require('cors')
 const Mongo = require('./mongo')
 
 const { notFoundHandler, logError } = require('./src/middleware/errorHandler')
-
 const adminRouter = require('./src/components/admin/router')
 const siteRouter = require('./src/components/site/router')
 

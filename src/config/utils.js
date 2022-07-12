@@ -1,6 +1,6 @@
 const { Crypto } = require('@peculiar/webcrypto')
 
-const getRandomName = (name) => `${Date.now().toString()}-${name}}`
+const getRandomName = (name) => `${Date.now().toString().slice(0, 16)}-${name}}`
 
 const getSignature = async (reference, amount, currency = 'COP') => {
   const cadenaConcatenada = `${reference}${amount}00${currency}${process.env.WOMPI_INTEGRITY}`

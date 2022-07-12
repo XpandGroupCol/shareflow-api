@@ -57,13 +57,12 @@ const sendEmail = async (sendEmailPayload) => {
     if (sendEmailPayload.htmlMessage) payload.html = sendEmailPayload.htmlMessage
 
     const sendResult = await transporter.sendMail(payload)
-    console.log({ sendResult })
     if (!sendResult) return false
     return true
   } catch (error) {
     // throw boom.internal('Error sending email: ', error.message || null)
     // We need to use a logger here
-    console.log(error)
+    return Promise.reject(error)
   }
 }
 

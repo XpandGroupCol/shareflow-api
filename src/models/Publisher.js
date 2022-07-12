@@ -2,8 +2,14 @@ const { Schema, model } = require('mongoose')
 
 const PublisherSchema = new Schema({
   logo: {
-    type: String,
-    required: false
+    name: {
+      type: String,
+      default: ''
+    },
+    url: {
+      type: String,
+      default: ''
+    }
   },
   publisher: {
     type: String,

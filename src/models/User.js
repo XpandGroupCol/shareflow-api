@@ -18,9 +18,14 @@ const userSchema = new Schema({
     default: ''
   },
   avatar: {
-    type: String,
-    required: false,
-    default: ''
+    name: {
+      type: String,
+      default: ''
+    },
+    url: {
+      type: String,
+      default: ''
+    }
   },
   password: {
     type: String,
