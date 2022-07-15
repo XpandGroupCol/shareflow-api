@@ -1,4 +1,5 @@
 const asyncHandler = require('../../../middleware/asynHandler')
+const { receiveSingleFile } = require('../../../middleware/fileManager')
 const loggedIn = require('../../../middleware/isAuth')
 const { validateRequestSchema } = require('../../../middleware/requestSchemaHandler')
 const userRouter = require('express').Router()
@@ -20,6 +21,17 @@ userRouter.get('/users/me',
   loggedIn,
   asyncHandler(controllers.getProfile))
 
+userRouter.get('/users/:id',
+  loggedIn,
+  // validateRequestSchema(schemas.getSchema, 'query'),
+  asyncHandler(controllers.getUserById))
+
+userRouter.post('/users',
+  receiveSingleFile,
+  loggedIn,
+  // validateRequestSchema(schemas.getSchema, 'query'),
+  asyncHandler(controllers.createUser))
+
 userRouter.put('/users/change-password',
   loggedIn,
   validateRequestSchema(schemas.changePasswordSchema),
@@ -30,10 +42,14 @@ userRouter.put('/users/me',
   validateRequestSchema(schemas.updateProfileSchema),
   asyncHandler(controllers.updateProfile))
 
-userRouter.put('/users/avatar',
+userRouter.put('/users/upload-file',
+  receiveSingleFile,
   loggedIn,
-  validateRequestSchema(schemas.getSchema, 'query'),
-  asyncHandler(controllers.download))
+  asyncHandler(controllers.uploadfile))
+
+userRouter.put('/users/:id',
+  loggedIn,
+  asyncHandler(controllers.updateUser))
 
 userRouter.delete('/users/:id',
   loggedIn,

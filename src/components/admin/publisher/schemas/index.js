@@ -8,6 +8,16 @@ const getSchema = joi.object({
   category: joi.string().optional()
 })
 
+const deleteSchema = joi.object({
+  status: joi.boolean().required()
+})
+
+const idSchema = joi.object({
+  id: joi.string().required()
+})
+
 module.exports = {
-  getSchema
+  getSchema,
+  deleteSchema,
+  idSchema
 }

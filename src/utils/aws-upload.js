@@ -28,7 +28,30 @@ const uploadFile = async ({ fileName, body, mimetype, bucket }) => {
   }
 }
 
+const uploadS3File = async ({ fileName, body, mimetype, bucket }) => {
+  const key = `${Date.now()}-${fileName}`
+  const params = {
+    Bucket: bucket || process.env.AWS_BUCKET_NAME,
+    Key: key,
+    Body: body,
+    ContentType: mimetype
+  }
+
+  try {
+    const { Location = null } = await s3.upload(params).promise()
+    return {
+      url: Location,
+      name: key
+    }
+  } catch (e) {
+    return {
+      url: null, name: null
+    }
+  }
+}
+
 module.exports = {
   uploadFile,
-  receiveFile
+  receiveFile,
+  uploadS3File
 }

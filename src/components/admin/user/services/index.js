@@ -2,10 +2,12 @@ const { PER_PAGE } = require('../../../../config')
 const User = require('../../../../models/User')
 const { rgx } = require('../../../../utils')
 const bcryptjs = require('bcryptjs')
+const { uploadS3File } = require('../../../../utils/aws-upload')
+const boom = require('@hapi/boom')
 
-const getUsers = async ({ search, page = 1, role, status }) => {
+const getUsers = async ({ search, page = 1, role, status, userId }) => {
   const currentPage = page < 1 ? 0 : page - 1
-  let query = {}
+  let query = { _id: { $ne: userId } }
 
   if (search) {
     query = {
@@ -42,6 +44,12 @@ const getUsers = async ({ search, page = 1, role, status }) => {
   }
 }
 
+const getUserById = async (id) => {
+  const data = await User.findById(id)
+  if (!data) throw boom.badRequest('Usuario no encontrado')
+  return data
+}
+
 const deleteUser = async ({ id, status }) => {
   const data = await User.findByIdAndUpdate(id, { status }, { new: true })
   return data
@@ -57,14 +65,47 @@ const updateProfile = async ({ id, body }) => {
   return data
 }
 
+const updateUser = async ({ id, body }) => {
+  const data = await User.findByIdAndUpdate(id, { ...body }, { new: true }).lean().exec()
+  return data
+}
+
 const changePassword = async ({ id, password }) => {
   const newPassword = await bcryptjs.hash(password, 10)
   const data = await User.findByIdAndUpdate(id, { password: newPassword }, { new: true }).lean().exec()
   return data
 }
 
-const changeAvatar = async ({ id, avatar }) => {
-  const data = await User.findByIdAndUpdate(id, { avatar }, { new: true }).lean().exec()
+const uploadfile = async ({ file, isDelete }) => {
+  if (isDelete) {
+    // se debe eliminar
+  }
+
+  if (file) {
+    const avatar = await uploadS3File({
+      fileName: file.originalname,
+      mimetype: file.mimetype,
+      body: file.buffer
+    })
+
+    return avatar
+  }
+  return null
+}
+
+const createUser = async ({ file, body }) => {
+  if (file) {
+    const avatar = await uploadS3File({
+      fileName: file.originalname,
+      mimetype: file.mimetype,
+      body: file.buffer
+    })
+    body.avatar = avatar
+  }
+
+  body.password = await bcryptjs.hash(body.password, 10)
+
+  const data = await User.create({ ...body, emailVerified: true })
   return data
 }
 
@@ -73,6 +114,9 @@ module.exports = {
   deleteUser,
   getProfile,
   updateProfile,
-  changeAvatar,
-  changePassword
+  uploadfile,
+  changePassword,
+  createUser,
+  getUserById,
+  updateUser
 }

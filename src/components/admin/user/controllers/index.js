@@ -3,10 +3,19 @@ const services = require('../services')
 const { fields } = require('./constants')
 
 const getUsers = async (request, response) => {
-  const data = await services.getUsers(request.query)
+  const data = await services.getUsers({ ...request.query, userId: request.userId })
   response.status(200).json({
     statusCode: 200,
     ...data
+  })
+}
+
+const getUserById = async (request, response) => {
+  const { id } = request.params
+  const data = await services.getUserById(id)
+  response.status(200).json({
+    statusCode: 200,
+    data
   })
 }
 
@@ -41,6 +50,15 @@ const updateProfile = async (request, response) => {
   })
 }
 
+const updateUser = async (request, response) => {
+  const { body } = request
+  const { id } = request.params
+  response.status(200).json({
+    statusCode: 200,
+    data: await services.updateUser({ id, body })
+  })
+}
+
 const changePassword = async (request, response) => {
   const { userId: id } = request
   const { password } = request.body
@@ -50,12 +68,19 @@ const changePassword = async (request, response) => {
   })
 }
 
-const changeAvatar = async (request, response) => {
-  const { userId: id } = request
-  const { avatar } = request.body
+const uploadfile = async (request, response) => {
+  const { file, isDelete } = request
   response.status(200).json({
     statusCode: 200,
-    data: await services.changeAvatar({ id, avatar })
+    data: await services.uploadfile({ file, isDelete })
+  })
+}
+
+const createUser = async (request, response) => {
+  const { file, body } = request
+  response.status(200).json({
+    statusCode: 200,
+    data: await services.createUser({ file, body })
   })
 }
 
@@ -66,5 +91,8 @@ module.exports = {
   getProfile,
   updateProfile,
   changePassword,
-  changeAvatar
+  uploadfile,
+  createUser,
+  getUserById,
+  updateUser
 }

@@ -9,5 +9,6 @@ adminRouter.use('/admin', require('./target/route'))
 adminRouter.use('/admin', require('./campaign/route'))
 adminRouter.use('/admin', require('./format/route'))
 adminRouter.use('/admin', require('./publisher/route'))
+adminRouter.use('/admin', require('./lists/route'))
 
 module.exports = adminRouter

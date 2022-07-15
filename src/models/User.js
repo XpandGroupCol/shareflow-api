@@ -83,9 +83,14 @@ const userSchema = new Schema({
     default: ''
   },
   rut: {
-    type: String,
-    required: false,
-    default: ''
+    name: {
+      type: String,
+      default: ''
+    },
+    url: {
+      type: String,
+      default: ''
+    }
   },
   checkRut: {
     type: Boolean,

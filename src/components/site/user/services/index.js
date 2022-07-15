@@ -6,7 +6,6 @@ require('../../../../models/Payment')
 
 const PER_PAGE = 9
 const getCampaigns = async ({ user, search, page = 1, status }) => {
-  console.log({ user })
   const currentPage = page < 1 ? 0 : page - 1
   let query = { user }
 

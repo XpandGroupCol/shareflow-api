@@ -12,7 +12,6 @@ const getCampaigns = async (request, response) => {
 
 const download = async (request, response) => {
   const data = await services.getCampaigns(request.query)
-  console.log(data.data)
   return downloadResource(response, 'campaings.csv', fields, data?.data || [])
 }
 
