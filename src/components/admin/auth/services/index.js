@@ -103,7 +103,6 @@ const changePassword = async ({ password, token }) => {
     await User.findOneAndUpdate({ _id }, { password: newPassword })
     return true
   } catch (e) {
-    console.log({ e })
     throw boom.unauthorized('Token no valido')
   }
 }
