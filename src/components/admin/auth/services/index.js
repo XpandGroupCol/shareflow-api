@@ -7,6 +7,7 @@ const { DEFAULT_ROLES } = require('../../../../config')
 const getSession = require('../../../../utils/getSession')
 const { verifyToken, setToken } = require('../../../../utils/token')
 const { sendEmail } = require('../../../../utils/aws/SES')
+const { recoveryPasswordTemplate } = require('../../../../templates/recoveryPassword')
 
 const auth = async ({ email, password }) => {
   const user = await User.findOne({
@@ -60,17 +61,17 @@ const forgotPassword = async ({ email }) => {
   if (user) {
     const data = { id: user?._id, email: user?.email }
 
-    // aqui se le debe enviar un email al usuario con el token
     const token = setToken(data, `${process.env.ACCESS_TOKEN}${user.password}`, { expiresIn: '15m' })
+    const url = `${process.env.CLIENT_URL}/auth/recovery-password/${token}@u@${user?._id}`
 
     const sendEmailPayload = {
       destinationEmails: ['diegocontreras1219@gmail.com'],
       emailSubject: 'Recuperar contraseña',
       text: 'Recuperar contraseña',
-      htmlMessage: `<a href="${process.env.BASE_URL}/auth/recovery-password/${token}@u@${user?._id}">Cambiar contraseña</a>`
+      htmlMessage: recoveryPasswordTemplate({ url, name: user?.name })
     }
-    await sendEmail(sendEmailPayload)
-    return `${token}@u@${user?._id}`
+    const send = await sendEmail(sendEmailPayload)
+    return send
   }
 
   return true
@@ -80,8 +81,6 @@ const validateToken = async ({ token }) => {
   const [_token, _id] = token.split('@u@')
 
   const user = await User.findById(_id).lean().exec()
-
-  if (!user) throw boom.badRequest('Token no valido')
 
   try {
     verifyToken(_token, `${process.env.ACCESS_TOKEN}${user.password}`)
@@ -100,10 +99,11 @@ const changePassword = async ({ password, token }) => {
 
   try {
     verifyToken(_token, `${process.env.ACCESS_TOKEN}${user.password}`)
-    user.password = await bcryptjs.hash(password, 10)
-    await user.save()
+    const newPassword = await bcryptjs.hash(password, 10)
+    await User.findOneAndUpdate({ _id }, { password: newPassword })
     return true
-  } catch {
+  } catch (e) {
+    console.log({ e })
     throw boom.unauthorized('Token no valido')
   }
 }

@@ -54,7 +54,7 @@ const sendInvitation = async ({ id }) => {
     destinationEmails: ['diegocontreras1219@gmail.com'],
     emailSubject: 'Bienvenido a Shareflow',
     text: 'Bienvenido a Shareflow',
-    htmlMessage: invitationTemplate({ name, url: `http://localhost:3000/auth/sign-up/${token}` })
+    htmlMessage: invitationTemplate({ name, url: `${process.env.CLIENT_URL}/auth/sign-up/${token}` })
   }
   try {
     const data = await sendEmail(sendEmailPayload)
