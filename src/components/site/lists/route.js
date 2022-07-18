@@ -20,4 +20,8 @@ listRouter.get('/lists/ages',
   loggedIn,
   asyncHandler(controllers.ages))
 
+listRouter.get('/lists/formats',
+  loggedIn,
+  asyncHandler(controllers.formats))
+
 module.exports = listRouter

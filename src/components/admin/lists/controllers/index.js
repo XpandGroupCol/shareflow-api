@@ -18,5 +18,11 @@ const ages = async (request, response) => {
     data: await services.getAges(request.body)
   })
 }
+const sectors = async (request, response) => {
+  response.status(200).json({
+    statusCode: 200,
+    data: await services.getSectors(request.body)
+  })
+}
 
-module.exports = { targets, formats, ages }
+module.exports = { targets, formats, ages, sectors }

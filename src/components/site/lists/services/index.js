@@ -1,4 +1,5 @@
 const Age = require('../../../../models/Age')
+const Format = require('../../../../models/Format')
 const Location = require('../../../../models/Location')
 const Sector = require('../../../../models/Sector')
 const Target = require('../../../../models/Target')
@@ -23,9 +24,14 @@ const getSectors = async () => {
   return data.map(({ name, _id }) => ({ label: name, value: _id }))
 }
 
+const getFormats = async () => {
+  const data = await Format.find({ status: true }).lean().exec()
+  return data.map(({ name, _id }) => ({ label: name, value: _id }))
+}
 module.exports = {
   getLocations,
   getTargets,
   getAges,
-  getSectors
+  getSectors,
+  getFormats
 }

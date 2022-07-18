@@ -13,7 +13,7 @@ const getPublishers = async (request, response) => {
 const download = async (request, response) => {
   const data = await services.getPublishers(request.query)
 
-  return downloadResource(response, 'users.csv', fields, data?.data || [])
+  return downloadResource(response, 'publishers.csv', fields, data?.data || [])
 }
 
 const createPublisher = async (request, response) => {

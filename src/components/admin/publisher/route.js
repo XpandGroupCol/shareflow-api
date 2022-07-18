@@ -12,15 +12,15 @@ publisherRouter.get('/publishers',
   validateRequestSchema(schemas.getSchema, 'query'),
   asyncHandler(controllers.getPublishers))
 
-publisherRouter.get('/publishers/:id',
-  loggedIn,
-  validateRequestSchema(schemas.idSchema, 'params'),
-  asyncHandler(controllers.getPublisherById))
-
 publisherRouter.get('/publishers/download',
   loggedIn,
   validateRequestSchema(schemas.getSchema, 'query'),
   asyncHandler(controllers.download))
+
+publisherRouter.get('/publishers/:id',
+  loggedIn,
+  validateRequestSchema(schemas.idSchema, 'params'),
+  asyncHandler(controllers.getPublisherById))
 
 publisherRouter.put('/publishers/upload-file',
   receiveSingleFile,

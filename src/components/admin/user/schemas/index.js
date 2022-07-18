@@ -27,7 +27,8 @@ const updateProfileSchema = joi.object({
   lastName: joi
     .string()
     .trim()
-    .required()
+    .required(),
+  avatar: joi.object().optional()
 })
 
 module.exports = {
