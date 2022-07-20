@@ -5,6 +5,8 @@ const Publisher = require('../../../../models/Publisher')
 const User = require('../../../../models/User')
 const { rgx } = require('../../../../utils')
 const { uploadS3File } = require('../../../../utils/aws-upload')
+const { checkFormatFile } = require('../../../../utils/formatFile')
+const { hookUploadFile } = require('../../../v1/campaigns/hooks')
 
 const leanById = ({ ages, sex, sector, target, __v, _id, ...restOfCampaign }) => ({
   _id: _id,
@@ -159,4 +161,20 @@ const uploadfile = async ({ file, isDelete }) => {
   return null
 }
 
-module.exports = { getCampaigns, getCampaignById, getPublishersByTargetId, updateCampaign, uploadfile }
+const validateFormatFile = async ({ files, conditions }) => {
+  if (files.length) {
+    for await (const file of files) {
+      await checkFormatFile(file.buffer, file.mimetype, conditions)
+    }
+  }
+
+  const filesUpload = []
+  for await (const file of files) {
+    const fileUpload = await hookUploadFile(file)
+    filesUpload.push(fileUpload)
+  }
+
+  return filesUpload
+}
+
+module.exports = { getCampaigns, getCampaignById, validateFormatFile, getPublishersByTargetId, updateCampaign, uploadfile }

@@ -19,8 +19,14 @@ const getPublishersByTargetIdSchema = joi.object({
   page: joi.string().optional()
 })
 
+const validateFormatFileSchema = joi.object({
+  width: joi.string().trim().required(),
+  height: joi.string().trim().required()
+})
+
 module.exports = {
   getSchema,
   idSchema,
-  getPublishersByTargetIdSchema
+  getPublishersByTargetIdSchema,
+  validateFormatFileSchema
 }

@@ -52,4 +52,15 @@ const uploadfile = async (request, response) => {
   })
 }
 
-module.exports = { getCampaigns, download, getCampaignById, getPublishersByTargetId, updateCampaign, uploadfile }
+const validateFormatFile = async (request, response) => {
+  const { files } = request
+  const conditions = request.body
+
+  const data = await services.validateFormatFile({ files, conditions })
+  response.status(200).json({
+    statusCode: 200,
+    data
+  })
+}
+
+module.exports = { getCampaigns, download, getCampaignById, getPublishersByTargetId, updateCampaign, validateFormatFile, uploadfile }

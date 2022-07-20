@@ -1,5 +1,5 @@
 const asyncHandler = require('../../../middleware/asynHandler')
-const { receiveSingleFile } = require('../../../middleware/fileManager')
+const { receiveSingleFile, receiveMultipleFiles } = require('../../../middleware/fileManager')
 const loggedIn = require('../../../middleware/isAuth')
 const { validateRequestSchema } = require('../../../middleware/requestSchemaHandler')
 const campaignRouter = require('express').Router()
@@ -26,6 +26,12 @@ campaignRouter.get('/campaigns/:id',
   loggedIn,
   validateRequestSchema(schemas.idSchema, 'params'),
   asyncHandler(controllers.getCampaignById))
+
+campaignRouter.post('/campaigns/validateFiles',
+  loggedIn,
+  receiveMultipleFiles,
+  validateRequestSchema(schemas.validateFormatFileSchema),
+  asyncHandler(controllers.validateFormatFile))
 
 campaignRouter.put('/campaigns/upload-file',
   receiveSingleFile,
