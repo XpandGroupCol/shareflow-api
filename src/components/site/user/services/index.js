@@ -1,48 +1,50 @@
 
-const Campaign = require('../../../../models/Campaign')
-const { rgx } = require('../../../../utils')
-require('../../../../models/Location')
-require('../../../../models/Payment')
+const User = require('../../../../models/User')
+const bcryptjs = require('bcryptjs')
+const { uploadS3File } = require('../../../../utils/aws-upload')
 
-const PER_PAGE = 9
-const getCampaigns = async ({ user, search, page = 1, status }) => {
-  const currentPage = page < 1 ? 0 : page - 1
-  let query = { user }
-
-  if (search) {
-    query = {
-      ...query,
-      $or: [
-        { brand: { $regex: rgx(search), $options: 'i' } },
-        { name: { $regex: rgx(search), $options: 'i' } }
-      ]
-    }
-  }
-
-  if (status) {
-    query = { ...query, status }
-  }
-
-  const data = await Campaign.find(query)
-    .populate('user')
-    .populate('sector')
-    .populate('target')
-    // .populate('locations')
-    .populate('ages')
-    .populate({
-      path: 'payments',
-      options: { sort: '-createdAt', limit: 1 }
-    })
-    .limit(PER_PAGE).skip(PER_PAGE * currentPage).lean().exec()
-
-  const total = await Campaign.countDocuments(query)
-
-  return {
-    data,
-    total,
-    pages: Math.ceil(total / PER_PAGE),
-    page: currentPage + 1
-  }
+const getProfile = async (id) => {
+  const data = await User.findById(id)
+  return data
 }
 
-module.exports = { getCampaigns }
+const updateProfile = async ({ id, body }) => {
+  const data = await User.findByIdAndUpdate(id, { ...body }, { new: true }).lean().exec()
+  return data
+}
+
+const updateUser = async ({ id, body }) => {
+  const data = await User.findByIdAndUpdate(id, { ...body }, { new: true }).lean().exec()
+  return data
+}
+
+const changePassword = async ({ id, password }) => {
+  const newPassword = await bcryptjs.hash(password, 10)
+  const data = await User.findByIdAndUpdate(id, { password: newPassword }, { new: true }).lean().exec()
+  return data
+}
+
+const uploadfile = async ({ file, isDelete }) => {
+  if (isDelete) {
+    // se debe eliminar
+  }
+
+  if (file) {
+    const avatar = await uploadS3File({
+      fileName: file.originalname,
+      mimetype: file.mimetype,
+      body: file.buffer
+    })
+
+    return avatar
+  }
+  return null
+}
+
+module.exports = {
+  getProfile,
+  updateProfile,
+  uploadfile,
+  changePassword,
+  updateUser
+}

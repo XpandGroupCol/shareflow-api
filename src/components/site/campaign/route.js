@@ -12,15 +12,15 @@ campaignRouter.get('/campaigns',
   validateRequestSchema(schemas.getSchema, 'query'),
   asyncHandler(controllers.getCampaigns))
 
-campaignRouter.get('/campaigns/:id',
-  loggedIn,
-  // validateRequestSchema(schemas.getSchema, 'params'),
-  asyncHandler(controllers.getCampaignById))
-
 campaignRouter.get('/campaigns/publishers-by-target',
   loggedIn,
   validateRequestSchema(schemas.getPublishersByTargetIdSchema, 'query'),
   asyncHandler(controllers.getPublishersByTargetId))
+
+campaignRouter.get('/campaigns/:id',
+  loggedIn,
+  // validateRequestSchema(schemas.getSchema, 'params'),
+  asyncHandler(controllers.getCampaignById))
 
 campaignRouter.post('/campaigns',
   loggedIn,
@@ -38,6 +38,11 @@ campaignRouter.delete('/campaigns/:id',
   loggedIn,
   // validateRequestSchema(schemas.createCampaingSchema),
   asyncHandler(controllers.deleteCampaing))
+
+campaignRouter.put('/campaigns/upload-file',
+  receiveSingleFile,
+  loggedIn,
+  asyncHandler(controllers.uploadfile))
 
 campaignRouter.put('/campaigns/:id',
   loggedIn,

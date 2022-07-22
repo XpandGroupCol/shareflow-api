@@ -34,7 +34,8 @@ const createCampaingSchema = joi.object({
   sex: joi.string(),
   payment: joi.any(),
   summary: joi.object().optional(),
-  userPercentage: joi.any()
+  userPercentage: joi.any(),
+  file: joi.any().optional()
 })
 
 const validateFormatFileSchema = joi.object({

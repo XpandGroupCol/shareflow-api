@@ -1,22 +1,21 @@
 require('../../../../models/Location')
 require('../../../../models/Payment')
-const { SEX } = require('../../../../config')
 const Campaign = require('../../../../models/Campaign')
 const Publisher = require('../../../../models/Publisher')
 const User = require('../../../../models/User')
 const { rgx } = require('../../../../utils')
+const { uploadS3File } = require('../../../../utils/aws-upload')
 const { checkFormatFile } = require('../../../../utils/formatFile')
 const { hookUploadFile } = require('../../../v1/campaigns/hooks')
 
 const PER_PAGE = 9
 
-const leanById = ({ locations, ages, sex, sector, target, __v, _id, ...restOfCampaign }) => ({
-  id: _id,
-  locations: locations.map(({ _id, name }) => ({ id: _id, label: name })),
-  ages: ages.map(({ _id, name }) => ({ id: _id, label: name })),
-  sector: { id: sector?._id, label: sector?.name },
-  target: { id: target?._id, label: target?.name },
-  sex: SEX.find(({ id }) => id === sex) ?? null,
+const leanById = ({ ages, sex, sector, target, __v, _id, ...restOfCampaign }) => ({
+  _id: _id,
+  ages: ages.map(({ _id, name }) => ({ value: _id, label: name })),
+  sector: { value: sector?._id, label: sector?.name },
+  target: { value: target?._id, label: target?.name },
+  sex,
   ...restOfCampaign
 })
 
@@ -126,14 +125,14 @@ const getPublishersByTargetId = async ({ target = null, miniBudget = null, user:
 }
 
 const createCampaing = async ({ body, file, user }) => {
-  // if (file) {
-  //   const logo = await hookUploadFile({
-  //     fileName: getRandomName(file.fieldname),
-  //     mimetype: file.mimetype,
-  //     body: file.buffer
-  //   })
-  //   body.logo = logo
-  // }
+  if (file) {
+    const logo = await uploadS3File({
+      fileName: file.originalname,
+      mimetype: file.mimetype,
+      body: file.buffer
+    })
+    body.logo = logo
+  }
 
   const data = await Campaign.create({ ...body, user })
 
@@ -178,9 +177,26 @@ const validateFormatFile = async ({ files, conditions }) => {
 }
 
 const updateCampaign = async ({ body, id }) => {
-  const data = await Campaign.findByIdAndUpdate(id, { ...body, status: 'draft' }, { new: true })
+  const data = await Campaign.findByIdAndUpdate(id, { ...body }, { new: true })
 
   return data
+}
+
+const uploadfile = async ({ file, isDelete }) => {
+  if (isDelete) {
+    // se debe eliminar
+  }
+
+  if (file) {
+    const avatar = await uploadS3File({
+      fileName: file.originalname,
+      mimetype: file.mimetype,
+      body: file.buffer
+    })
+
+    return avatar
+  }
+  return null
 }
 
 module.exports = {
@@ -190,5 +206,6 @@ module.exports = {
   deleteCampaing,
   getCampaignById,
   validateFormatFile,
-  updateCampaign
+  updateCampaign,
+  uploadfile
 }

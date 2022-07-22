@@ -72,6 +72,14 @@ const updateCampaign = async (request, response) => {
   })
 }
 
+const uploadfile = async (request, response) => {
+  const { file, isDelete } = request
+  response.status(200).json({
+    statusCode: 200,
+    data: await services.uploadfile({ file, isDelete })
+  })
+}
+
 module.exports = {
   getCampaigns,
   getPublishersByTargetId,
@@ -79,5 +87,6 @@ module.exports = {
   deleteCampaing,
   getCampaignById,
   validateFormatFile,
-  updateCampaign
+  updateCampaign,
+  uploadfile
 }

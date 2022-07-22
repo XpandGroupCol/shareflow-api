@@ -42,20 +42,20 @@ const getProfile = async (request, response) => {
   })
 }
 
-const updateProfile = async (request, response) => {
-  const { userId: id, body } = request
-  response.status(200).json({
-    statusCode: 200,
-    data: await services.updateProfile({ id, body })
-  })
-}
-
 const updateUser = async (request, response) => {
   const { body } = request
   const { id } = request.params
   response.status(200).json({
     statusCode: 200,
     data: await services.updateUser({ id, body })
+  })
+}
+
+const updateProfile = async (request, response) => {
+  const { userId: id, body } = request
+  response.status(200).json({
+    statusCode: 200,
+    data: await services.updateProfile({ id, body })
   })
 }
 
