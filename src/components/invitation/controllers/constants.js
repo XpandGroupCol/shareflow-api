@@ -4,6 +4,10 @@ const fields = [
     value: 'name'
   },
   {
+    label: 'Apellido',
+    value: 'lastName'
+  },
+  {
     label: 'Whatsapp',
     value: 'phone'
   },

@@ -6,6 +6,11 @@ const InvitationSchema = new Schema({
     required: true,
     lowercase: true
   },
+  lastName: {
+    type: String,
+    required: true,
+    lowercase: true
+  },
   phone: {
     type: String,
     required: true
@@ -14,6 +19,10 @@ const InvitationSchema = new Schema({
     type: String,
     required: true,
     unique: true
+  },
+  sendEmail: {
+    type: Boolean,
+    default: false
   }
 }, {
   timestamps: true
