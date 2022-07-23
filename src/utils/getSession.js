@@ -6,7 +6,8 @@ const getSession = ({ role, name, lastName, avatar, _id, email }) => {
 
   return {
     role,
-    name: `${name} ${lastName || ''}`,
+    name,
+    lastName,
     avatar,
     email,
     token,

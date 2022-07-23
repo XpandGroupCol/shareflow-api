@@ -1,5 +1,5 @@
-const asyncHandler = require('../../../middleware/asynHandler')
-const { validateRequestSchema } = require('../../../middleware/requestSchemaHandler')
+const asyncHandler = require('../../middleware/asynHandler')
+const { validateRequestSchema } = require('../../middleware/requestSchemaHandler')
 const siteAuthRouter = require('express').Router()
 
 const controllers = require('./controllers')
@@ -7,11 +7,7 @@ const schemas = require('./schemas')
 
 siteAuthRouter.post('/auth',
   validateRequestSchema(schemas.authSchema),
-  asyncHandler(controllers.auth))
-
-siteAuthRouter.post('/auth/social',
-  validateRequestSchema(schemas.socialSchema),
-  asyncHandler(controllers.auth))
+  asyncHandler(controllers.authAdmin))
 
 siteAuthRouter.post('/auth/refresh-token',
   validateRequestSchema(schemas.tokenSchema),

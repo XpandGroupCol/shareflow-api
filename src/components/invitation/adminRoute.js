@@ -16,10 +16,6 @@ invitationRouter.get('/invitation/download',
   validateRequestSchema(schemas.getSchema, 'query'),
   asyncHandler(controllers.download))
 
-invitationRouter.post('/invitation',
-  validateRequestSchema(schemas.createSchema),
-  asyncHandler(controllers.createInvitation))
-
 invitationRouter.post('/invitation/send-email',
   loggedIn,
   validateRequestSchema(schemas.sendEmailSchema),

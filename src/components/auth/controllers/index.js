@@ -1,16 +1,17 @@
+const { DEFAULT_ROLES } = require('../../../config')
 const services = require('../services')
 
-const auth = async (request, response) => {
+const authSite = async (request, response) => {
   response.status(200).json({
     statusCode: 200,
-    data: await services.auth(request.body)
+    data: await services.auth({ ...request.body, role: DEFAULT_ROLES.CLIENT })
   })
 }
 
-const social = async (request, response) => {
+const authAdmin = async (request, response) => {
   response.status(200).json({
     statusCode: 200,
-    data: await services.social(request.body)
+    data: await services.auth({ ...request.body, role: { $ne: DEFAULT_ROLES.CLIENT } })
   })
 }
 
@@ -21,10 +22,10 @@ const signup = async (request, response) => {
   })
 }
 
-const verifyAccount = async (request, response) => {
+const verifyInvitation = async (request, response) => {
   response.status(200).json({
     statusCode: 200,
-    data: await services.verifyAccount(request.body)
+    data: await services.verifyInvitation(request.params)
   })
 }
 
@@ -55,4 +56,13 @@ const changePassword = async (request, response) => {
   })
 }
 
-module.exports = { auth, refreshToken, forgotPassword, validateToken, changePassword, social, signup, verifyAccount }
+module.exports = {
+  authSite,
+  authAdmin,
+  refreshToken,
+  forgotPassword,
+  validateToken,
+  changePassword,
+  signup,
+  verifyInvitation
+}

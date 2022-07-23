@@ -138,5 +138,6 @@ module.exports = {
   MEDIA_FORMATS,
   NEW_CAMPAIGN_STATUS,
   DEFAULT_ROLES,
-  PER_PAGE
+  PER_PAGE,
+  GLOBAL_ERROR: 'Parece que tenemos problemas para procesar tu solicitud, por favor intenta nuevamente.'
 }

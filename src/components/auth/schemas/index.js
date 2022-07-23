@@ -20,6 +20,7 @@ const signupSchema = joi.object({
   email: joi.string().email().required(),
   name: joi.string().required(),
   lastName: joi.string().required(),
+  phone: joi.string().required(),
   password: joi
     .string()
     .trim()

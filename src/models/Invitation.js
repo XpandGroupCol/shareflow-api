@@ -23,6 +23,10 @@ const InvitationSchema = new Schema({
   sendEmail: {
     type: Boolean,
     default: false
+  },
+  hasUser: {
+    type: Boolean,
+    default: false
   }
 }, {
   timestamps: true
