@@ -3,14 +3,9 @@ const { NEW_CAMPAIGN_STATUS } = require('../config')
 
 const CampaignSchema = new Schema({
   logo: {
-    name: {
-      type: String,
-      default: ''
-    },
-    url: {
-      type: String,
-      default: ''
-    }
+    name: String,
+    url: String,
+    default: { name: '', url: '' }
   },
   brand: {
     type: String,
@@ -89,10 +84,11 @@ const CampaignSchema = new Schema({
       publisherCategory: { type: String, enum: ['platform', 'medium'] },
       share: { type: String },
       value: { type: Number },
-      imageUrl: String,
+      media: { name: String, url: String },
+      logo: { name: String, url: String },
       width: Number,
       height: Number,
-      mimetype: String
+      isVideo: { type: Boolean, default: false }
     }],
     default: []
   },
@@ -102,8 +98,8 @@ const CampaignSchema = new Schema({
     enum: ['all', 'male', 'women'],
     default: 'all'
   },
-  payments: {
-    type: [Schema.Types.ObjectId],
+  lastPayment: {
+    type: Schema.Types.ObjectId,
     ref: 'Payment'
   },
   summary: {
@@ -117,6 +113,7 @@ const CampaignSchema = new Schema({
     grossValue: { type: Number },
     serviceFee: { type: Number }
   },
+  orderNumber: { type: Number },
   isDelete: {
     type: Boolean,
     default: false

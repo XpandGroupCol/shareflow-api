@@ -50,8 +50,23 @@ const uploadS3File = async ({ fileName, body, mimetype, bucket }) => {
   }
 }
 
+const deleteS3File = async ({ name, bucket }) => {
+  const params = {
+    Bucket: bucket || process.env.AWS_BUCKET_NAME,
+    Key: name
+  }
+
+  try {
+    await s3.deleteObject(params).promise()
+    return true
+  } catch (e) {
+    return false
+  }
+}
+
 module.exports = {
   uploadFile,
   receiveFile,
-  uploadS3File
+  uploadS3File,
+  deleteS3File
 }

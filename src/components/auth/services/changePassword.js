@@ -11,8 +11,6 @@ const changePassword = async ({ password, token }) => {
 
   const user = await User.findById(_id)
 
-  console.log(user)
-
   if (!user) throw boom.badRequest('Token no valido')
 
   try {
@@ -21,7 +19,6 @@ const changePassword = async ({ password, token }) => {
     await user.save()
     return true
   } catch (e) {
-    console.log(e)
     throw boom.unauthorized('Token no valido')
   }
 }

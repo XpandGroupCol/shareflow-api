@@ -20,6 +20,9 @@ const InvitationSchema = new Schema({
     required: true,
     unique: true
   },
+  activeCampaignId: {
+    type: Number
+  },
   sendEmail: {
     type: Boolean,
     default: false
