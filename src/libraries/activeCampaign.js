@@ -23,13 +23,15 @@ const addTag = async (id) => {
   }
 }
 
-const createLead = async (payload) => {
+const createLead = async (contact) => {
   try {
+    const payload = { contact }
     const { data: user } = await fetcher('https://xpandgroup.api-us1.com/api/3/contacts', payload)
     if (!user?.contact?.id) return false
     await addTag(user?.contact?.id)
     return user?.contact?.id
   } catch (e) {
+    console.log(e)
     return null
   }
 }
