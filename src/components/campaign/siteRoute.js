@@ -34,6 +34,9 @@ campaignRouter.post('/campaigns/validateFiles',
   validateRequestSchema(schemas.validateFormatFileSchema),
   asyncHandler(controllers.validateFormatFile))
 
+campaignRouter.post('/campaigns/web-hook-payment',
+  asyncHandler(controllers.wompiEvent))
+
 campaignRouter.put('/campaigns/upload-file/:id',
   receiveSingleFile,
   loggedIn,

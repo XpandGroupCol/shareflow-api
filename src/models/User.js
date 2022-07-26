@@ -110,6 +110,10 @@ const userSchema = new Schema({
     type: Number,
     required: true,
     default: 15
+  },
+  balance: {
+    type: Number,
+    default: 0
   }
 },
 {

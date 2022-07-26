@@ -98,10 +98,6 @@ const CampaignSchema = new Schema({
     enum: ['all', 'male', 'women'],
     default: 'all'
   },
-  lastPayment: {
-    type: Schema.Types.ObjectId,
-    ref: 'Payment'
-  },
   summary: {
     clicks: { type: Number },
     prints: { type: Number },

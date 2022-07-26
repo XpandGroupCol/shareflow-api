@@ -93,6 +93,17 @@ const deleteCampaing = async (request, response) => {
   })
 }
 
+const wompiEvent = async (request, response) => {
+  const { body } = request
+  const { reference, amount_in_cents: amount, id: transactionId, status, payment_method_type: paymentMethod } = body?.data?.transaction || {}
+
+  const data = await services.wompiEvent({ reference, amount, transactionId, status, paymentMethod })
+  response.status(200).json({
+    statusCode: 200,
+    data
+  })
+}
+
 module.exports = {
   getCampaigns,
   createCampaing,
@@ -103,5 +114,6 @@ module.exports = {
   updateCampaign,
   validateFormatFile,
   uploadfile,
-  getAllSiteCampaigns
+  getAllSiteCampaigns,
+  wompiEvent
 }

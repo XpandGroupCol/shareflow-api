@@ -6,6 +6,7 @@ const getPublishersByTargetId = require('./getPublishersByTargetId')
 const updateCampaign = require('./updateCampaign')
 const uploadfile = require('./uploadfile')
 const validateFormatFile = require('./validateFormatFile')
+const wompiEvent = require('./wompiEvent')
 
 module.exports = {
   createCampaing,
@@ -15,5 +16,6 @@ module.exports = {
   getPublishersByTargetId,
   updateCampaign,
   uploadfile,
-  validateFormatFile
+  validateFormatFile,
+  wompiEvent
 }
