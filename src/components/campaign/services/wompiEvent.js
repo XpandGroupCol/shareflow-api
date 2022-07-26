@@ -14,7 +14,7 @@ const wompiEvent = async ({ reference, amount, transactionId, status, paymentMet
   const payment = await Payment.create({
     campaignId,
     transactionId,
-    amount: amount?.slice(0, -2),
+    amount,
     status,
     paymentMethod
   })
