@@ -2,6 +2,14 @@ const boom = require('@hapi/boom')
 const Campaign = require('../../../models/Campaign')
 const Payment = require('../../../models/Payment')
 
+const clearNumber = (number) => {
+  if (typeof number === 'number') {
+    const clear = number.toString().slice(0, -2)
+    return Number(clear)
+  }
+  return Number(number.toString().slice(0, -2))
+}
+
 const wompiEvent = async ({ reference, amount, transactionId, status, paymentMethod }) => {
   if (!transactionId) throw boom.notFound()
 
@@ -9,17 +17,13 @@ const wompiEvent = async ({ reference, amount, transactionId, status, paymentMet
   const campaign = await Campaign.findById(campaignId)
   if (!campaign) throw boom.notFound()
 
-  console.log({ campaign })
-
   const payment = await Payment.create({
     campaignId,
     transactionId,
-    amount,
+    amount: clearNumber(amount),
     status,
     paymentMethod
   })
-
-  console.log({ payment })
 
   if (!payment) throw boom.notFound()
 
@@ -28,7 +32,6 @@ const wompiEvent = async ({ reference, amount, transactionId, status, paymentMet
   }
 
   const response = await campaign.save()
-  console.log({ response })
   return response
 }
 
