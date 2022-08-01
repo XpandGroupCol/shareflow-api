@@ -55,7 +55,7 @@ const fields = [
   },
   {
     label: 'Sexo',
-    value: ({ sex }) => SEX.find(({ id }) => id === sex)?.label ?? ''
+    value: ({ sex }) => SEX[sex] ?? ''
   }
 ]
 

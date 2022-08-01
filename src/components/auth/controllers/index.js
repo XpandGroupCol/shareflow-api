@@ -37,9 +37,20 @@ const refreshToken = async (request, response) => {
 }
 
 const forgotPassword = async (request, response) => {
+  const { email } = request.body
+  const baseUrl = process.env.CLIENT_URL
   response.status(200).json({
     statusCode: 200,
-    data: await services.forgotPassword(request.body)
+    data: await services.forgotPassword({ email, baseUrl })
+  })
+}
+
+const forgotPasswordAdmin = async (request, response) => {
+  const { email } = request.body
+  const baseUrl = process.env.ADMIN_URL
+  response.status(200).json({
+    statusCode: 200,
+    data: await services.forgotPassword({ email, baseUrl })
   })
 }
 const validateToken = async (request, response) => {
@@ -64,5 +75,6 @@ module.exports = {
   validateToken,
   changePassword,
   signup,
-  verifyInvitation
+  verifyInvitation,
+  forgotPasswordAdmin
 }

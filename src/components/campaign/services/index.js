@@ -7,6 +7,7 @@ const updateCampaign = require('./updateCampaign')
 const uploadfile = require('./uploadfile')
 const validateFormatFile = require('./validateFormatFile')
 const wompiEvent = require('./wompiEvent')
+const getPDF = require('./getPDF')
 
 module.exports = {
   createCampaing,
@@ -17,5 +18,6 @@ module.exports = {
   updateCampaign,
   uploadfile,
   validateFormatFile,
-  wompiEvent
+  wompiEvent,
+  getPDF
 }

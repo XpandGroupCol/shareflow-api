@@ -1,4 +1,4 @@
-const { uploadS3File, deleteS3File } = require('../../../utils/aws-upload')
+const { uploadS3File, deleteS3File } = require('../../../utils/aws/S3')
 const Campaign = require('../../../models/Campaign')
 
 const emptyImage = { name: '', url: '' }

@@ -1,4 +1,5 @@
 const Campaign = require('../../../models/Campaign')
+require('../../../models/Location')
 const { leanById } = require('../../../utils/transformData')
 
 const getCampaignById = async (id) => {

@@ -56,6 +56,7 @@ const uploadfile = async (request, response) => {
   const { file } = request
   const { name } = request.body
   const { id } = request.params
+
   response.status(200).json({
     statusCode: 200,
     data: await services.uploadfile({ file, name, id })
@@ -104,6 +105,13 @@ const wompiEvent = async (request, response) => {
   })
 }
 
+const getPDF = async (request, response) => {
+  const { id } = request.params
+  const data = await services.getPDF(id)
+  response.setHeader('Content-disposition', 'attachment; filename=report.pdf')
+  return response.type('pdf').send(data)
+}
+
 module.exports = {
   getCampaigns,
   createCampaing,
@@ -115,5 +123,6 @@ module.exports = {
   validateFormatFile,
   uploadfile,
   getAllSiteCampaigns,
-  wompiEvent
+  wompiEvent,
+  getPDF
 }

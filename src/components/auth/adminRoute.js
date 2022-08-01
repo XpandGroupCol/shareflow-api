@@ -15,7 +15,7 @@ siteAuthRouter.post('/auth/refresh-token',
 
 siteAuthRouter.post('/auth/forgot-password',
   validateRequestSchema(schemas.forgotPasswordSchema),
-  asyncHandler(controllers.forgotPassword))
+  asyncHandler(controllers.forgotPasswordAdmin))
 
 siteAuthRouter.post('/auth/validate-token',
   validateRequestSchema(schemas.tokenSchema),

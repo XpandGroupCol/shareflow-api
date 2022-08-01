@@ -17,6 +17,11 @@ campaignRouter.get('/campaigns/publishers-by-target',
   validateRequestSchema(schemas.getPublishersByTargetIdSchema, 'query'),
   asyncHandler(controllers.getPublishersByTargetId))
 
+campaignRouter.get('/campaigns/pdf/:id',
+  loggedIn,
+  validateRequestSchema(schemas.idSchema, 'params'),
+  asyncHandler(controllers.getPDF))
+
 campaignRouter.get('/campaigns/:id',
   loggedIn,
   validateRequestSchema(schemas.idSchema, 'params'),

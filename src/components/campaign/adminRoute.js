@@ -22,6 +22,11 @@ campaignRouter.get('/campaigns/download',
   validateRequestSchema(schemas.getSchema, 'query'),
   asyncHandler(controllers.download))
 
+campaignRouter.get('/campaigns/pdf/:id',
+  loggedIn,
+  validateRequestSchema(schemas.idSchema, 'params'),
+  asyncHandler(controllers.getPDF))
+
 campaignRouter.get('/campaigns/:id',
   loggedIn,
   validateRequestSchema(schemas.idSchema, 'params'),

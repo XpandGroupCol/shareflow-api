@@ -1,5 +1,5 @@
+const { uploadS3File } = require('../../../utils/aws/S3')
 const { checkFormatFile } = require('../../../utils/formatFile')
-const { hookUploadFile } = require('../../v1/campaigns/hooks')
 
 const validateFormatFile = async ({ files, conditions }) => {
   if (files.length) {
@@ -10,8 +10,13 @@ const validateFormatFile = async ({ files, conditions }) => {
 
   const filesUpload = []
   for await (const file of files) {
-    const fileUpload = await hookUploadFile(file)
-    filesUpload.push(fileUpload)
+    const response = await uploadS3File({
+      fileName: file.originalname,
+      mimetype: file.mimetype,
+      body: file.buffer,
+      bucket: process.env.AWS_BUCKET_FORMATS
+    })
+    filesUpload.push(response)
   }
 
   return filesUpload

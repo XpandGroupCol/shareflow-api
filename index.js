@@ -4,8 +4,8 @@ const cors = require('cors')
 const Mongo = require('./mongo')
 
 const { notFoundHandler, logError } = require('./src/middleware/errorHandler')
-const adminRouter = require('./src/components/admin/router')
-const siteRouter = require('./src/components/site/router')
+const adminRouter = require('./src/components/v1/admin')
+const siteRouter = require('./src/components/v1/site')
 
 const mongoDB = new Mongo()
 const app = express()
