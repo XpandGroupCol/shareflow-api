@@ -42,10 +42,19 @@ userRouter.put('/users/me',
   validateRequestSchema(schemas.updateProfileSchema),
   asyncHandler(controllers.updateProfile))
 
-userRouter.put('/users/upload-file',
+userRouter.put('/users/upload-avatar/:id',
   receiveSingleFile,
   loggedIn,
-  asyncHandler(controllers.uploadfile))
+  asyncHandler(controllers.setAvatar))
+
+userRouter.put('/users/upload-rut/:id',
+  receiveSingleFile,
+  loggedIn,
+  asyncHandler(controllers.uploadRut))
+
+userRouter.put('/users/validate-rut/:id',
+  loggedIn,
+  asyncHandler(controllers.validateRut))
 
 userRouter.put('/users/:id',
   loggedIn,

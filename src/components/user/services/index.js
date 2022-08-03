@@ -6,6 +6,7 @@ const updateUser = require('./updateUser')
 const changePassword = require('./changePassword')
 const uploadfile = require('./uploadfile')
 const updateCompany = require('./updateCompany')
+const validateRut = require('./validateRut')
 
 module.exports = {
   getUsers,
@@ -15,5 +16,6 @@ module.exports = {
   createUser,
   getUserById,
   updateUser,
-  updateCompany
+  updateCompany,
+  validateRut
 }

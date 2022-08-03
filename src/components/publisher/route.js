@@ -22,7 +22,7 @@ publisherRouter.get('/publishers/:id',
   validateRequestSchema(schemas.idSchema, 'params'),
   asyncHandler(controllers.getPublisherById))
 
-publisherRouter.put('/publishers/upload-file',
+publisherRouter.put('/publishers/upload-logo/:id',
   receiveSingleFile,
   loggedIn,
   asyncHandler(controllers.uploadfile))

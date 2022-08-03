@@ -44,10 +44,12 @@ const updatePublisher = async (request, response) => {
 }
 
 const uploadfile = async (request, response) => {
-  const { file, isDelete } = request
+  const { file } = request
+  const { name } = request.body
+  const { id } = request.params
   response.status(200).json({
     statusCode: 200,
-    data: await services.uploadfile({ file, isDelete })
+    data: await services.uploadfile({ file, id, name })
   })
 }
 

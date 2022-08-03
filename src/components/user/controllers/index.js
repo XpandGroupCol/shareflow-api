@@ -97,6 +97,15 @@ const uploadRut = async (request, response) => {
   })
 }
 
+const validateRut = async (request, response) => {
+  const { checkRut } = request.body
+  const { id } = request.params
+  response.status(200).json({
+    statusCode: 200,
+    data: await services.validateRut({ id, checkRut })
+  })
+}
+
 const createUser = async (request, response) => {
   const { file, body } = request
   response.status(200).json({
@@ -117,5 +126,6 @@ module.exports = {
   createUser,
   getUserById,
   updateUser,
-  updateCompany
+  updateCompany,
+  validateRut
 }
