@@ -20,4 +20,8 @@ listRouter.get('/lists/sectors',
   loggedIn,
   asyncHandler(controllers.sectors))
 
+listRouter.get('/lists/locations',
+  loggedIn,
+  asyncHandler(controllers.locations))
+
 module.exports = listRouter

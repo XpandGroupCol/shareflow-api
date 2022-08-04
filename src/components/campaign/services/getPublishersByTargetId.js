@@ -56,6 +56,7 @@ const getPublishersByTargetId = async ({ target = null, miniBudget = null, sex, 
           return data.push({
             id: `${publisher._id}-${format._id}`,
             publisherId: publisher._id,
+            miniBudget: publisher?.miniBudget,
             formatId: format._id,
             logo: publisher.logo || '',
             label: format.format.name || '',

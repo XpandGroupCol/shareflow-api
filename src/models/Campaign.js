@@ -76,6 +76,7 @@ const CampaignSchema = new Schema({
       formatId: { type: Schema.Types.ObjectId, ref: 'Format' },
       publisherId: { type: Schema.Types.ObjectId, ref: 'Publisher' },
       publisher: { type: String },
+      miniBudget: { type: Number },
       objectiveGoal: { type: Number },
       pricePerUnit: { type: Number },
       biddingModel: { type: String, enum: ['CPM', 'CPC', 'CPV', 'CPA'] },
