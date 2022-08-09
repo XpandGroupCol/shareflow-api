@@ -184,9 +184,7 @@ const getDocDefinition = ({ brand, name, orderNumber, startDate, endDate, status
 
 const createPdf = async (campaing) => {
   const printer = new PdfPrinter({ Roboto })
-  console.log({ campaing })
   const docDefinition = getDocDefinition(campaing)
-  console.log({ docDefinition })
   const pdfDoc = printer.createPdfKitDocument(docDefinition)
 
   return new Promise((resolve, reject) => {
