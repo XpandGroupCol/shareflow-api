@@ -8,10 +8,12 @@ const loggedIn = (req, _, next) => {
 
   const [, bearer] = token.split(' ')
   try {
-    const { _id: userId } = jwt.verify(bearer, process.env.ACCESS_TOKEN) || {}
-    req.userId = userId
+    const jwtResult = jwt.verify(bearer, process.env.ACCESS_TOKEN) || {}
+    req.userName = jwtResult.email
+    req.userId = jwtResult._id
     next()
-  } catch {
+  } catch (error) {
+    console.log(error)
     throw boom.unauthorized('Su sesion ha expirado.')
   }
 }

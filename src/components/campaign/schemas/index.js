@@ -43,7 +43,7 @@ const createCampaingSchema = joi.object({
   user: joi.string(),
   publishers: joi.array(),
   sex: joi.string(),
-  payment: joi.any(),
+  payments: joi.any(),
   summary: joi.object().optional(),
   userPercentage: joi.any(),
   file: joi.any().optional()
