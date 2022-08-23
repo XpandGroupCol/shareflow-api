@@ -27,7 +27,8 @@ const asyncReadFile = util.promisify(readFile)
 const sendEmail = async (sendEmailPayload) => {
   try {
     const payload = {
-      from: sendEmailPayload.originVerifiedAWSEmail || 'brayan.duque.pinto@gmail.com',
+      // from: sendEmailPayload.originVerifiedAWSEmail || 'notifications@shareflow.me',
+      from: sendEmailPayload.originVerifiedAWSEmail || 'diegocontreras1219@gmail.com',
       to: sendEmailPayload.destinationEmails,
       subject: sendEmailPayload.emailSubject || 'New Email'
     }

@@ -1,6 +1,8 @@
 const services = require('../services')
 const { downloadResource } = require('../../../libraries/downloadCSV')
 const { fields } = require('./constants')
+const { implementacion } = require('../../../templates/implementation')
+const { campaignClosing } = require('../../../templates/campaignClosing')
 
 const getCampaigns = async (request, response) => {
   const data = await services.getAllCampaigns(request.query)
@@ -112,6 +114,46 @@ const getPDF = async (request, response) => {
   return response.type('pdf').send(data)
 }
 
+const startCampaign = async (request, response) => {
+  const { id } = request.params
+
+  const data = await services.campaignFlow({
+    id,
+    status: 'inProgress',
+    emailSubject: 'Shareflow - Implementación de la campaña',
+    text: 'Shareflow - Implementación de la campaña',
+    template: implementacion
+  })
+  response.status(200).json({
+    statusCode: 200,
+    data
+  })
+}
+
+const endCampaign = async (request, response) => {
+  const { id } = request.params
+  const data = await services.campaignFlow({
+    id,
+    status: 'completed',
+    emailSubject: 'Shareflow - Cierre de la campaña',
+    text: 'Shareflow - Cierre de la campaña',
+    template: campaignClosing
+  })
+  response.status(200).json({
+    statusCode: 200,
+    data
+  })
+}
+
+const rememberEmail = async (request, response) => {
+  const { id } = request.body
+  const data = await services.rememberEmail(id)
+  response.status(200).json({
+    statusCode: 200,
+    data
+  })
+}
+
 module.exports = {
   getCampaigns,
   createCampaing,
@@ -124,5 +166,8 @@ module.exports = {
   uploadfile,
   getAllSiteCampaigns,
   wompiEvent,
-  getPDF
+  getPDF,
+  startCampaign,
+  endCampaign,
+  rememberEmail
 }

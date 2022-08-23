@@ -8,6 +8,8 @@ const uploadfile = require('./uploadfile')
 const validateFormatFile = require('./validateFormatFile')
 const wompiEvent = require('./wompiEvent')
 const getPDF = require('./getPDF')
+const campaignFlow = require('./campaignFlow')
+const rememberEmail = require('./rememberEmail')
 
 module.exports = {
   createCampaing,
@@ -19,5 +21,7 @@ module.exports = {
   uploadfile,
   validateFormatFile,
   wompiEvent,
-  getPDF
+  getPDF,
+  campaignFlow,
+  rememberEmail
 }

@@ -38,14 +38,31 @@ campaignRouter.post('/campaigns/validateFiles',
   validateRequestSchema(schemas.validateFormatFileSchema),
   asyncHandler(controllers.validateFormatFile))
 
+campaignRouter.post('/campaigns/remember',
+  loggedIn,
+  asyncHandler(controllers.rememberEmail))
+
 campaignRouter.put('/campaigns/upload-file',
   receiveSingleFile,
   loggedIn,
   asyncHandler(controllers.uploadfile))
 
+campaignRouter.put('/campaigns/start/:id',
+  loggedIn,
+  asyncHandler(controllers.startCampaign))
+
+campaignRouter.put('/campaigns/end/:id',
+  loggedIn,
+  asyncHandler(controllers.endCampaign))
+
 campaignRouter.put('/campaigns/:id',
   loggedIn,
   // validateRequestSchema(schemas.idSchema, 'params'),
   asyncHandler(controllers.updateCampaign))
+
+campaignRouter.delete('/campaigns/:id',
+  loggedIn,
+  // validateRequestSchema(schemas.createCampaingSchema),
+  asyncHandler(controllers.deleteCampaing))
 
 module.exports = campaignRouter

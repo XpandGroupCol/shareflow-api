@@ -31,6 +31,8 @@ const wompiEvent = async ({ reference, amount, transactionId, status, paymentMet
     campaign.status = 'paid'
   }
 
+  // TODO:Aqui se debe disparar un correo para que sepan que tiene documentos por validar
+
   const response = await campaign.save()
   return response
 }
