@@ -3,6 +3,9 @@ const express = require('express')
 const cors = require('cors')
 const Mongo = require('./mongo')
 
+require('./src/models/Payment.js')
+require('./src/models/Audit.js')
+
 const { notFoundHandler, logError } = require('./src/middleware/errorHandler')
 const adminRouter = require('./src/components/v1/admin')
 const siteRouter = require('./src/components/v1/site')
