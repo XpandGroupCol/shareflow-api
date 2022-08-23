@@ -37,6 +37,15 @@ const getCampaignById = async (request, response) => {
   })
 }
 
+const createCampaing = async (request, response) => {
+  const { body, userId: user, file, userName } = request
+  const data = await services.createCampaing({ body, user, file, userName })
+  response.status(200).json({
+    statusCode: 200,
+    data
+  })
+}
+
 const download = async (request, response) => {
   const data = await services.getAllCampaigns(request.query)
   return downloadResource(response, 'campaings.csv', fields, data?.data || [])
@@ -44,8 +53,8 @@ const download = async (request, response) => {
 
 const updateCampaign = async (request, response) => {
   const { id } = request.params
-  const { body } = request
-  const data = await services.updateCampaign({ id, body })
+  const { body, userName } = request
+  const data = await services.updateCampaign({ body, id, userName })
   response.status(200).json({
     statusCode: 200,
     data
@@ -68,16 +77,6 @@ const validateFormatFile = async (request, response) => {
   const conditions = request.body
 
   const data = await services.validateFormatFile({ files, conditions })
-  response.status(200).json({
-    statusCode: 200,
-    data
-  })
-}
-
-const createCampaing = async (request, response) => {
-  const { body, userId: user, file } = request
-
-  const data = await services.createCampaing({ body, user, file })
   response.status(200).json({
     statusCode: 200,
     data
