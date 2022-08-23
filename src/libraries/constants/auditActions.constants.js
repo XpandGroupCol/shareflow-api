@@ -5,7 +5,7 @@ const auditActions = {
 }
 
 const modules = {
-  CAMPAIGN: 'CAMPAIGN'
+  CAMPAIGN: 'campaign'
 }
 
 const ignoreFields = {
