@@ -104,7 +104,7 @@ const getDocDefinition = ({ brand, name, orderNumber, startDate, endDate, status
               bold: true,
               text: 'Impresiones: '
             }, {
-              text: `${getFormatedNumber(summary.prints)} \n`
+              text: `${getFormatedNumber(summary?.prints || 0)} \n`
             }]
           },
           {
@@ -112,7 +112,7 @@ const getDocDefinition = ({ brand, name, orderNumber, startDate, endDate, status
               bold: true,
               text: 'Reproducciones: '
             }, {
-              text: `${getFormatedNumber(summary.reproductions)} \n`
+              text: `${getFormatedNumber(summary?.reproductions || 0)} \n`
             }]
           },
           {
@@ -120,7 +120,7 @@ const getDocDefinition = ({ brand, name, orderNumber, startDate, endDate, status
               bold: true,
               text: 'Clicks: '
             }, {
-              text: `${getFormatedNumber(summary.clicks)} \n`
+              text: `${getFormatedNumber(summary?.clicks || 0)} \n`
             }]
           }
         ]

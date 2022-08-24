@@ -10,6 +10,7 @@ const wompiEvent = require('./wompiEvent')
 const getPDF = require('./getPDF')
 const campaignFlow = require('./campaignFlow')
 const rememberEmail = require('./rememberEmail')
+const requestImplementation = require('./requestImplementation')
 
 module.exports = {
   createCampaing,
@@ -23,5 +24,6 @@ module.exports = {
   wompiEvent,
   getPDF,
   campaignFlow,
-  rememberEmail
+  rememberEmail,
+  requestImplementation
 }

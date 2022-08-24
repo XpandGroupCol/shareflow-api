@@ -63,8 +63,6 @@ const getLocations = async ({ search = '' }) => {
   const data = await Location.find(query)
     .limit(limit).lean().exec()
 
-  console.log({ data })
-
   return data.map(({ city, _id, department }) => ({ label: `${city}, ${department}`, value: _id }))
 }
 

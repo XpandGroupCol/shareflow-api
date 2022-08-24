@@ -111,6 +111,10 @@ const CampaignSchema = new Schema({
     serviceFee: { type: Number }
   },
   orderNumber: { type: Number },
+  isPaid: {
+    type: Boolean,
+    default: false
+  },
   isDelete: {
     type: Boolean,
     default: false

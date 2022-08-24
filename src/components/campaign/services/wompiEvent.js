@@ -1,6 +1,9 @@
 const boom = require('@hapi/boom')
 const Campaign = require('../../../models/Campaign')
 const Payment = require('../../../models/Payment')
+const { validateDocuments } = require('../../../templates/validateDocuments')
+const { sendEmail } = require('../../../utils/aws/SES')
+const { createPdf } = require('../../../utils/pdf')
 
 const clearNumber = (number) => {
   if (typeof number === 'number') {
@@ -29,9 +32,26 @@ const wompiEvent = async ({ reference, amount, transactionId, status, paymentMet
 
   if (status === 'APPROVED') {
     campaign.status = 'paid'
+    campaign.isPaid = true
   }
 
-  // TODO:Aqui se debe disparar un correo para que sepan que tiene documentos por validar
+  const campaignLean = campaign.populate('user')
+    .populate('sector')
+    .populate('target')
+    .populate('locations')
+    .populate('ages')
+
+  const attachment = await createPdf(campaignLean)
+
+  const sendEmailPayload = {
+    destinationEmails: ['diegocontreras1219@gmail.com'],
+    emailSubject: '',
+    text: '',
+    htmlMessage: validateDocuments({ name: campaign?.user?.name }),
+    attachedFiles: [attachment]
+  }
+
+  await sendEmail(sendEmailPayload)
 
   const response = await campaign.save()
   return response

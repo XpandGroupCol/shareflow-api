@@ -114,6 +114,11 @@ const userSchema = new Schema({
   balance: {
     type: Number,
     default: 0
+  },
+  hasCredit: {
+    type: Boolean,
+    required: true,
+    default: false
   }
 },
 {
