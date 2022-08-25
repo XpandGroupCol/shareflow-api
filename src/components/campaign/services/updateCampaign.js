@@ -4,7 +4,7 @@ const Campaign = require('../../../models/Campaign')
 const { loggerUpdateRecord } = require('../../../utils/audit')
 const { leanById } = require('../../../utils/transformData')
 
-const updateCampaign = async ({ id, body, userName }) => {
+const updateCampaign = async ({ id, body, userId }) => {
   if (!id) throw boom.notFound()
   const currentData = await Campaign.findById(id).lean().exec()
 
@@ -15,7 +15,7 @@ const updateCampaign = async ({ id, body, userName }) => {
     .populate('ages').lean().exec()
 
   const newData = await Campaign.findById(campaign._id).lean().exec()
-  await loggerUpdateRecord(currentData, newData, userName, modules.CAMPAIGN)
+  await loggerUpdateRecord(currentData, newData, userId, modules.CAMPAIGN)
   return leanById(campaign)
 }
 

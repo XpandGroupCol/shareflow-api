@@ -3,11 +3,13 @@ const { auditActions, ignoreFields } = require('../libraries/constants/auditActi
 const Audit = require('../models/Audit')
 const _ = require('lodash')
 
-const loggerUpdateRecord = async (currentData, newData, user, module) => {
+const loggerUpdateRecord = async (currentData, newData, userId, module) => {
   const data = deepEqual(currentData, newData)
+  const createdBy = await Audit.findOne({ newElementId: currentData._id, action: auditActions.create }).lean().exec()
   const recordsToSave = {
     newElementId: newData._id,
-    modifiedBy: user,
+    createdBy: createdBy.createdBy,
+    updatedBy: userId,
     module: module,
     action: auditActions.update,
     data
@@ -17,7 +19,7 @@ const loggerUpdateRecord = async (currentData, newData, user, module) => {
   return newAuditRecord
 }
 
-const loggerCreateRecord = async (request, user, module) => {
+const loggerCreateRecord = async (request, userId, module) => {
   const keys = Object.keys(request)
   const data = []
   for (const key of keys) {
@@ -33,7 +35,8 @@ const loggerCreateRecord = async (request, user, module) => {
   }
   const recordsToSave = {
     newElementId: request._id,
-    modifiedBy: user,
+    createdBy: userId,
+    updatedBy: userId,
     module: module,
     action: auditActions.create,
     data
