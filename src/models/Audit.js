@@ -5,8 +5,14 @@ const auditSchema = new Schema({
     type: Schema.Types.ObjectId,
     required: true
   },
-  modifiedBy: {
-    type: String,
+  createdBy: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  updatedBy: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
     required: true
   },
   modifiedAt: {

@@ -55,8 +55,8 @@ const download = async (request, response) => {
 
 const updateCampaign = async (request, response) => {
   const { id } = request.params
-  const { body, userName } = request
-  const data = await services.updateCampaign({ body, id, userName })
+  const { body, userId } = request
+  const data = await services.updateCampaign({ body, id, userId })
   response.status(200).json({
     statusCode: 200,
     data
