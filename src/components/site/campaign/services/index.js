@@ -2,12 +2,12 @@ require('../../../../models/Location')
 require('../../../../models/Payment')
 const boom = require('@hapi/boom')
 const { SEX } = require('../../../../config')
-const { modules } = require('../../../../libraries/constants/auditActions.constants')
+// const { modules } = require('../../../../libraries/constants/auditActions.constants')
 const Campaign = require('../../../../models/Campaign')
 const Publisher = require('../../../../models/Publisher')
 const User = require('../../../../models/User')
 const { rgx } = require('../../../../utils')
-const { loggerCreateRecord, loggerUpdateRecord } = require('../../../../utils/audit')
+// const { loggerCreateRecord, loggerUpdateRecord } = require('../../../../utils/audit')
 const { checkFormatFile } = require('../../../../utils/formatFile')
 const { hookUploadFile } = require('../../../v1/campaigns/hooks')
 
@@ -140,8 +140,8 @@ const createCampaing = async ({ body, file, user, userName }) => {
   // }
 
     const data = await Campaign.create({ ...body, user })
-    const dataInfo = await Campaign.findById(data._id).lean().exec()
-    await loggerCreateRecord(dataInfo, userName, modules.CAMPAIGN)
+    // const dataInfo = await Campaign.findById(data._id).lean().exec()
+    // await loggerCreateRecord(dataInfo, userName, modules.CAMPAIGN)
     return data
   } catch (error) {
     throw boom.badRequest(error)
@@ -186,10 +186,10 @@ const validateFormatFile = async ({ files, conditions }) => {
 }
 
 const updateCampaign = async ({ body, id, userName }) => {
-  const currentData = await Campaign.findById(id).lean().exec()
+  // const currentData = await Campaign.findById(id).lean().exec()
   const data = await Campaign.findByIdAndUpdate(id, { ...body, status: 'draft' }, { new: true })
-  const newData = await Campaign.findById(data._id).lean().exec()
-  await loggerUpdateRecord(currentData, newData, userName, modules.CAMPAIGN)
+  // const newData = await Campaign.findById(data._id).lean().exec()
+  // await loggerUpdateRecord(currentData, newData, userName, modules.CAMPAIGN)
   return data
 }
 

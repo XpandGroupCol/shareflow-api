@@ -1,6 +1,6 @@
-const { modules } = require('../../../libraries/constants/auditActions.constants')
+// const { modules } = require('../../../libraries/constants/auditActions.constants')
 const Campaign = require('../../../models/Campaign')
-const { loggerCreateRecord } = require('../../../utils/audit')
+// const { loggerCreateRecord } = require('../../../utils/audit')
 const { uploadS3File } = require('../../../utils/aws/S3')
 
 const createCampaing = async ({ body, file, user, userName }) => {
@@ -17,8 +17,8 @@ const createCampaing = async ({ body, file, user, userName }) => {
 
   const number = lastCampaign?.orderNumber ?? 1
   const data = await Campaign.create({ ...body, user, orderNumber: number + 1 })
-  const dataInfo = await Campaign.findById(data._id).lean().exec()
-  await loggerCreateRecord(dataInfo, userName, modules.CAMPAIGN)
+  // const dataInfo = await Campaign.findById(data._id).lean().exec()
+  // await loggerCreateRecord(dataInfo, userName, modules.CAMPAIGN)
 
   return data
 }
