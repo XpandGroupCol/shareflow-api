@@ -1,4 +1,5 @@
 const joi = require('joi')
+const { DASHBOARD_NAMES } = require('../../../libraries/constants/dashboardNames.constanst')
 
 const getSchema = joi.object({
   search: joi.string().optional(),
@@ -49,10 +50,17 @@ const createCampaingSchema = joi.object({
   file: joi.any().optional()
 })
 
+const getDashboardOfCampaingSchema = joi.object({
+  page: joi.string().required(),
+  status: joi.string().optional(),
+  name: joi.string().valid(...Object.values(DASHBOARD_NAMES))
+})
+
 module.exports = {
   getSchema,
   idSchema,
-  getPublishersByTargetIdSchema,
+  createCampaingSchema,
   validateFormatFileSchema,
-  createCampaingSchema
+  getDashboardOfCampaingSchema,
+  getPublishersByTargetIdSchema
 }
