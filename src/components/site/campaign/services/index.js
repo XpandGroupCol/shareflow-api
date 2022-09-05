@@ -130,14 +130,14 @@ const getPublishersByTargetId = async ({ target = null, miniBudget = null, user:
 
 const createCampaing = async ({ body, file, user, userName }) => {
   try {
-  // if (file) {
-  //   const logo = await hookUploadFile({
-  //     fileName: getRandomName(file.fieldname),
-  //     mimetype: file.mimetype,
-  //     body: file.buffer
-  //   })
-  //   body.logo = logo
-  // }
+    if (file) {
+      const logo = await hookUploadFile({
+        fileName: getRandomName(file.fieldname),
+        mimetype: file.mimetype,
+        body: file.buffer
+      })
+      body.logo = logo
+    }
 
     const data = await Campaign.create({ ...body, user })
     // const dataInfo = await Campaign.findById(data._id).lean().exec()

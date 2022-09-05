@@ -37,6 +37,7 @@ const getCampaigns = async ({ user, search, page = 1, target, sector, status, pe
     .populate('sector')
     .populate('target')
     .populate('ages')
+    .populate('locations')
     .limit(perPage).skip(perPage * currentPage).lean().exec()
 
   const total = await Campaign.countDocuments(query)

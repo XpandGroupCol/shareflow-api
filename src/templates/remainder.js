@@ -1,5 +1,8 @@
 /* eslint-disable no-tabs */
-const remainder = ({ name }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+const status = ['draft', 'pending']
+
+const remainder = ({ campaign }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
     <head>
     <!--[if gte mso 9]>
@@ -46,7 +49,7 @@ const remainder = ({ name }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Tr
 									<table border="0" cellspacing="0" cellpadding="0" width="100%">
 										<tr><td align="center" valign="top" height="160" bgcolor="#ffffff" style="padding: 21px 0px 0px; height: 160px;">
 											<div style="line-height: 30px;">
-												<span style="font-family: &quot;Cera Pro&quot;, sans-serif; font-weight: bold; font-size: 30px; color: #363a57;">${name}, tu campaña <span style="color: #8116f2;">Nike Running SU22 </span>aún no se encuentra en marcha. Completa los siguientes pasos para salir al aire.</span>
+												<span style="font-family: &quot;Cera Pro&quot;, sans-serif; font-weight: bold; font-size: 30px; color: #363a57;">${campaign?.user?.name}, tu campaña <span style="color: #8116f2;">${campaign?.name} ${campaign?.brand}</span>aún no se encuentra en marcha. Completa los siguientes pasos para salir al aire.</span>
 											</div>
 										</td></tr>
 									</table>
@@ -105,16 +108,20 @@ const remainder = ({ name }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Tr
 															</table>
 														</div>
 														<div style="height: 20px; line-height: 20px; font-size: 18px;">&nbsp;</div>
-														<div>
+														${campaign?.amount
+														? `<div>
+															<button style="background-color:#75ddb2;font-size:15px;border:none;font-weight:bold;line-height:36px;width:127px;color:#ffffff;border-radius:6px;display:inline-block;font-family:Arial, sans-serif;text-align:center;text-decoration:none;-webkit-text-size-adjust:none;mso-hide:all">Completado</button>
+														</div>`
+														: `<div>
 															<!--[if mso]>
-															<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="#" style="height:36px;v-text-anchor:middle;width:127;" arcsize="17%" stroke="f" fillcolor="#75ddb2">
+															<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${process.env.CLIENT_URL}/campaigns/${campaign?._id}/edit"  style="height:36px;v-text-anchor:middle;width:217;" arcsize="17%" stroke="f" fillcolor="#8116f2">
 															<w:anchorlock>
 															</w:anchorlock>
-															<center style="color: #ffffff; font-size: 15px; font-weight: bold; font-family: Arial, sans-serif;">Completado</center>
+															<center style="color: #ffffff; font-size: 15px; font-weight: bold; font-family: Arial, sans-serif;">Haz click para completar</center>
 															</v:roundrect>
 															<![endif]-->
-															<a target="_blank" href="#" style="background-color:#75ddb2;font-size:15px;font-weight:bold;line-height:36px;width:127px;color:#ffffff;border-radius:6px;display:inline-block;font-family:Arial, sans-serif;text-align:center;text-decoration:none;-webkit-text-size-adjust:none;mso-hide:all">Completado</a>
-														</div>
+															<a target="_blank" href="${process.env.CLIENT_URL}/campaigns/${campaign?._id}/edit"  style="background-color:#8116f2;font-size:15px;font-weight:bold;line-height:36px;width:217px;color:#ffffff;border-radius:6px;display:inline-block;font-family:Arial, sans-serif;text-align:center;text-decoration:none;-webkit-text-size-adjust:none;mso-hide:all">Haz click para completar</a>
+														</div>`}
 													</td></tr>
 												</table>
 											</div>
@@ -156,17 +163,20 @@ const remainder = ({ name }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Tr
 															</table>
 														</div>
 														<div style="height: 20px; line-height: 20px; font-size: 18px;">&nbsp;</div>
-														<div>
-															<!--[if mso]>
-															// eslint-disable-next-line no-tabs
-															<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="#" style="height:36px;v-text-anchor:middle;width:127;" arcsize="17%" stroke="f" fillcolor="#75ddb2">
-															<w:anchorlock>
-															</w:anchorlock>
-															<center style="color: #ffffff; font-size: 15px; font-weight: bold; font-family: Arial, sans-serif;">Completado</center>
-															</v:roundrect>
-															<![endif]-->
-															<a target="_blank" href="#" style="background-color:#75ddb2;font-size:15px;font-weight:bold;line-height:36px;width:127px;color:#ffffff;border-radius:6px;display:inline-block;font-family:Arial, sans-serif;text-align:center;text-decoration:none;-webkit-text-size-adjust:none;mso-hide:all">Completado</a>
-														</div>
+														${campaign?.publishers
+															? `<div>
+																<button style="background-color:#75ddb2;font-size:15px;border:none;font-weight:bold;line-height:36px;width:127px;color:#ffffff;border-radius:6px;display:inline-block;font-family:Arial, sans-serif;text-align:center;text-decoration:none;-webkit-text-size-adjust:none;mso-hide:all">Completado</button>
+															</div>`
+															: `<div>
+																<!--[if mso]>
+																<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${process.env.CLIENT_URL}/campaigns/${campaign?._id}/edit"  style="height:36px;v-text-anchor:middle;width:217;" arcsize="17%" stroke="f" fillcolor="#8116f2">
+																<w:anchorlock>
+																</w:anchorlock>
+																<center style="color: #ffffff; font-size: 15px; font-weight: bold; font-family: Arial, sans-serif;">Haz click para completar</center>
+																</v:roundrect>
+																<![endif]-->
+																<a target="_blank" href="${process.env.CLIENT_URL}/campaigns/${campaign?._id}/edit"  style="background-color:#8116f2;font-size:15px;font-weight:bold;line-height:36px;width:217px;color:#ffffff;border-radius:6px;display:inline-block;font-family:Arial, sans-serif;text-align:center;text-decoration:none;-webkit-text-size-adjust:none;mso-hide:all">Haz click para completar</a>
+															</div>`}
 													</td></tr>
 												</table>
 											</div>
@@ -208,16 +218,20 @@ const remainder = ({ name }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Tr
 															</table>
 														</div>
 														<div style="height: 20px; line-height: 20px; font-size: 18px;">&nbsp;</div>
-														<div>
-															<!--[if mso]>
-															<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="#" style="height:36px;v-text-anchor:middle;width:217;" arcsize="17%" stroke="f" fillcolor="#8116f2">
-															<w:anchorlock>
-															</w:anchorlock>
-															<center style="color: #ffffff; font-size: 15px; font-weight: bold; font-family: Arial, sans-serif;">Haz click para completar</center>
-															</v:roundrect>
-															<![endif]-->
-															<a target="_blank" href="#" style="background-color:#8116f2;font-size:15px;font-weight:bold;line-height:36px;width:217px;color:#ffffff;border-radius:6px;display:inline-block;font-family:Arial, sans-serif;text-align:center;text-decoration:none;-webkit-text-size-adjust:none;mso-hide:all">Haz click para completar</a>
-														</div>
+														${!campaign?.publishers.some(({ media }) => !media?.url)
+														? `<div>
+														<button style="background-color:#75ddb2;font-size:15px;border:none;font-weight:bold;line-height:36px;width:127px;color:#ffffff;border-radius:6px;display:inline-block;font-family:Arial, sans-serif;text-align:center;text-decoration:none;-webkit-text-size-adjust:none;mso-hide:all">Completado</button>
+													</div>`
+													: `<div>
+														<!--[if mso]>
+														<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${process.env.CLIENT_URL}/campaigns/${campaign?._id}/media"  style="height:36px;v-text-anchor:middle;width:217;" arcsize="17%" stroke="f" fillcolor="#8116f2">
+														<w:anchorlock>
+														</w:anchorlock>
+														<center style="color: #ffffff; font-size: 15px; font-weight: bold; font-family: Arial, sans-serif;">Haz click para completar</center>
+														</v:roundrect>
+														<![endif]-->
+														<a target="_blank" href="${process.env.CLIENT_URL}/campaigns/${campaign?._id}/media"  style="background-color:#8116f2;font-size:15px;font-weight:bold;line-height:36px;width:217px;color:#ffffff;border-radius:6px;display:inline-block;font-family:Arial, sans-serif;text-align:center;text-decoration:none;-webkit-text-size-adjust:none;mso-hide:all">Haz click para completar</a>
+													</div>`}
 													</td></tr>
 												</table>
 											</div>
@@ -261,16 +275,20 @@ const remainder = ({ name }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Tr
 															</table>
 														</div>
 														<div style="height: 20px; line-height: 20px; font-size: 18px;">&nbsp;</div>
-														<div>
-															<!--[if mso]>
-															<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="#" style="height:36px;v-text-anchor:middle;width:217;" arcsize="17%" stroke="f" fillcolor="#8116f2">
-															<w:anchorlock>
-															</w:anchorlock>
-															<center style="color: #ffffff; font-size: 15px; font-weight: bold; font-family: Arial, sans-serif;">Haz click para completar</center>
-															</v:roundrect>
-															<![endif]-->
-															<a target="_blank" href="#" style="background-color:#8116f2;font-size:15px;font-weight:bold;line-height:36px;width:217px;color:#ffffff;border-radius:6px;display:inline-block;font-family:Arial, sans-serif;text-align:center;text-decoration:none;-webkit-text-size-adjust:none;mso-hide:all">Haz click para completar</a>
-														</div>
+														${!campaign?.publishers.some(({ media }) => !media?.url) && !status.includes(campaign?.status)
+														? `<div>
+														<button style="background-color:#75ddb2;font-size:15px;border:none;font-weight:bold;line-height:36px;width:127px;color:#ffffff;border-radius:6px;display:inline-block;font-family:Arial, sans-serif;text-align:center;text-decoration:none;-webkit-text-size-adjust:none;mso-hide:all">Completado</button>
+													</div>`
+													: `<div>
+														<!--[if mso]>
+														<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${process.env.CLIENT_URL}/campaigns/${campaign?._id}/order"  style="height:36px;v-text-anchor:middle;width:217;" arcsize="17%" stroke="f" fillcolor="#8116f2">
+														<w:anchorlock>
+														</w:anchorlock>
+														<center style="color: #ffffff; font-size: 15px; font-weight: bold; font-family: Arial, sans-serif;">Haz click para completar</center>
+														</v:roundrect>
+														<![endif]-->
+														<a target="_blank" href="${process.env.CLIENT_URL}/campaigns/${campaign?._id}/order"  style="background-color:#8116f2;font-size:15px;font-weight:bold;line-height:36px;width:217px;color:#ffffff;border-radius:6px;display:inline-block;font-family:Arial, sans-serif;text-align:center;text-decoration:none;-webkit-text-size-adjust:none;mso-hide:all">Haz click para completar</a>
+													</div>`}
 													</td></tr>
 												</table>
 											</div>
@@ -327,16 +345,16 @@ const remainder = ({ name }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Tr
 																		<tr><td align="left" valign="top">
 																			<table border="0" cellspacing="0" cellpadding="0" width="176" style="width: 176px;">
 																				<tr><td align="left" valign="middle" style="padding: 0px 10px 0px 0px;">
-																					<img src="img/10-736.png" width="32" height="32" alt="" border="0" style="display: block;">
+																					<img src="https://shareflow-statics.s3.amazonaws.com/facebook.png" width="32" height="32" alt="" border="0" style="display: block;">
 																				</td>
 																				<td align="left" valign="middle" style="padding: 0px 10px 0px 0px;">
-																					<img src="img/10-737.png" width="32" height="32" alt="" border="0" style="display: block;">
+																					<img src="https://shareflow-statics.s3.amazonaws.com/instagram.png" width="32" height="32" alt="" border="0" style="display: block;">
 																				</td>
 																				<td align="left" valign="middle" style="padding: 0px 10px 0px 0px;">
-																					<img src="img/10-738.png" width="32" height="32" alt="" border="0" style="display: block;">
+																					<img src="https://shareflow-statics.s3.amazonaws.com/linkedin.png" width="32" height="32" alt="" border="0" style="display: block;">
 																				</td>
 																				<td align="left" valign="middle">
-																					<img src="img/10-739.png" width="32" height="32" alt="" border="0" style="display: block;">
+																					<img src="https://shareflow-statics.s3.amazonaws.com/youtube.png" width="32" height="32" alt="" border="0" style="display: block;">
 																				</td></tr>
 																			</table>
 																		</td></tr>
@@ -355,11 +373,8 @@ const remainder = ({ name }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Tr
 									</table>
 								</div>
 								<div style="height: 16px; line-height: 16px; font-size: 14px;">&nbsp;</div>
-								<img src="img/10-740.png" width="150" height="23" alt="" border="0" style="display: block;">
+								<img src="https://shareflow-statics.s3.amazonaws.com/shareflow.png" width="150" height="23" alt="" border="0" style="display: block;">
 								<div style="height: 16px; line-height: 16px; font-size: 14px;">&nbsp;</div>
-								<div style="line-height: 20px;">
-									<span style="font-family: Helvetica, sans-serif; font-size: 12px; color: #363a57;">No quiero recibir más mensajes como este.</span>
-								</div>
 								<div style="height: 16px; line-height: 16px; font-size: 14px;">&nbsp;</div>
 								<div style="line-height: 20px;">
 									<span style="font-family: Helvetica, sans-serif; font-size: 12px; color: #363a57;">Por favor no intentes responder este correo electrónico. Los correos electrónicos enviados a esta dirección no se responderán.</span>

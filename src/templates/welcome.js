@@ -123,24 +123,24 @@ const welcomeTemplate = ({ name }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4
                                     <table width="186" border="0" cellspacing="0" cellpadding="0" style="width: 186px;">
                                     <tr><td>
                                     <![endif]-->
-                                    <table border="0" cellspacing="0" cellpadding="0" width="100%" style="max-width: 186px;">
+                                     <table border="0" cellspacing="0" cellpadding="0" width="100%" style="max-width: 186px;">
                                       <tr><td align="left" valign="top">
                                         <table border="0" cellspacing="0" cellpadding="0" width="176" style="width: 176px;">
                                           <tr><td align="left" valign="middle" style="padding: 0px 10px 0px 0px;">
-                                            <img src="img/1-134.png" width="32" height="32" alt="" border="0" style="display: block;">
+                                            <img src="https://shareflow-statics.s3.amazonaws.com/facebook.png" width="32" height="32" alt="" border="0" style="display: block;">
                                           </td>
                                           <td align="left" valign="middle" style="padding: 0px 10px 0px 0px;">
-                                            <img src="img/1-135.png" width="32" height="32" alt="" border="0" style="display: block;">
+                                            <img src="https://shareflow-statics.s3.amazonaws.com/instagram.png" width="32" height="32" alt="" border="0" style="display: block;">
                                           </td>
                                           <td align="left" valign="middle" style="padding: 0px 10px 0px 0px;">
-                                            <img src="img/1-136.png" width="32" height="32" alt="" border="0" style="display: block;">
+                                            <img src="https://shareflow-statics.s3.amazonaws.com/linkedin.png" width="32" height="32" alt="" border="0" style="display: block;">
                                           </td>
                                           <td align="left" valign="middle">
-                                            <img src="img/1-138.png" width="32" height="32" alt="" border="0" style="display: block;">
+                                            <img src="https://shareflow-statics.s3.amazonaws.com/youtube.png" width="32" height="32" alt="" border="0" style="display: block;">
                                           </td></tr>
                                         </table>
                                       </td></tr>
-                                    </table>
+																	  </table>
                                     <!--[if (gte mso 9)|(IE)]>
                                     </td></tr>
                                     </table>

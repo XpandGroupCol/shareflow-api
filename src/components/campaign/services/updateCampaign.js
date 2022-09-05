@@ -1,12 +1,10 @@
 const boom = require('@hapi/boom')
-// const { modules } = require('../../../libraries/constants/auditActions.constants')
+const Activity = require('../../../models/Activity')
 const Campaign = require('../../../models/Campaign')
-// const { loggerUpdateRecord } = require('../../../utils/audit')
 const { leanById } = require('../../../utils/transformData')
 
-const updateCampaign = async ({ id, body, userName }) => {
+const updateCampaign = async ({ id, body }) => {
   if (!id) throw boom.notFound()
-  // const currentData = await Campaign.findById(id).lean().exec()
 
   const campaign = await Campaign.findByIdAndUpdate(id, { ...body }, { new: true }).populate('user')
     .populate('sector')
@@ -14,8 +12,17 @@ const updateCampaign = async ({ id, body, userName }) => {
     .populate('locations')
     .populate('ages').lean().exec()
 
-  // const newData = await Campaign.findById(campaign._id).lean().exec()
-  // await loggerUpdateRecord(currentData, newData, userName, modules.CAMPAIGN)
+  try {
+    await Activity.create({
+      data: body,
+      createBy: campaign?._user?._id,
+      updateBy: campaign?._user?._id,
+      campaignId: campaign?._id
+    })
+  } catch (e) {
+    console.log(e)
+  }
+
   return leanById(campaign)
 }
 

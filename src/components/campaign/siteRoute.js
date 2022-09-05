@@ -12,6 +12,9 @@ campaignRouter.get('/campaigns',
   validateRequestSchema(schemas.getSchema, 'query'),
   asyncHandler(controllers.getAllSiteCampaigns))
 
+campaignRouter.get('/testEmail',
+  asyncHandler(controllers.testEmail))
+
 campaignRouter.get('/campaigns/publishers-by-target',
   loggedIn,
   validateRequestSchema(schemas.getPublishersByTargetIdSchema, 'query'),

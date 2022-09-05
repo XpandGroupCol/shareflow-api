@@ -34,17 +34,8 @@ const getFormats = async ({ search = '' }) => {
   return data.map(clearList)
 }
 
-const getSectors = async ({ search = '' }) => {
-  let query = { status: true }
-  if (search) {
-    query = {
-      ...query,
-      name: { $regex: rgx(search), $options: 'i' }
-    }
-  }
-  const data = await Sector.find(query)
-    .limit(limit).lean().exec()
-
+const getSectors = async () => {
+  const data = await Sector.find({ status: true }).lean().exec()
   return data.map(clearList)
 }
 

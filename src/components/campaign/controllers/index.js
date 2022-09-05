@@ -162,6 +162,14 @@ const requestImplementation = async (request, response) => {
   })
 }
 
+const testEmail = async (_, response) => {
+  const data = await services.testEmails()
+  response.status(200).json({
+    statusCode: 200,
+    data
+  })
+}
+
 module.exports = {
   getCampaigns,
   createCampaing,
@@ -178,5 +186,6 @@ module.exports = {
   startCampaign,
   endCampaign,
   rememberEmail,
-  requestImplementation
+  requestImplementation,
+  testEmail
 }

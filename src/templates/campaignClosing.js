@@ -1,5 +1,7 @@
+const { getFormatedNumber } = require('../utils/transformData')
+
 /* eslint-disable no-tabs */
-const campaignClosing = ({ name }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+const campaignClosing = ({ campaign }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 	<head>
 		<!--[if gte mso 9]>
@@ -52,11 +54,11 @@ const campaignClosing = ({ name }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4
 															<table border="0" cellspacing="0" cellpadding="0" width="100%">
 																<tr><td align="center" valign="top" height="311" style="height: 311px;">
 																	<div style="line-height: 30px;">
-																		<span style="font-family: &quot;Cera Pro&quot;, sans-serif; font-weight: bold; font-size: 30px; color: #363a57;">${name}, tu campaña <span style="color: #8116f2;">Nike Running SU22</span> está próxima a finalizar. 💫</span>
+																		<span style="font-family: &quot;Cera Pro&quot;, sans-serif; font-weight: bold; font-size: 30px; color: #363a57;">${campaign?.user?.name}, tu campaña <span style="color: #8116f2;">${campaign?.name} ${campaign?.brand}</span> está próxima a finalizar. 💫</span>
 																	</div>
 																	<div style="height: 15px; line-height: 15px; font-size: 13px;">&nbsp;</div>
 																	<div style="line-height: 20px;">
-																		<span style="font-family: Helvetica, sans-serif; font-size: 15px; color: #363a57;">Definitivamente ha sido increíble ser parte de esta campaña, además hemos aportado muchísimo a tu objetivo de <span style="color: #8116f2; font-weight: normal;">Visibilidad de marca</span> lo cuál ayudará a aumentar el impacto en tu negocio.</span>
+																		<span style="font-family: Helvetica, sans-serif; font-size: 15px; color: #363a57;">Definitivamente ha sido increíble ser parte de esta campaña, además hemos aportado muchísimo a tu objetivo de <span style="color: #8116f2; font-weight: normal;">${campaign?.sector?.name}</span> lo cuál ayudará a aumentar el impacto en tu negocio.</span>
 																	</div>
 																	<div style="height: 15px; line-height: 15px; font-size: 13px;">&nbsp;</div>
 																	<div>
@@ -65,19 +67,44 @@ const campaignClosing = ({ name }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4
 																		<tr><td>
 																		<![endif]-->
 																		<table border="0" cellspacing="0" cellpadding="0" width="100%" style="max-width: 416px;">
-																			<tr><td align="center" valign="top" height="122" bgcolor="#ffffff" style="height: 122px;">
-																				<div style="line-height: 20px;">
-																					<span style="font-family: Helvetica, sans-serif; font-size: 15px; color: #363a57;">Tu campaña finalizará con</span>
-																				</div>
-																				<div style="height: 8px; line-height: 8px; font-size: 6px;">&nbsp;</div>
-																				<div style="line-height: 64px;">
-																					<span style="font-family: &quot;Cera Pro&quot;, sans-serif; font-weight: bold; font-size: 60px; color: #363a57;">1.123.456</span>
-																				</div>
-																				<div style="height: 8px; line-height: 8px; font-size: 6px;">&nbsp;</div>
-																				<div style="line-height: 20px;">
-																					<span style="font-family: Helvetica, sans-serif; font-weight: bold; font-size: 15px; color: #8116f2;">Impresiones</span>
-																				</div>
-																			</td></tr>
+																			<tr>
+																				<td align="center" valign="top" height="122" bgcolor="#ffffff" style="height: 122px;">
+																					<div>
+																						<span style="font-family: Helvetica, sans-serif; font-size: 15px; color: #363a57;">Tu campaña finalizará con</span>
+																					</div>
+																					<div style="height: 8px; line-height: 8px; font-size: 6px;">&nbsp;</div>
+																					
+																					${campaign?.summary?.clicks
+																						? `<div>
+																						<span style="font-family: &quot;Cera Pro&quot;, sans-serif; font-weight: bold; font-size: 60px; color: #363a57;">${getFormatedNumber(campaign?.summary?.clicks)}</span>
+																					</div>
+																					<div>
+																						<span style="font-family: Helvetica, sans-serif; font-weight: bold; font-size: 15px; color: #8116f2;">Clicks</span>
+																						<br/><br/>
+																					</div>`
+																						: ''}
+
+																					${campaign?.summary?.prints
+																						? `<div>
+																						<span style="font-family: &quot;Cera Pro&quot;, sans-serif; font-weight: bold; font-size: 60px; color: #363a57;">${getFormatedNumber(campaign?.summary?.prints)}</span>
+																					</div>
+																					<div>
+																						<span style="font-family: Helvetica, sans-serif; font-weight: bold; font-size: 15px; color: #8116f2;">Impresiones</span>
+																						<br/><br/>
+																					</div>`
+																						: ''}
+
+																					${campaign?.summary?.reproductions
+																						? `<div>
+																						<span style="font-family: &quot;Cera Pro&quot;, sans-serif; font-weight: bold; font-size: 60px; color: #363a57;">${getFormatedNumber(campaign?.summary?.reproductions)}</span>
+																					</div>
+																					<div>
+																						<span style="font-family: Helvetica, sans-serif; font-weight: bold; font-size: 15px; color: #8116f2;">Reproducciones</span>
+																						<br/><br/>
+																					</div>`
+																						: ''}
+																				</td>
+																			</tr>
 																		</table>
 																		<!--[if (gte mso 9)|(IE)]>
 																		</td></tr>
@@ -87,6 +114,7 @@ const campaignClosing = ({ name }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4
 																</td></tr>
 															</table>
 														</div>
+														<br/>
 														<div>
 															<!--[if mso]>
 															<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="#" style="height:36px;v-text-anchor:middle;width:247;" arcsize="56%" stroke="f" fillcolor="#8116f2">
@@ -131,7 +159,7 @@ const campaignClosing = ({ name }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4
 											</div>
 											<div style="height: 15px; line-height: 15px; font-size: 13px;">&nbsp;</div>
 											<div style="line-height: 20px;">
-												<span style="font-family: Helvetica, sans-serif; font-size: 15px; color: #363a57;">Sí tu objetivo de <span style="color: #8116f2; font-weight: normal;">Visibilidad de marca</span> no fue suficiente, tenemos un equipo especializado en <span style="font-weight: normal;">conversión</span>. Con este equipo podrás maximizar el desempeño de tu negocio y aumentar el <span style="font-weight: normal;">ROI, </span>disminuir el <span style="font-weight: normal;">Costo de Adquisición de Cliente </span>y ser más<span style="font-weight: normal;">
+												<span style="font-family: Helvetica, sans-serif; font-size: 15px; color: #363a57;">Sí tu objetivo de <span style="color: #8116f2; font-weight: normal;">${campaign?.sector?.name}</span> no fue suficiente, tenemos un equipo especializado en <span style="font-weight: normal;">conversión</span>. Con este equipo podrás maximizar el desempeño de tu negocio y aumentar el <span style="font-weight: normal;">ROI, </span>disminuir el <span style="font-weight: normal;">Costo de Adquisición de Cliente </span>y ser más<span style="font-weight: normal;">
 												</span>
 												<span style="font-weight: normal;">rentable.</span>
 												</span>
@@ -200,16 +228,16 @@ const campaignClosing = ({ name }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4
 																		<tr><td align="left" valign="top">
 																			<table border="0" cellspacing="0" cellpadding="0" width="176" style="width: 176px;">
 																				<tr><td align="left" valign="middle" style="padding: 0px 10px 0px 0px;">
-																					<img src="img/13-855.png" width="32" height="32" alt="" border="0" style="display: block;">
+																					<img src="https://shareflow-statics.s3.amazonaws.com/facebook.png" width="32" height="32" alt="" border="0" style="display: block;">
 																				</td>
 																				<td align="left" valign="middle" style="padding: 0px 10px 0px 0px;">
-																					<img src="img/13-856.png" width="32" height="32" alt="" border="0" style="display: block;">
+																					<img src="https://shareflow-statics.s3.amazonaws.com/instagram.png" width="32" height="32" alt="" border="0" style="display: block;">
 																				</td>
 																				<td align="left" valign="middle" style="padding: 0px 10px 0px 0px;">
-																					<img src="img/13-857.png" width="32" height="32" alt="" border="0" style="display: block;">
+																					<img src="https://shareflow-statics.s3.amazonaws.com/linkedin.png" width="32" height="32" alt="" border="0" style="display: block;">
 																				</td>
 																				<td align="left" valign="middle">
-																					<img src="img/13-858.png" width="32" height="32" alt="" border="0" style="display: block;">
+																					<img src="https://shareflow-statics.s3.amazonaws.com/youtube.png" width="32" height="32" alt="" border="0" style="display: block;">
 																				</td></tr>
 																			</table>
 																		</td></tr>
@@ -228,11 +256,8 @@ const campaignClosing = ({ name }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4
 									</table>
 								</div>
 								<div style="height: 16px; line-height: 16px; font-size: 14px;">&nbsp;</div>
-								<img src="img/13-859.png" width="150" height="23" alt="" border="0" style="display: block;">
+								<img src="https://shareflow-statics.s3.amazonaws.com/shareflow.png" width="150" height="23" alt="" border="0" style="display: block;">
 								<div style="height: 16px; line-height: 16px; font-size: 14px;">&nbsp;</div>
-								<div style="line-height: 20px;">
-									<span style="font-family: Helvetica, sans-serif; font-size: 12px; color: #363a57;">No quiero recibir más mensajes como este.</span>
-								</div>
 								<div style="height: 16px; line-height: 16px; font-size: 14px;">&nbsp;</div>
 								<div style="line-height: 20px;">
 									<span style="font-family: Helvetica, sans-serif; font-size: 12px; color: #363a57;">Por favor no intentes responder este correo electrónico. Los correos electrónicos enviados a esta dirección no se responderán.</span>

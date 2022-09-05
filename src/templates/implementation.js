@@ -1,5 +1,7 @@
+const { getFormatedNumber, parseDate } = require('../utils/transformData')
+
 /* eslint-disable no-tabs */
-const implementacion = ({ name }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+const implementacion = ({ campaign }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 	<head>
 		<!--[if gte mso 9]>
@@ -42,13 +44,13 @@ const implementacion = ({ name }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.
 						<![endif]-->
 						<table border="0" cellspacing="0" cellpadding="0" width="100%" style="max-width: 600px;">
 							<tr><td align="center" valign="top" bgcolor="#8116f2" style="padding: 40px 30px 24px;">
-								<img src="img/24-96.png" width="250" height="38" alt="" border="0" style="display: block;">
+								<img src="https://shareflow-statics.s3.amazonaws.com/shareflow.png" width="250" height="38" alt="" border="0" style="display: block;">
 								<div style="height: 16px; line-height: 16px; font-size: 14px;">&nbsp;</div>
 								<div>
 									<table border="0" cellspacing="0" cellpadding="0" width="100%">
 										<tr><td align="center" valign="top" height="95" style="padding: 17px 0px 0px; height: 95px;">
 											<div style="line-height: 32px;">
-												<span style="font-family: &quot;Cera Pro&quot;, sans-serif; font-weight: bold; font-size: 30px; color: #ffffff;">${name}, tu campaña se encuentra en proceso de implementación!</span>
+												<span style="font-family: &quot;Cera Pro&quot;, sans-serif; font-weight: bold; font-size: 30px; color: #ffffff;">${campaign?.user?.name}, tu campaña se encuentra en proceso de implementación!</span>
 											</div>
 										</td></tr>
 									</table>
@@ -62,19 +64,19 @@ const implementacion = ({ name }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.
 									<table border="0" cellspacing="0" cellpadding="0" width="100%" style="max-width: 540px;">
 										<tr><td align="left">
 											<div style="line-height: 20px;">
-												<span style="font-family: Helvetica, sans-serif; font-size: 15px; color: #ffffff;">Te contamos que se ha registrado en nuestra plataforma la orden de compra <span style="font-weight: normal;">número #12345678 </span>
+												<span style="font-family: Helvetica, sans-serif; font-size: 15px; color: #ffffff;">Te contamos que se ha registrado en nuestra plataforma la orden de compra <span style="font-weight: normal;">número #${campaign?.orderNumber} </span>
 												<span style="font-weight: normal;">el día </span>
-												<span style="font-weight: normal;">30/06/22 </span>
+												<span style="font-weight: normal;">${parseDate(campaign?.createdAt)}</span>
 												<span style="font-weight: normal;">a las </span>
-												<span style="font-weight: normal;">22:54 </span>
+												<span style="font-weight: normal;">${parseDate(campaign?.createdAt, 'HH:mm:ss')}</span>
 												<span style="font-weight: normal;">por un valor de</span>
-												<span style="font-weight: normal;"> $5.000.000 COP (IVA Incluído). <br>
+												<span style="font-weight: normal;"> $${getFormatedNumber(campaign?.amount)} COP (IVA Incluído). <br>
 												<br>
 												</span>
 												<span style="font-weight: normal;">Tu campaña comienza el día </span>
-												<span style="font-weight: normal;">01/07/22 </span>
+												<span style="font-weight: normal;">${parseDate(campaign?.startDate)}</span>
 												<span style="font-weight: normal;">y finaliza el día </span>
-												<span style="font-weight: normal;">31/08/22. </span>
+												<span style="font-weight: normal;">${parseDate(campaign?.endDate)}. </span>
 												<span style="font-weight: normal;">Adjunto encontrarás un PDF con el detalle de tu compra, los medios, indicadores, y costos.<br>
 												<br>Recuerda que a través de </span>
 												<span style="font-weight: normal;">www.shareflow.me </span>
@@ -109,45 +111,6 @@ const implementacion = ({ name }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.
 								</table>
 							</div>
 							<div style="height: 16px; line-height: 16px; font-size: 14px;">&nbsp;</div>
-							<div>
-								<table border="0" cellspacing="0" cellpadding="0" width="100%">
-									<tr><td align="center" valign="middle" style="padding: 10px 0px;">
-										<table width="100%" border="0" cellspacing="0" cellpadding="0">
-											<tr><td align="center" valign="middle" style="font-size: 0px;">
-												<div style="display: inline-block; vertical-align: middle; width: 6px; padding: 0px 2px;">
-													<table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-collapse: collapse;">
-														<tr><td align="undefined" valign="top" class="outf14" style="font-size: large;">
-															<img src="img/24-110.png" width="6" height="6" alt="" border="0" style="display: block;">
-														</td></tr>
-													</table>
-												</div>
-												<!--[if (gte mso 9)|(IE)]>
-												</td>
-												<td valign="middle" width="6" style="width: 6px">
-												<![endif]-->
-												<div style="display: inline-block; vertical-align: middle; width: 6px; padding: 0px 2px;">
-													<table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-collapse: collapse;">
-														<tr><td align="undefined" valign="top" class="outf14" style="font-size: large;">
-															<img src="img/24-110.png" width="6" height="6" alt="" border="0" style="display: block;">
-														</td></tr>
-													</table>
-												</div>
-												<!--[if (gte mso 9)|(IE)]>
-												</td>
-												<td valign="middle" width="6" style="width: 6px">
-												<![endif]-->
-												<div style="display: inline-block; vertical-align: middle; width: 6px; padding: 0px 2px;">
-													<table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-collapse: collapse;">
-														<tr><td align="undefined" valign="top" class="outf14" style="font-size: large;">
-															<img src="img/24-110.png" width="6" height="6" alt="" border="0" style="display: block;">
-														</td></tr>
-													</table>
-												</div>
-											</td></tr>
-										</table>
-									</td></tr>
-								</table>
-							</div>
 							<div style="height: 16px; line-height: 16px; font-size: 14px;">&nbsp;</div>
 							<div>
 								<table border="0" cellspacing="0" cellpadding="0" width="100%">
@@ -223,23 +186,23 @@ const implementacion = ({ name }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.
 																<tr><td>
 																<![endif]-->
 																<table border="0" cellspacing="0" cellpadding="0" width="100%" style="max-width: 186px;">
-																	<tr><td align="left" valign="top">
-																		<table border="0" cellspacing="0" cellpadding="0" width="176" style="width: 176px;">
-																			<tr><td align="left" valign="middle" style="padding: 0px 10px 0px 0px;">
-																				<img src="img/23-78.png" width="32" height="32" alt="" border="0" style="display: block;">
-																			</td>
-																			<td align="left" valign="middle" style="padding: 0px 10px 0px 0px;">
-																				<img src="img/23-79.png" width="32" height="32" alt="" border="0" style="display: block;">
-																			</td>
-																			<td align="left" valign="middle" style="padding: 0px 10px 0px 0px;">
-																				<img src="img/23-80.png" width="32" height="32" alt="" border="0" style="display: block;">
-																			</td>
-																			<td align="left" valign="middle">
-																				<img src="img/23-81.png" width="32" height="32" alt="" border="0" style="display: block;">
-																			</td></tr>
-																		</table>
-																	</td></tr>
-																</table>
+																		<tr><td align="left" valign="top">
+																			<table border="0" cellspacing="0" cellpadding="0" width="176" style="width: 176px;">
+																				<tr><td align="left" valign="middle" style="padding: 0px 10px 0px 0px;">
+																					<img src="https://shareflow-statics.s3.amazonaws.com/facebook.png" width="32" height="32" alt="" border="0" style="display: block;">
+																				</td>
+																				<td align="left" valign="middle" style="padding: 0px 10px 0px 0px;">
+																					<img src="https://shareflow-statics.s3.amazonaws.com/instagram.png" width="32" height="32" alt="" border="0" style="display: block;">
+																				</td>
+																				<td align="left" valign="middle" style="padding: 0px 10px 0px 0px;">
+																					<img src="https://shareflow-statics.s3.amazonaws.com/linkedin.png" width="32" height="32" alt="" border="0" style="display: block;">
+																				</td>
+																				<td align="left" valign="middle">
+																					<img src="https://shareflow-statics.s3.amazonaws.com/youtube.png" width="32" height="32" alt="" border="0" style="display: block;">
+																				</td></tr>
+																			</table>
+																		</td></tr>
+																	</table>
 																<!--[if (gte mso 9)|(IE)]>
 																</td></tr>
 																</table>
@@ -254,9 +217,6 @@ const implementacion = ({ name }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.
 								</table>
 							</div>
 							<div style="height: 16px; line-height: 16px; font-size: 14px;">&nbsp;</div>
-							<div style="line-height: 20px;">
-								<span style="font-family: Helvetica, sans-serif; font-size: 12px; color: #ffffff;">No quiero recibir más mensajes como este.</span>
-							</div>
 							<div style="height: 16px; line-height: 16px; font-size: 14px;">&nbsp;</div>
 							<div style="line-height: 20px;">
 								<span style="font-family: Helvetica, sans-serif; font-size: 12px; color: #ffffff;">Por favor no intentes responder este correo electrónico. Los correos electrónicos enviados a esta dirección no se responderán.</span>

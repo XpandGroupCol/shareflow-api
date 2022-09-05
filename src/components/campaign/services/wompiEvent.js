@@ -1,4 +1,5 @@
 const boom = require('@hapi/boom')
+const Activity = require('../../../models/Activity')
 const Campaign = require('../../../models/Campaign')
 const Payment = require('../../../models/Payment')
 const { validateDocuments } = require('../../../templates/validateDocuments')
@@ -54,6 +55,18 @@ const wompiEvent = async ({ reference, amount, transactionId, status, paymentMet
   await sendEmail(sendEmailPayload)
 
   const response = await campaign.save()
+
+  try {
+    await Activity.create({
+      data: { status: campaign.status },
+      createBy: campaign?.user?._id,
+      updateBy: campaign?.user?._id,
+      campaignId: campaign?._id
+    })
+  } catch (e) {
+    console.log(e)
+  }
+
   return response
 }
 

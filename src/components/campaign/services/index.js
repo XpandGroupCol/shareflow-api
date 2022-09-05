@@ -11,6 +11,7 @@ const getPDF = require('./getPDF')
 const campaignFlow = require('./campaignFlow')
 const rememberEmail = require('./rememberEmail')
 const requestImplementation = require('./requestImplementation')
+const testEmails = require('./testEmails')
 
 module.exports = {
   createCampaing,
@@ -25,5 +26,6 @@ module.exports = {
   getPDF,
   campaignFlow,
   rememberEmail,
-  requestImplementation
+  requestImplementation,
+  testEmails
 }

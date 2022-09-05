@@ -1,6 +1,7 @@
 const boom = require('@hapi/boom')
 const Campaign = require('../../../models/Campaign')
 const { createPdf } = require('../../../utils/pdf')
+const { leanById } = require('../../../utils/transformData')
 
 const getPDF = async (id) => {
   if (!id) throw boom.notFound()
@@ -12,7 +13,7 @@ const getPDF = async (id) => {
     .populate('ages')
     .lean().exec()
 
-  const binaryResult = await createPdf(campaing)
+  const binaryResult = await createPdf(leanById(campaing))
   return binaryResult
 }
 
