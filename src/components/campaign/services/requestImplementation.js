@@ -1,8 +1,8 @@
 const boom = require('@hapi/boom')
 const Campaign = require('../../../models/Campaign')
 const { validateDocuments } = require('../../../templates/validateDocuments')
-const { sendEmail } = require('../../../utils/aws/SES')
 const { createPdf } = require('../../../utils/pdf')
+const { sendSengridEmail } = require('../../../utils/sendGrid')
 const { leanById } = require('../../../utils/transformData')
 
 const requestImplementation = async (id) => {
@@ -17,13 +17,13 @@ const requestImplementation = async (id) => {
   const attachment = await createPdf(campaign)
 
   const sendEmailPayload = {
-    destinationEmails: ['diegocontreras1219@gmail.com'],
-    emailSubject: 'Nueva campaña creada',
+    to: campaign?.user?.email,
+    subject: 'Nueva campaña creada',
     text: 'Tienes una nueva campaña para revisar',
-    htmlMessage: validateDocuments({ name: campaign?.user?.name }),
+    html: validateDocuments({ name: campaign?.user?.name }),
     attachedFiles: [attachment]
   }
-  const send = await sendEmail(sendEmailPayload)
+  const send = await sendSengridEmail(sendEmailPayload)
   return { campaign: leanById(campaign), send }
 }
 

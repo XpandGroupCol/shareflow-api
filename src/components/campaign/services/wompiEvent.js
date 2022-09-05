@@ -3,8 +3,8 @@ const Activity = require('../../../models/Activity')
 const Campaign = require('../../../models/Campaign')
 const Payment = require('../../../models/Payment')
 const { validateDocuments } = require('../../../templates/validateDocuments')
-const { sendEmail } = require('../../../utils/aws/SES')
 const { createPdf } = require('../../../utils/pdf')
+const { sendSengridEmail } = require('../../../utils/sendGrid')
 
 const clearNumber = (number) => {
   if (typeof number === 'number') {
@@ -15,6 +15,8 @@ const clearNumber = (number) => {
 }
 
 const wompiEvent = async ({ reference, amount, transactionId, status, paymentMethod }) => {
+  console.log({ reference, amount, transactionId, status, paymentMethod })
+
   if (!transactionId) throw boom.notFound()
 
   const [campaignId] = reference.split('-')
@@ -28,6 +30,8 @@ const wompiEvent = async ({ reference, amount, transactionId, status, paymentMet
     status,
     paymentMethod
   })
+
+  console.log({ payment })
 
   if (!payment) throw boom.notFound()
 
@@ -44,15 +48,17 @@ const wompiEvent = async ({ reference, amount, transactionId, status, paymentMet
 
   const attachment = await createPdf(campaignLean)
 
+  console.log({ campaignLean })
+
   const sendEmailPayload = {
-    destinationEmails: ['diegocontreras1219@gmail.com'],
-    emailSubject: '',
-    text: '',
-    htmlMessage: validateDocuments({ name: campaign?.user?.name }),
-    attachedFiles: [attachment]
+    to: 'order.request@shareflow.me',
+    subject: 'Nueva Orden',
+    text: 'Nueva Orden',
+    html: validateDocuments({ name: campaign?.user?.name }),
+    attachment
   }
 
-  await sendEmail(sendEmailPayload)
+  await sendSengridEmail(sendEmailPayload)
 
   const response = await campaign.save()
 

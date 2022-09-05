@@ -1,7 +1,7 @@
 
 const User = require('../../../models/User')
 const { recoveryPasswordTemplate } = require('../../../templates/recoveryPassword')
-const { sendEmail } = require('../../../utils/aws/SES')
+const { sendSengridEmail } = require('../../../utils/sendGrid')
 
 const { setToken } = require('../../../utils/token')
 
@@ -18,12 +18,12 @@ const forgotPassword = async ({ email, baseUrl }) => {
     const url = `${baseUrl}/auth/recovery-password/${token}@u@${user?._id}`
 
     const sendEmailPayload = {
-      destinationEmails: ['diegocontreras1219@gmail.com'],
-      emailSubject: 'Recuperar contraseña',
+      to: user?.email,
+      subject: 'Recuperar contraseña',
       text: 'Recuperar contraseña',
-      htmlMessage: recoveryPasswordTemplate({ url, name: user?.name })
+      html: recoveryPasswordTemplate({ url, name: user?.name })
     }
-    const send = await sendEmail(sendEmailPayload)
+    const send = await sendSengridEmail(sendEmailPayload)
     return send
   }
 }

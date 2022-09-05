@@ -1,7 +1,7 @@
 const boom = require('@hapi/boom')
 const Activity = require('../../../models/Activity')
 const Campaign = require('../../../models/Campaign')
-const { sendEmail } = require('../../../utils/aws/SES')
+const { sendSengridEmail } = require('../../../utils/sendGrid')
 
 const updateCampaign = async ({ id, status, template, emailSubject, text }) => {
   if (!id) throw boom.notFound()
@@ -13,12 +13,12 @@ const updateCampaign = async ({ id, status, template, emailSubject, text }) => {
     .populate('ages').lean().exec()
 
   const sendEmailPayload = {
-    destinationEmails: ['diegocontreras1219@gmail.com'],
-    emailSubject,
+    to: campaign?.user?.email,
+    subject: emailSubject,
     text,
-    htmlMessage: template({ campaign })
+    html: template({ campaign })
   }
-  const send = await sendEmail(sendEmailPayload)
+  const send = await sendSengridEmail(sendEmailPayload)
 
   try {
     await Activity.create({
