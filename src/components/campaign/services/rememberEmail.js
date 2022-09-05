@@ -16,7 +16,7 @@ const rememberEmail = async (id) => {
     to: campaign?.user?.email,
     subject: 'Completar la orden',
     text: 'Completar la orden',
-    html: remainder({ name: campaign?.user?.name })
+    html: remainder({ campaign })
 
   }
 
