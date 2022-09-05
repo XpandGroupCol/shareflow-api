@@ -15,12 +15,12 @@ const clearNumber = (number) => {
 }
 
 const wompiEvent = async ({ reference, amount, transactionId, status, paymentMethod }) => {
-  console.log({ reference, amount, transactionId, status, paymentMethod })
+  let campaign = null
 
   if (!transactionId) throw boom.notFound()
 
   const [campaignId] = reference.split('-')
-  const campaign = await Campaign.findById(campaignId)
+  campaign = await Campaign.findById(campaignId)
   if (!campaign) throw boom.notFound()
 
   const payment = await Payment.create({
@@ -31,49 +31,45 @@ const wompiEvent = async ({ reference, amount, transactionId, status, paymentMet
     paymentMethod
   })
 
-  console.log({ payment })
-
   if (!payment) throw boom.notFound()
 
   if (status === 'APPROVED') {
-    campaign.status = 'paid'
-    campaign.isPaid = true
+    campaign = await Campaign.findByIdAndUpdate(campaignId, {
+      status: 'paid',
+      isPaid: true
+    }, { new: true })
+
+    const campaignLean = campaign.populate('user')
+      .populate('sector')
+      .populate('target')
+      .populate('locations')
+      .populate('ages')
+
+    const attachment = await createPdf(campaignLean)
+
+    const sendEmailPayload = {
+      to: 'order.request@shareflow.me',
+      subject: 'Nueva Orden',
+      text: 'Nueva Orden',
+      html: validateDocuments({ name: campaign?.user?.name }),
+      attachment
+    }
+
+    await sendSengridEmail(sendEmailPayload)
+
+    try {
+      await Activity.create({
+        data: { status: campaign.status },
+        createBy: campaign?.user?._id,
+        updateBy: campaign?.user?._id,
+        campaignId: campaign?._id
+      })
+    } catch (e) {
+      console.log(e)
+    }
   }
 
-  const campaignLean = campaign.populate('user')
-    .populate('sector')
-    .populate('target')
-    .populate('locations')
-    .populate('ages')
-
-  const attachment = await createPdf(campaignLean)
-
-  console.log({ campaignLean })
-
-  const sendEmailPayload = {
-    to: 'order.request@shareflow.me',
-    subject: 'Nueva Orden',
-    text: 'Nueva Orden',
-    html: validateDocuments({ name: campaign?.user?.name }),
-    attachment
-  }
-
-  await sendSengridEmail(sendEmailPayload)
-
-  const response = await campaign.save()
-
-  try {
-    await Activity.create({
-      data: { status: campaign.status },
-      createBy: campaign?.user?._id,
-      updateBy: campaign?.user?._id,
-      campaignId: campaign?._id
-    })
-  } catch (e) {
-    console.log(e)
-  }
-
-  return response
+  return campaign
 }
 
 module.exports = wompiEvent
