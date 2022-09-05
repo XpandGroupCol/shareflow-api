@@ -12,6 +12,7 @@ const campaignFlow = require('./campaignFlow')
 const rememberEmail = require('./rememberEmail')
 const requestImplementation = require('./requestImplementation')
 const testEmails = require('./testEmails')
+const getDashboardOfCampaing = require('./getDashboardOfCampaing')
 
 module.exports = {
   createCampaing,
@@ -27,5 +28,6 @@ module.exports = {
   campaignFlow,
   rememberEmail,
   requestImplementation,
-  testEmails
+  testEmails,
+  getDashboardOfCampaing
 }

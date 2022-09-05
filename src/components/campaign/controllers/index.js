@@ -39,6 +39,15 @@ const getCampaignById = async (request, response) => {
   })
 }
 
+const getDashboardOfCampaing = async (request, response) => {
+  const { query } = request
+  const data = await services.getDashboardOfCampaing(query)
+  response.status(200).json({
+    statusCode: 200,
+    ...data
+  })
+}
+
 const createCampaing = async (request, response) => {
   const { body, userId: user, file, userName } = request
   const data = await services.createCampaing({ body, user, file, userName })
@@ -187,5 +196,6 @@ module.exports = {
   endCampaign,
   rememberEmail,
   requestImplementation,
-  testEmail
+  testEmail,
+  getDashboardOfCampaing
 }

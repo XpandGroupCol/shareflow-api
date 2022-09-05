@@ -7,6 +7,11 @@ const campaignRouter = require('express').Router()
 const controllers = require('./controllers')
 const schemas = require('./schemas')
 
+campaignRouter.get('/campaigns/dashboard',
+  loggedIn,
+  validateRequestSchema(schemas.getDashboardOfCampaingSchema, 'query'),
+  asyncHandler(controllers.getDashboardOfCampaing))
+
 campaignRouter.get('/campaigns',
   loggedIn,
   validateRequestSchema(schemas.getSchema, 'query'),
