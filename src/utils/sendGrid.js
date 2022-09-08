@@ -17,8 +17,7 @@ const sendSengridEmail = async ({
   }
 
   try {
-    const data = await sgMail.send(msg)
-    console.log({ data })
+    await sgMail.send(msg)
     return true
   } catch (e) {
     console.log({ e })

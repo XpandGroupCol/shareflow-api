@@ -3,17 +3,19 @@ const Activity = require('../../../models/Activity')
 const Campaign = require('../../../models/Campaign')
 const { createPdf } = require('../../../utils/pdf')
 const { sendSengridEmail } = require('../../../utils/sendGrid')
+const { leanById } = require('../../../utils/transformData')
 
 const updateCampaign = async ({ id, status, template, emailSubject, text }) => {
   if (!id) throw boom.notFound()
 
-  const campaign = await Campaign.findByIdAndUpdate(id, { status }, { new: true }).populate('user')
+  const campaign = await Campaign.findByIdAndUpdate(id, { status }, { new: true })
+    .populate('user')
     .populate('sector')
     .populate('target')
     .populate('locations')
     .populate('ages').lean().exec()
 
-  const attachment = await createPdf(campaign)
+  const attachment = await createPdf(leanById(campaign))
 
   const sendEmailPayload = {
     to: campaign?.user?.email,

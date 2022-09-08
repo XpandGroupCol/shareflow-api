@@ -14,7 +14,7 @@ const requestImplementation = async (id) => {
     .populate('locations')
     .populate('ages').lean().exec()
 
-  const attachment = await createPdf(campaign)
+  const attachment = await createPdf(leanById(campaign))
 
   const sendEmailPayload = {
     to: campaign?.user?.email,

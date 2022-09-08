@@ -160,7 +160,7 @@ const implementation = ({ campaign }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTM
 																		<div style="height: 8px; line-height: 8px; font-size: 6px;">&nbsp;</div>
 																		<div style="line-height: 20px;">
 																			<span style="font-family: Helvetica, sans-serif; font-size: 15px; color: #ffffff;">¿Necesitas ayuda?, escríbenos a 
-																			<a target="_blank" href="mailto:soporte@shareflow.me" style="font-weight: normal;color: #ffffff;">soporte@shareflow.me</a>
+																			<a target="_blank" href="mailto:support@shareflow.me" style="font-weight: normal;color: #ffffff;">support@shareflow.me</a>
 																			</span>
 																		</div>
 																	</td></tr>

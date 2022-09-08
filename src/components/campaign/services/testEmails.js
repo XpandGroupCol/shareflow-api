@@ -2,15 +2,17 @@ const Campaign = require('../../../models/Campaign')
 const { validateDocuments } = require('../../../templates/validateDocuments')
 const { createPdf } = require('../../../utils/pdf')
 const { sendSengridEmail } = require('../../../utils/sendGrid')
+const { leanById } = require('../../../utils/transformData')
 
 const testEmail = async () => {
-  const campaign = await Campaign.findById('631a3e641a5569fc406684af').populate('user')
+  const campaign = await Campaign.findByIdAndUpdate('631a3e641a5569fc406684af', { status: 'paid' }, { new: true })
+    .populate('user')
     .populate('sector')
     .populate('target')
     .populate('locations')
     .populate('ages').lean().exec()
 
-  const pdf = await createPdf(campaign)
+  const pdf = await createPdf(leanById(campaign))
 
   const sendEmailPayload = {
     to: 'diegocontreras1219@gmail.com',

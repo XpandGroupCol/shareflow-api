@@ -112,7 +112,7 @@ const invitationTemplate = ({ url, name }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DT
                                       <tr><td align="left" valign="top">
                                         <div style="height: 8px; line-height: 8px; font-size: 6px;">&nbsp;</div>
                                         <div style="line-height: 20px;">
-                                          <span style="font-family: Helvetica, sans-serif; font-size: 15px; color: #363a57;">¿Necesitas ayuda?, escríbenos a <span style="font-weight: normal;">soporte@shareflow.me</span>
+                                          <span style="font-family: Helvetica, sans-serif; font-size: 15px; color: #363a57;">¿Necesitas ayuda?, escríbenos a <span style="font-weight: normal;">support@shareflow.me</span>
                                           </span>
                                         </div>
                                       </td></tr>
