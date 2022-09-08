@@ -23,8 +23,9 @@ const requestImplementation = async (id) => {
     html: validateDocuments({ name: campaign?.user?.name }),
     attachments: [{
       filename: `orden-${campaign?.orderNumber}.pdf`,
-      content: Buffer.from(attachment, 'base64'),
-      type: 'application/pdf',
+      content: Buffer.from(attachment).toString('base64'),
+      contentType: 'application/pdf',
+      content_id: `orden-${campaign?.orderNumber}`,
       disposition: 'attachment'
     }]
   }

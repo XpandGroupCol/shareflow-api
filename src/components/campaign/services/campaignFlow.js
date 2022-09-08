@@ -22,8 +22,9 @@ const updateCampaign = async ({ id, status, template, emailSubject, text }) => {
     html: template({ campaign }),
     attachments: [{
       filename: `orden-${campaign?.orderNumber}.pdf`,
-      content: Buffer.from(attachment, 'base64'),
-      type: 'application/pdf',
+      content: Buffer.from(attachment).toString('base64'),
+      contentType: 'application/pdf',
+      content_id: `orden-${campaign?.orderNumber}`,
       disposition: 'attachment'
     }]
   }

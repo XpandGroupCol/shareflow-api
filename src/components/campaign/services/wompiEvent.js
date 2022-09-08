@@ -55,8 +55,9 @@ const wompiEvent = async ({ reference, amount, transactionId, status, paymentMet
       html: validateDocuments({ name: campaign?.user?.name }),
       attachedFiles: [{
         filename: `orden-${campaign?.orderNumber}.pdf`,
-        content: Buffer.from(attachment, 'base64'),
-        contentType: 'application/pdf'
+        content: Buffer.from(attachment).toString('base64'),
+        contentType: 'application/pdf',
+        content_id: `orden-${campaign?.orderNumber}`
       }]
     }
 

@@ -1,10 +1,10 @@
 const Campaign = require('../../../models/Campaign')
 const { validateDocuments } = require('../../../templates/validateDocuments')
-const { sendEmail } = require('../../../utils/aws/SES')
 const { createPdf } = require('../../../utils/pdf')
+const { sendSengridEmail } = require('../../../utils/sendGrid')
 
 const testEmail = async () => {
-  const campaign = await Campaign.findById('62debba254f72b6df9f2c75a').populate('user')
+  const campaign = await Campaign.findById('631a3e641a5569fc406684af').populate('user')
     .populate('sector')
     .populate('target')
     .populate('locations')
@@ -13,17 +13,18 @@ const testEmail = async () => {
   const pdf = await createPdf(campaign)
 
   const sendEmailPayload = {
-    destinationEmails: ['diegocontreras1219@gmail.com'],
-    emailSubject: 'Test',
+    to: 'diegocontreras1219@gmail.com',
+    subject: 'Test',
     text: 'Test',
-    htmlMessage: validateDocuments({ campaign }),
-    attachedFiles: [{
+    html: validateDocuments({ campaign }),
+    attachments: [{
       filename: `orden-${campaign?.orderNumber}.pdf`,
-      content: Buffer.from(pdf, 'base64'),
-      contentType: 'application/pdf'
+      content: Buffer.from(pdf).toString('base64'),
+      contentType: 'application/pdf',
+      content_id: `orden-${campaign?.orderNumber}`
     }]
   }
-  const send = await sendEmail(sendEmailPayload)
+  const send = await sendSengridEmail(sendEmailPayload)
   return { send, campaign }
 }
 
