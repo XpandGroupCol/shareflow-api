@@ -1,7 +1,8 @@
-const { getFormatedNumber, parseDate } = require('../utils/transformData')
+const { getTotal } = require('../utils')
+const { getFormatedNumber, parseDate, parseUTCDate } = require('../utils/transformData')
 
 /* eslint-disable no-tabs */
-const implementacion = ({ campaign }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+const implementation = ({ campaign }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 	<head>
 		<!--[if gte mso 9]>
@@ -44,7 +45,7 @@ const implementacion = ({ campaign }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTM
 						<![endif]-->
 						<table border="0" cellspacing="0" cellpadding="0" width="100%" style="max-width: 600px;">
 							<tr><td align="center" valign="top" bgcolor="#8116f2" style="padding: 40px 30px 24px;">
-								<img src="https://shareflow-statics.s3.amazonaws.com/shareflow.png" width="250" height="38" alt="" border="0" style="display: block;">
+								<img src="https://shareflow-statics.s3.amazonaws.com/logo-white.png" width="250" height="38" alt="" border="0" style="display: block;">
 								<div style="height: 16px; line-height: 16px; font-size: 14px;">&nbsp;</div>
 								<div>
 									<table border="0" cellspacing="0" cellpadding="0" width="100%">
@@ -68,9 +69,9 @@ const implementacion = ({ campaign }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTM
 												<span style="font-weight: normal;">el día </span>
 												<span style="font-weight: normal;">${parseDate(campaign?.createdAt)}</span>
 												<span style="font-weight: normal;">a las </span>
-												<span style="font-weight: normal;">${parseDate(campaign?.createdAt, 'HH:mm:ss')}</span>
+												<span style="font-weight: normal;">${parseUTCDate(campaign?.createdAt, 'hh:mm A')}</span>
 												<span style="font-weight: normal;">por un valor de</span>
-												<span style="font-weight: normal;"> $${getFormatedNumber(campaign?.amount)} COP (IVA Incluído). <br>
+												<span style="font-weight: normal;"> $${getFormatedNumber(getTotal(campaign?.amount)?.total || 0)} COP (IVA Incluído). <br>
 												<br>
 												</span>
 												<span style="font-weight: normal;">Tu campaña comienza el día </span>
@@ -79,7 +80,7 @@ const implementacion = ({ campaign }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTM
 												<span style="font-weight: normal;">${parseDate(campaign?.endDate)}. </span>
 												<span style="font-weight: normal;">Adjunto encontrarás un PDF con el detalle de tu compra, los medios, indicadores, y costos.<br>
 												<br>Recuerda que a través de </span>
-												<span style="font-weight: normal;">www.shareflow.me </span>
+												<a href='https://shareflow.me/' target="_blank" style="font-weight: normal; color: #ffffff;">www.shareflow.me </a>
 												<span style="font-weight: normal;">podrás crear las campañas que desees. Si necesitas tu </span>
 												<span style="font-weight: normal;">Factura Electrónica</span>
 												<span style="font-weight: normal;"> debes hacer click en el siguiente botón y completar los datos de tu empresa. <br>
@@ -105,7 +106,8 @@ const implementacion = ({ campaign }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTM
 											<center style="color: #363a57; font-size: 15px; font-weight: bold; font-family: Arial, sans-serif;">Necesito Factura Electrónica</center>
 											</v:roundrect>
 											<![endif]-->
-											<a target="_blank" href="#" style="background-color:#ffffff;font-size:15px;font-weight:bold;line-height:36px;width:247px;color:#363a57;border-radius:20px;display:inline-block;font-family:Arial, sans-serif;text-align:center;text-decoration:none;-webkit-text-size-adjust:none;mso-hide:all">Necesito Factura Electrónica</a>
+											<a target="_blank" href="mailto:invoicing@shareflow.me?subject=factura electrónica&body=Hola me gustaría tener la factura electrónica de la orden #${campaign?.orderNumber}" 
+											style="background-color:#ffffff;font-size:15px;font-weight:bold;line-height:36px;width:247px;color:#363a57;border-radius:20px;display:inline-block;font-family:Arial, sans-serif;text-align:center;text-decoration:none;-webkit-text-size-adjust:none;mso-hide:all">Necesito Factura Electrónica</a>
 										</div>
 									</td></tr>
 								</table>
@@ -134,7 +136,7 @@ const implementacion = ({ campaign }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTM
 											<center style="color: #363a57; font-size: 15px; font-weight: bold; font-family: &quot;Cera Pro&quot;, sans-serif;">Contactar con ventas.</center>
 											</v:roundrect>
 											<![endif]-->
-											<a target="_blank" href="#" style="background-color:#ffffff;font-size:15px;font-weight:bold;line-height:36px;width:197px;color:#363a57;border-radius:20px;display:inline-block;font-family:Cera Pro, sans-serif;text-align:center;text-decoration:none;-webkit-text-size-adjust:none;mso-hide:all">Contactar con ventas.</a>
+											<a target="_blank" href="https://calendly.com/camilo-orozco/shareflow-grow-up" style="background-color:#ffffff;font-size:15px;font-weight:bold;line-height:36px;width:197px;color:#363a57;border-radius:20px;display:inline-block;font-family:Cera Pro, sans-serif;text-align:center;text-decoration:none;-webkit-text-size-adjust:none;mso-hide:all">Contactar con ventas.</a>
 										</div>
 									</td></tr>
 								</table>
@@ -155,12 +157,10 @@ const implementacion = ({ campaign }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTM
 																<![endif]-->
 																<table border="0" cellspacing="0" cellpadding="0" width="100%" style="max-width: 306px;">
 																	<tr><td align="left" valign="top">
-																		<div style="line-height: 20px;">
-																			<span style="font-family: Helvetica, sans-serif; font-size: 15px; color: #ffffff;">(123) 456–7890</span>
-																		</div>
 																		<div style="height: 8px; line-height: 8px; font-size: 6px;">&nbsp;</div>
 																		<div style="line-height: 20px;">
-																			<span style="font-family: Helvetica, sans-serif; font-size: 15px; color: #ffffff;">¿Necesitas ayuda?, escríbenos a <span style="font-weight: normal;">soporte@shareflow.me</span>
+																			<span style="font-family: Helvetica, sans-serif; font-size: 15px; color: #ffffff;">¿Necesitas ayuda?, escríbenos a 
+																			<a target="_blank" href="mailto:soporte@shareflow.me" style="font-weight: normal;color: #ffffff;">soporte@shareflow.me</a>
 																			</span>
 																		</div>
 																	</td></tr>
@@ -188,18 +188,23 @@ const implementacion = ({ campaign }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTM
 																<table border="0" cellspacing="0" cellpadding="0" width="100%" style="max-width: 186px;">
 																		<tr><td align="left" valign="top">
 																			<table border="0" cellspacing="0" cellpadding="0" width="176" style="width: 176px;">
-																				<tr><td align="left" valign="middle" style="padding: 0px 10px 0px 0px;">
-																					<img src="https://shareflow-statics.s3.amazonaws.com/facebook.png" width="32" height="32" alt="" border="0" style="display: block;">
+																				<tr>
+																				<td align="left" valign="middle" style="padding: 0px 10px 0px 0px;">
+																					<a href='https://www.facebook.com/Shareflow.me/' target='_blank'>
+																						<img src="https://shareflow-statics.s3.amazonaws.com/facebook.png" width="32" height="32" alt="" border="0" style="display: block;">
+																					</a>
 																				</td>
 																				<td align="left" valign="middle" style="padding: 0px 10px 0px 0px;">
-																					<img src="https://shareflow-statics.s3.amazonaws.com/instagram.png" width="32" height="32" alt="" border="0" style="display: block;">
-																				</td>
-																				<td align="left" valign="middle" style="padding: 0px 10px 0px 0px;">
-																					<img src="https://shareflow-statics.s3.amazonaws.com/linkedin.png" width="32" height="32" alt="" border="0" style="display: block;">
+																					<a href='https://www.instagram.com/shareflow.me/' target='_blank'>	
+																						<img src="https://shareflow-statics.s3.amazonaws.com/instagram.png" width="32" height="32" alt="" border="0" style="display: block;">
+																					</a>
 																				</td>
 																				<td align="left" valign="middle">
-																					<img src="https://shareflow-statics.s3.amazonaws.com/youtube.png" width="32" height="32" alt="" border="0" style="display: block;">
-																				</td></tr>
+																					<a href=' https://www.youtube.com/channel/UCmN8mWbmVXSXSySMDGxX6Cw' target='_blank'>
+																						<img src="https://shareflow-statics.s3.amazonaws.com/youtube.png" width="32" height="32" alt="" border="0" style="display: block;">
+																					</a>
+																				</td>
+																				</tr>
 																			</table>
 																		</td></tr>
 																	</table>
@@ -238,4 +243,4 @@ const implementacion = ({ campaign }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTM
 	</body>
 </html>`
 
-module.exports = { implementacion }
+module.exports = { implementation }

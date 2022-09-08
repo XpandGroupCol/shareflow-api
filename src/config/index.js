@@ -24,10 +24,13 @@ const DEFAULT_ROLES = {
 
 const PER_PAGE = 10
 
+const ORDER_EMAIL = 'order.request@shareflow.me'
+
 module.exports = {
   SEX,
   NEW_CAMPAIGN_STATUS,
   DEFAULT_ROLES,
   PER_PAGE,
-  GLOBAL_ERROR: 'Parece que tenemos problemas para procesar tu solicitud, por favor intenta nuevamente.'
+  GLOBAL_ERROR: 'Parece que tenemos problemas para procesar tu solicitud, por favor intenta nuevamente.',
+  ORDER_EMAIL
 }

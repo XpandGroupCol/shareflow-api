@@ -110,9 +110,6 @@ const recoveryPasswordTemplate = ({ url, name }) => `<!DOCTYPE HTML PUBLIC "-//W
 																		<![endif]-->
 																		<table border="0" cellspacing="0" cellpadding="0" width="100%" style="max-width: 318px;">
 																			<tr><td align="left" valign="top">
-																				<div style="line-height: 20px;">
-																					<span style="font-family: Helvetica, sans-serif; font-size: 15px; color: #363a57;">(123) 456–7890</span>
-																				</div>
 																				<div style="height: 8px; line-height: 8px; font-size: 6px;">&nbsp;</div>
 																				<div style="line-height: 20px;">
 																					<span style="font-family: Helvetica, sans-serif; font-size: 15px; color: #363a57;">¿Necesitas ayuda?, escríbenos a <span style="font-weight: normal;">soporte@shareflow.me</span>
@@ -143,18 +140,23 @@ const recoveryPasswordTemplate = ({ url, name }) => `<!DOCTYPE HTML PUBLIC "-//W
 																		<table border="0" cellspacing="0" cellpadding="0" width="100%" style="max-width: 186px;">
 																		<tr><td align="left" valign="top">
 																			<table border="0" cellspacing="0" cellpadding="0" width="176" style="width: 176px;">
-																				<tr><td align="left" valign="middle" style="padding: 0px 10px 0px 0px;">
+																				<tr>
+																				<td align="left" valign="middle" style="padding: 0px 10px 0px 0px;">
+																					<a href='https://www.facebook.com/Shareflow.me/' target='_blank'>
 																					<img src="https://shareflow-statics.s3.amazonaws.com/facebook.png" width="32" height="32" alt="" border="0" style="display: block;">
-																				</td>
-																				<td align="left" valign="middle" style="padding: 0px 10px 0px 0px;">
+																					</a>
+																				  </td>
+																					<td align="left" valign="middle" style="padding: 0px 10px 0px 0px;">
+																					<a href='https://www.instagram.com/shareflow.me/' target='_blank'>	
 																					<img src="https://shareflow-statics.s3.amazonaws.com/instagram.png" width="32" height="32" alt="" border="0" style="display: block;">
+																					</a>
+																				  </td>
+																				  <td align="left" valign="middle">
+																					  <a href=' https://www.youtube.com/channel/UCmN8mWbmVXSXSySMDGxX6Cw' target='_blank'>
+																						  <img src="https://shareflow-statics.s3.amazonaws.com/youtube.png" width="32" height="32" alt="" border="0" style="display: block;">
+																					  </a>
 																				</td>
-																				<td align="left" valign="middle" style="padding: 0px 10px 0px 0px;">
-																					<img src="https://shareflow-statics.s3.amazonaws.com/linkedin.png" width="32" height="32" alt="" border="0" style="display: block;">
-																				</td>
-																				<td align="left" valign="middle">
-																					<img src="https://shareflow-statics.s3.amazonaws.com/youtube.png" width="32" height="32" alt="" border="0" style="display: block;">
-																				</td></tr>
+																				</tr>
 																			</table>
 																		</td></tr>
 																	</table>
@@ -172,11 +174,8 @@ const recoveryPasswordTemplate = ({ url, name }) => `<!DOCTYPE HTML PUBLIC "-//W
 										</table>
 									</div>
 									<div style="height: 16px; line-height: 16px; font-size: 14px;">&nbsp;</div>
-									<img src="img/8-172.png" width="150" height="23" alt="" border="0" style="display: block;">
+									<img src="https://shareflow-statics.s3.amazonaws.com/shareflow.png" width="150" height="23" alt="" border="0" style="display: block;">
 									<div style="height: 16px; line-height: 16px; font-size: 14px;">&nbsp;</div>
-									<div style="line-height: 20px;">
-										<span style="font-family: Helvetica, sans-serif; font-size: 12px; color: #363a57;">No quiero recibir más mensajes como este.</span>
-									</div>
 									<div style="height: 16px; line-height: 16px; font-size: 14px;">&nbsp;</div>
 									<div style="line-height: 20px;">
 										<span style="font-family: Helvetica, sans-serif; font-size: 12px; color: #363a57;">Por favor no intentes responder este correo electrónico. Los correos electrónicos enviados a esta dirección no se responderán.</span>

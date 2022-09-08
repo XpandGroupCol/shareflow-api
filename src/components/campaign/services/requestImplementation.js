@@ -21,7 +21,12 @@ const requestImplementation = async (id) => {
     subject: 'Nueva campaña creada',
     text: 'Tienes una nueva campaña para revisar',
     html: validateDocuments({ name: campaign?.user?.name }),
-    attachedFiles: [attachment]
+    attachments: [{
+      filename: `orden-${campaign?.orderNumber}.pdf`,
+      content: Buffer.from(attachment, 'base64'),
+      type: 'application/pdf',
+      disposition: 'attachment'
+    }]
   }
   const send = await sendSengridEmail(sendEmailPayload)
   return { campaign: leanById(campaign), send }

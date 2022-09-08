@@ -1,3 +1,4 @@
+const { ORDER_EMAIL } = require('../config')
 const { getFormatedNumber } = require('../utils/transformData')
 
 /* eslint-disable no-tabs */
@@ -123,7 +124,9 @@ const campaignClosing = ({ campaign }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HT
 															<center style="color: #ffffff; font-size: 15px; font-weight: bold; font-family: &quot;Cera Pro&quot;, sans-serif;">Solicitar reporte de campaña</center>
 															</v:roundrect>
 															<![endif]-->
-															<a target="_blank" href="#" style="background-color:#8116f2;font-size:15px;font-weight:bold;line-height:36px;width:247px;color:#ffffff;border-radius:20px;display:inline-block;font-family:Cera Pro, sans-serif;text-align:center;text-decoration:none;-webkit-text-size-adjust:none;mso-hide:all">Solicitar reporte de campaña</a>
+															<a target="_blank"
+															 href="mailto:${ORDER_EMAIL}?subject=Reporte de campaña&body=Hola me gustaría tener la factura electrónica de la orden ${campaign?.orderNumber}" 
+															 style="background-color:#8116f2;font-size:15px;font-weight:bold;line-height:36px;width:247px;color:#ffffff;border-radius:20px;display:inline-block;font-family:Cera Pro, sans-serif;text-align:center;text-decoration:none;-webkit-text-size-adjust:none;mso-hide:all">Solicitar reporte de campaña</a>
 														</div>
 													</td></tr>
 												</table>
@@ -173,7 +176,7 @@ const campaignClosing = ({ campaign }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HT
 												<center style="color: #ffffff; font-size: 15px; font-weight: bold; font-family: &quot;Cera Pro&quot;, sans-serif;">Contactar con ventas.</center>
 												</v:roundrect>
 												<![endif]-->
-												<a target="_blank" href="#" style="background-color:#363a57;font-size:15px;font-weight:bold;line-height:36px;width:197px;color:#ffffff;border-radius:20px;display:inline-block;font-family:Cera Pro, sans-serif;text-align:center;text-decoration:none;-webkit-text-size-adjust:none;mso-hide:all">Contactar con ventas.</a>
+												<a target="_blank" href="https://calendly.com/camilo-orozco/shareflow-grow-up" style="background-color:#363a57;font-size:15px;font-weight:bold;line-height:36px;width:197px;color:#ffffff;border-radius:20px;display:inline-block;font-family:Cera Pro, sans-serif;text-align:center;text-decoration:none;-webkit-text-size-adjust:none;mso-hide:all">Contactar con ventas.</a>
 											</div>
 										</td></tr>
 									</table>
@@ -194,9 +197,6 @@ const campaignClosing = ({ campaign }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HT
 																	<![endif]-->
 																	<table border="0" cellspacing="0" cellpadding="0" width="100%" style="max-width: 318px;">
 																		<tr><td align="left" valign="top">
-																			<div style="line-height: 20px;">
-																				<span style="font-family: Helvetica, sans-serif; font-size: 15px; color: #363a57;">(123) 456–7890</span>
-																			</div>
 																			<div style="height: 8px; line-height: 8px; font-size: 6px;">&nbsp;</div>
 																			<div style="line-height: 20px;">
 																				<span style="font-family: Helvetica, sans-serif; font-size: 15px; color: #363a57;">¿Necesitas ayuda?, escríbenos a <span style="font-weight: normal;">soporte@shareflow.me</span>
@@ -227,18 +227,23 @@ const campaignClosing = ({ campaign }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HT
 																	<table border="0" cellspacing="0" cellpadding="0" width="100%" style="max-width: 186px;">
 																		<tr><td align="left" valign="top">
 																			<table border="0" cellspacing="0" cellpadding="0" width="176" style="width: 176px;">
-																				<tr><td align="left" valign="middle" style="padding: 0px 10px 0px 0px;">
-																					<img src="https://shareflow-statics.s3.amazonaws.com/facebook.png" width="32" height="32" alt="" border="0" style="display: block;">
+																				<tr>
+																				<td align="left" valign="middle" style="padding: 0px 10px 0px 0px;">
+																					<a href='https://www.facebook.com/Shareflow.me/' target='_blank'>
+																						<img src="https://shareflow-statics.s3.amazonaws.com/facebook.png" width="32" height="32" alt="" border="0" style="display: block;">
+																					</a>
 																				</td>
 																				<td align="left" valign="middle" style="padding: 0px 10px 0px 0px;">
-																					<img src="https://shareflow-statics.s3.amazonaws.com/instagram.png" width="32" height="32" alt="" border="0" style="display: block;">
-																				</td>
-																				<td align="left" valign="middle" style="padding: 0px 10px 0px 0px;">
-																					<img src="https://shareflow-statics.s3.amazonaws.com/linkedin.png" width="32" height="32" alt="" border="0" style="display: block;">
+																					<a href='https://www.instagram.com/shareflow.me/' target='_blank'>	
+																						<img src="https://shareflow-statics.s3.amazonaws.com/instagram.png" width="32" height="32" alt="" border="0" style="display: block;">
+																					</a>
 																				</td>
 																				<td align="left" valign="middle">
-																					<img src="https://shareflow-statics.s3.amazonaws.com/youtube.png" width="32" height="32" alt="" border="0" style="display: block;">
-																				</td></tr>
+																					<a href=' https://www.youtube.com/channel/UCmN8mWbmVXSXSySMDGxX6Cw' target='_blank'>
+																						<img src="https://shareflow-statics.s3.amazonaws.com/youtube.png" width="32" height="32" alt="" border="0" style="display: block;">
+																					</a>
+																				</td>
+																				</tr>
 																			</table>
 																		</td></tr>
 																	</table>

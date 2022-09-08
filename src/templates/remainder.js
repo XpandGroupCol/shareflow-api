@@ -49,7 +49,7 @@ const remainder = ({ campaign }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0
 									<table border="0" cellspacing="0" cellpadding="0" width="100%">
 										<tr><td align="center" valign="top" height="160" bgcolor="#ffffff" style="padding: 21px 0px 0px; height: 160px;">
 											<div style="line-height: 30px;">
-												<span style="font-family: &quot;Cera Pro&quot;, sans-serif; font-weight: bold; font-size: 30px; color: #363a57;">${campaign?.user?.name}, tu campaña <span style="color: #8116f2;">${campaign?.name} ${campaign?.brand}</span>aún no se encuentra en marcha. Completa los siguientes pasos para salir al aire.</span>
+												<span style="font-family: &quot;Cera Pro&quot;, sans-serif; font-weight: bold; font-size: 30px; color: #363a57;">${campaign?.user?.name}, tu campaña <span style="color: #8116f2;">${campaign?.name} ${campaign?.brand} </span>aún no se encuentra en marcha. Completa los siguientes pasos para salir al aire.</span>
 											</div>
 										</td></tr>
 									</table>
@@ -98,7 +98,7 @@ const remainder = ({ campaign }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0
 																		<table border="0" cellspacing="0" cellpadding="0" width="100%">
 																			<tr><td align="left">
 																				<div style="line-height: 20px;">
-																					<span style="font-family: Helvetica, sans-serif; font-size: 12px; color: #363a57;">Selecciona el objetivo que quieres alcanzar, la segmentación y el presupuesto general para toda la campaña<span style="font-weight: normal;"> (IVA incluido).</span>
+																					<span style="font-family: Helvetica, sans-serif; font-size: 12px; color: #363a57;">Selecciona el objetivo que quieres alcanzar, la segmentación y el presupuesto general para toda la campaña<span style="font-weight: normal;">.</span>
 																					</span>
 																				</div>
 																			</td></tr>
@@ -311,9 +311,6 @@ const remainder = ({ campaign }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0
 																	<![endif]-->
 																	<table border="0" cellspacing="0" cellpadding="0" width="100%" style="max-width: 318px;">
 																		<tr><td align="left" valign="top">
-																			<div style="line-height: 20px;">
-																				<span style="font-family: Helvetica, sans-serif; font-size: 15px; color: #363a57;">(123) 456–7890</span>
-																			</div>
 																			<div style="height: 8px; line-height: 8px; font-size: 6px;">&nbsp;</div>
 																			<div style="line-height: 20px;">
 																				<span style="font-family: Helvetica, sans-serif; font-size: 15px; color: #363a57;">¿Necesitas ayuda?, escríbenos a <span style="font-weight: normal;">soporte@shareflow.me</span>
@@ -344,18 +341,23 @@ const remainder = ({ campaign }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0
 																	<table border="0" cellspacing="0" cellpadding="0" width="100%" style="max-width: 186px;">
 																		<tr><td align="left" valign="top">
 																			<table border="0" cellspacing="0" cellpadding="0" width="176" style="width: 176px;">
-																				<tr><td align="left" valign="middle" style="padding: 0px 10px 0px 0px;">
-																					<img src="https://shareflow-statics.s3.amazonaws.com/facebook.png" width="32" height="32" alt="" border="0" style="display: block;">
-																				</td>
-																				<td align="left" valign="middle" style="padding: 0px 10px 0px 0px;">
-																					<img src="https://shareflow-statics.s3.amazonaws.com/instagram.png" width="32" height="32" alt="" border="0" style="display: block;">
-																				</td>
-																				<td align="left" valign="middle" style="padding: 0px 10px 0px 0px;">
-																					<img src="https://shareflow-statics.s3.amazonaws.com/linkedin.png" width="32" height="32" alt="" border="0" style="display: block;">
-																				</td>
-																				<td align="left" valign="middle">
-																					<img src="https://shareflow-statics.s3.amazonaws.com/youtube.png" width="32" height="32" alt="" border="0" style="display: block;">
-																				</td></tr>
+																				<tr>
+																					<td align="left" valign="middle" style="padding: 0px 10px 0px 0px;">
+																						<a href='https://www.facebook.com/Shareflow.me/' target='_blank'>
+																							<img src="https://shareflow-statics.s3.amazonaws.com/facebook.png" width="32" height="32" alt="" border="0" style="display: block;">
+																						</a>
+																					</td>
+																					<td align="left" valign="middle" style="padding: 0px 10px 0px 0px;">
+																						<a href='https://www.instagram.com/shareflow.me/' target='_blank'>	
+																							<img src="https://shareflow-statics.s3.amazonaws.com/instagram.png" width="32" height="32" alt="" border="0" style="display: block;">
+																						</a>
+																					</td>
+																					<td align="left" valign="middle">
+																						<a href=' https://www.youtube.com/channel/UCmN8mWbmVXSXSySMDGxX6Cw' target='_blank'>
+																							<img src="https://shareflow-statics.s3.amazonaws.com/youtube.png" width="32" height="32" alt="" border="0" style="display: block;">
+																						</a>
+																					</td>
+																				</tr>
 																			</table>
 																		</td></tr>
 																	</table>

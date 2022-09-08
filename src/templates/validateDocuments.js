@@ -1,5 +1,8 @@
+const { getTotal } = require('../utils')
+const { getFormatedNumber, parseDate, getKPI, clearPhone } = require('../utils/transformData')
+
 /* eslint-disable no-tabs */
-const validateDocuments = () => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+const validateDocuments = ({ campaign }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 	<head>
 		<!--[if gte mso 9]>
@@ -42,7 +45,7 @@ const validateDocuments = () => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Tr
 						<![endif]-->
 						<table border="0" cellspacing="0" cellpadding="0" width="100%" style="max-width: 600px;">
 							<tr><td align="center" valign="top" bgcolor="#ffffff" style="padding: 40px 30px 24px;">
-								<img src="img/104-34.png" width="244" height="37" alt="" border="0" style="display: block;">
+								<img src="https://shareflow-statics.s3.amazonaws.com/shareflow.png" width="244" height="37" alt="" border="0" style="display: block;">
 								<div style="height: 16px; line-height: 16px; font-size: 14px;">&nbsp;</div>
 								<div>
 									<table border="0" cellspacing="0" cellpadding="0" width="100%">
@@ -64,8 +67,8 @@ const validateDocuments = () => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Tr
 											<div style="line-height: 20px;">
 												<span style="font-family: Helvetica, sans-serif; font-size: 15px; color: #363a57;">¡Enhora buena! <br>
 												<br>
-													<span style="font-weight: normal;">[Client name]</span> ha generado una nueva orden de compra (con número #XXXXXX) para <span style="font-weight: normal;">[Brand Name]</span> por un valor de <span style="font-weight: normal;">[Total value]</span> con el objetivo de <span style="font-weight: normal;">[Campaign Objective]</span>. <br>
-													<br>Es importante que esta campaña se implemente lo más pronto posible ya que comienza el <span style="font-weight: normal;">[Start date]</span> y finaliza el <span style="font-weight: normal;">[End date]</span>, además desea alcanzar un total de <span style="font-weight: normal;">[Total KPI] [Buying Type]</span>. <br>
+													<span style="font-weight: normal;">${campaign?.user?.name}</span> ha generado una nueva orden de compra (con número #${campaign?.orderNumber}) para <span style="font-weight: normal;">${campaign?.brand}</span> por un valor de <span style="font-weight: normal;">$${getFormatedNumber(getTotal(campaign?.amount)?.total || 0)}</span> con el objetivo de <span style="font-weight: normal;">${campaign?.target?.name}</span>. <br>
+													<br>Es importante que esta campaña se implemente lo más pronto posible ya que comienza el <span style="font-weight: normal;">${parseDate(campaign?.startDate)}</span> y finaliza el <span style="font-weight: normal;">${parseDate(campaign?.endDate)}</span>, además desea alcanzar un total de <span style="font-weight: normal;">${getFormatedNumber(getKPI(campaign?.publishers) || 0)}</span>. <br>
 													<br>Adjunto encontrarás un PDF con el detalle de la compra, los medios, indicadores y costos para su correcta implementación u ordenación a los respectivos medios.<br>
 													<br>
 														<span style="font-weight: normal;">Sí encuentras algún error en el material creativo o requieres de hablar con el cliente puedes contactarlo a través del botón inferior. <br>
@@ -91,7 +94,7 @@ const validateDocuments = () => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Tr
 														<center style="color: #ffffff; font-size: 15px; font-weight: bold; font-family: Arial, sans-serif;">Contactar al Cliente vía WhatsApp</center>
 														</v:roundrect>
 														<![endif]-->
-														<a target="_blank" href="#" style="background-color:#1ed35c;font-size:15px;font-weight:bold;line-height:36px;width:285px;color:#ffffff;border-radius:20px;display:inline-block;font-family:Arial, sans-serif;text-align:center;text-decoration:none;-webkit-text-size-adjust:none;mso-hide:all">Contactar al Cliente vía WhatsApp</a>
+														<a target="_blank" href="https://wa.me/${clearPhone(campaign?.user?.phone)}" style="background-color:#1ed35c;font-size:15px;font-weight:bold;line-height:36px;width:285px;color:#ffffff;border-radius:20px;display:inline-block;font-family:Arial, sans-serif;text-align:center;text-decoration:none;-webkit-text-size-adjust:none;mso-hide:all">Contactar al Cliente vía WhatsApp</a>
 													</div>
 												</td></tr>
 											</table>

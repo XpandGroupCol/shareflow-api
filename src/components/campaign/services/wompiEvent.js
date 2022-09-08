@@ -1,4 +1,5 @@
 const boom = require('@hapi/boom')
+const { ORDER_EMAIL } = require('../../../config')
 const Activity = require('../../../models/Activity')
 const Campaign = require('../../../models/Campaign')
 const Payment = require('../../../models/Payment')
@@ -48,11 +49,15 @@ const wompiEvent = async ({ reference, amount, transactionId, status, paymentMet
     const attachment = await createPdf(campaignLean)
 
     const sendEmailPayload = {
-      to: 'order.request@shareflow.me',
+      to: ORDER_EMAIL,
       subject: 'Nueva Orden',
       text: 'Nueva Orden',
       html: validateDocuments({ name: campaign?.user?.name }),
-      attachment
+      attachedFiles: [{
+        filename: `orden-${campaign?.orderNumber}.pdf`,
+        content: Buffer.from(attachment, 'base64'),
+        contentType: 'application/pdf'
+      }]
     }
 
     await sendSengridEmail(sendEmailPayload)

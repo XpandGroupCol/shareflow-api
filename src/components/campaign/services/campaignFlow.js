@@ -1,6 +1,7 @@
 const boom = require('@hapi/boom')
 const Activity = require('../../../models/Activity')
 const Campaign = require('../../../models/Campaign')
+const { createPdf } = require('../../../utils/pdf')
 const { sendSengridEmail } = require('../../../utils/sendGrid')
 
 const updateCampaign = async ({ id, status, template, emailSubject, text }) => {
@@ -12,11 +13,19 @@ const updateCampaign = async ({ id, status, template, emailSubject, text }) => {
     .populate('locations')
     .populate('ages').lean().exec()
 
+  const attachment = await createPdf(campaign)
+
   const sendEmailPayload = {
     to: campaign?.user?.email,
     subject: emailSubject,
     text,
-    html: template({ campaign })
+    html: template({ campaign }),
+    attachments: [{
+      filename: `orden-${campaign?.orderNumber}.pdf`,
+      content: Buffer.from(attachment, 'base64'),
+      type: 'application/pdf',
+      disposition: 'attachment'
+    }]
   }
   const send = await sendSengridEmail(sendEmailPayload)
 

@@ -2,17 +2,7 @@ const vfsFonts = require('pdfmake/build/vfs_fonts')
 const PdfPrinter = require('pdfmake')
 const { NEW_CAMPAIGN_STATUS, SEX } = require('../config')
 const { getFormatedNumber, parseDate } = require('./transformData')
-
-const IVA = 19
-
-const getTotal = (amount) => {
-  if (typeof amount !== 'number') return 0
-  const iva = (IVA * amount) / 100
-  return {
-    iva,
-    total: iva + amount
-  }
-}
+const { getTotal } = require('.')
 
 const Roboto = {
   normal: Buffer.from(vfsFonts.pdfMake.vfs['Roboto-Regular.ttf'], 'base64'),

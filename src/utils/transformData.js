@@ -1,7 +1,7 @@
-const { format } = require('date-fns')
-
+const dayjs = require('dayjs')
 const regex = (pattern) => new RegExp(`.*${pattern}.*`)
-
+const utc = require('dayjs/plugin/utc')
+dayjs.extend(utc)
 const leanById = ({ ages, sex, sector, target, __v, _id, locations, ...restOfCampaign }) => ({
   _id: _id,
   ages: ages.map(({ _id, name }) => ({ value: _id, label: name })),
@@ -12,13 +12,22 @@ const leanById = ({ ages, sex, sector, target, __v, _id, locations, ...restOfCam
   ...restOfCampaign
 })
 
+const getKPI = (data = []) => data.reduce((acc, { objectiveGoal = 0 }) => acc + objectiveGoal, 0)
+
 const getFormatedNumber = (number) => number ? number?.toLocaleString() : number
 
-const parseDate = (date, dateFormat = 'dd/MM/yyyy') => date ? format(new Date(date), dateFormat) : ''
+const parseDate = (date, dateFormat = 'DD/MM/YYYY') => date ? dayjs(new Date(date)).format(dateFormat) : ''
+
+const parseUTCDate = (date, dateFormat = 'DD/MM/YYYY') => date ? dayjs(new Date(date)).utc().format(dateFormat) : ''
+
+const clearPhone = (phone) => phone.replace('+', '')
 
 module.exports = {
   regex,
   leanById,
   getFormatedNumber,
-  parseDate
+  parseDate,
+  parseUTCDate,
+  getKPI,
+  clearPhone
 }

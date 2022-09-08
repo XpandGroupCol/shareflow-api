@@ -1,7 +1,7 @@
 const services = require('../services')
 const { downloadResource } = require('../../../libraries/downloadCSV')
 const { fields } = require('./constants')
-const { implementacion } = require('../../../templates/implementation')
+const { implementation } = require('../../../templates/implementation')
 const { campaignClosing } = require('../../../templates/campaignClosing')
 
 const getCampaigns = async (request, response) => {
@@ -130,7 +130,7 @@ const startCampaign = async (request, response) => {
     status: 'inProgress',
     emailSubject: 'Shareflow - Implementación de la campaña',
     text: 'Shareflow - Implementación de la campaña',
-    template: implementacion
+    template: implementation
   })
   response.status(200).json({
     statusCode: 200,
