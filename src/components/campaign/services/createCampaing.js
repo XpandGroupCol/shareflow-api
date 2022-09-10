@@ -18,7 +18,13 @@ const createCampaing = async ({ body, file, user, userName }) => {
   const data = await Campaign.create({ ...body, user, orderNumber: number + 1 })
 
   try {
-    await Activity.create({ data: body, createBy: user, updateBy: user, campaignId: data?._id })
+    await Activity.create({
+      data: body,
+      createBy: user,
+      updateBy: user,
+      campaignId: data?._id,
+      type: 'create'
+    })
   } catch (e) {
     console.log(e)
   }

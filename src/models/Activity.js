@@ -16,6 +16,10 @@ const ActivitySchema = new Schema({
     ref: 'Campaign',
     required: true
   },
+  type: {
+    type: String,
+    enum: ['create', 'update', 'delete']
+  },
   data: {
     type: Object,
     required: true

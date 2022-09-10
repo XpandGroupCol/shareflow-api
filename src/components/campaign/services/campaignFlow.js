@@ -35,6 +35,7 @@ const updateCampaign = async ({ id, status, template, emailSubject, text }) => {
   try {
     await Activity.create({
       data: { status },
+      type: 'update',
       createBy: campaign?._user?._id,
       updateBy: campaign?._user?._id,
       campaignId: campaign?._id

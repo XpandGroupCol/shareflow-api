@@ -68,7 +68,8 @@ const wompiEvent = async ({ reference, amount, transactionId, status, paymentMet
         data: { status: campaign.status },
         createBy: campaign?.user?._id,
         updateBy: campaign?.user?._id,
-        campaignId: campaign?._id
+        campaignId: campaign?._id,
+        type: 'update'
       })
     } catch (e) {
       console.log(e)

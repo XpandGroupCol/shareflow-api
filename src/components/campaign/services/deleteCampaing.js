@@ -9,7 +9,8 @@ const deleteCampaing = async (id) => {
       data: { isDelete: true },
       createBy: data?._user?._id,
       updateBy: data?._user?._id,
-      campaignId: data?._id
+      campaignId: data?._id,
+      type: 'delete'
     })
   } catch (e) {
     console.log(e)

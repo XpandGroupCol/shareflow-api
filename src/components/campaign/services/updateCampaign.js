@@ -17,7 +17,8 @@ const updateCampaign = async ({ id, body }) => {
       data: body,
       createBy: campaign?._user?._id,
       updateBy: campaign?._user?._id,
-      campaignId: campaign?._id
+      campaignId: campaign?._id,
+      type: 'update'
     })
   } catch (e) {
     console.log(e)

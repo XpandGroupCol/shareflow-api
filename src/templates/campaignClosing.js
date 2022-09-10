@@ -59,7 +59,7 @@ const campaignClosing = ({ campaign }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HT
 																	</div>
 																	<div style="height: 15px; line-height: 15px; font-size: 13px;">&nbsp;</div>
 																	<div style="line-height: 20px;">
-																		<span style="font-family: Helvetica, sans-serif; font-size: 15px; color: #363a57;">Definitivamente ha sido increíble ser parte de esta campaña, además hemos aportado muchísimo a tu objetivo de <span style="color: #8116f2; font-weight: normal;">${campaign?.sector?.name}</span> lo cuál ayudará a aumentar el impacto en tu negocio.</span>
+																		<span style="font-family: Helvetica, sans-serif; font-size: 15px; color: #363a57;">Definitivamente ha sido increíble ser parte de esta campaña, además hemos aportado muchísimo a tu objetivo de <span style="color: #8116f2; font-weight: normal;">${campaign?.target?.name}</span> lo cuál ayudará a aumentar el impacto en tu negocio.</span>
 																	</div>
 																	<div style="height: 15px; line-height: 15px; font-size: 13px;">&nbsp;</div>
 																	<div>
@@ -125,7 +125,7 @@ const campaignClosing = ({ campaign }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HT
 															</v:roundrect>
 															<![endif]-->
 															<a target="_blank"
-															 href="mailto:${ORDER_EMAIL}?subject=Reporte de campaña&body=Hola me gustaría tener la factura electrónica de la orden ${campaign?.orderNumber}" 
+															 href="mailto:${ORDER_EMAIL}?subject=Reporte de campaña&body=Hola me gustaría solicitar reporte de la campaña número ${campaign?.orderNumber}" 
 															 style="background-color:#8116f2;font-size:15px;font-weight:bold;line-height:36px;width:247px;color:#ffffff;border-radius:20px;display:inline-block;font-family:Cera Pro, sans-serif;text-align:center;text-decoration:none;-webkit-text-size-adjust:none;mso-hide:all">Solicitar reporte de campaña</a>
 														</div>
 													</td></tr>

@@ -1,5 +1,5 @@
 const Campaign = require('../../../models/Campaign')
-const { validateDocuments } = require('../../../templates/validateDocuments')
+const { campaignClosing } = require('../../../templates/campaignClosing')
 const { createPdf } = require('../../../utils/pdf')
 const { sendSengridEmail } = require('../../../utils/sendGrid')
 const { leanById } = require('../../../utils/transformData')
@@ -18,7 +18,7 @@ const testEmail = async () => {
     to: 'diegocontreras1219@gmail.com',
     subject: 'Test',
     text: 'Test',
-    html: validateDocuments({ campaign }),
+    html: campaignClosing({ campaign }),
     attachments: [{
       filename: `orden-${campaign?.orderNumber}.pdf`,
       content: Buffer.from(pdf).toString('base64'),
