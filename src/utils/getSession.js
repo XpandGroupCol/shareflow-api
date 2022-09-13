@@ -11,7 +11,8 @@ const getSession = ({ role, name, lastName, avatar, _id, email }) => {
     avatar,
     email,
     token,
-    refreshToken
+    refreshToken,
+    id: _id
   }
 }
 
