@@ -49,8 +49,8 @@ const getDashboardOfCampaing = async (request, response) => {
 }
 
 const createCampaing = async (request, response) => {
-  const { body, userId: user, file, userName } = request
-  const data = await services.createCampaing({ body, user, file, userName })
+  const { body, userId, file } = request
+  const data = await services.createCampaing({ body, userId, file })
   response.status(200).json({
     statusCode: 200,
     data
@@ -96,8 +96,9 @@ const validateFormatFile = async (request, response) => {
 
 const deleteCampaing = async (request, response) => {
   const { id } = request.params
+  const { userId } = request
 
-  const data = await services.deleteCampaing(id)
+  const data = await services.deleteCampaing({ id, userId })
   response.status(200).json({
     statusCode: 200,
     data
@@ -117,6 +118,7 @@ const wompiEvent = async (request, response) => {
 
 const getPDF = async (request, response) => {
   const { id } = request.params
+
   const data = await services.getPDF(id)
   response.setHeader('Content-disposition', 'attachment; filename=report.pdf')
   return response.type('pdf').send(data)
@@ -124,13 +126,15 @@ const getPDF = async (request, response) => {
 
 const startCampaign = async (request, response) => {
   const { id } = request.params
+  const { userId } = request
 
   const data = await services.campaignFlow({
     id,
     status: 'inProgress',
     emailSubject: 'Shareflow - Implementación de la campaña',
     text: 'Shareflow - Implementación de la campaña',
-    template: implementation
+    template: implementation,
+    userId
   })
   response.status(200).json({
     statusCode: 200,
@@ -140,12 +144,15 @@ const startCampaign = async (request, response) => {
 
 const endCampaign = async (request, response) => {
   const { id } = request.params
+  const { userId } = request
+
   const data = await services.campaignFlow({
     id,
     status: 'completed',
     emailSubject: 'Shareflow - Cierre de la campaña',
     text: 'Shareflow - Cierre de la campaña',
-    template: campaignClosing
+    template: campaignClosing,
+    userId
   })
   response.status(200).json({
     statusCode: 200,

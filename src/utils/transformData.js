@@ -2,6 +2,7 @@ const dayjs = require('dayjs')
 const regex = (pattern) => new RegExp(`.*${pattern}.*`)
 const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
+
 const leanById = ({ ages, sex, sector, target, __v, _id, locations, ...restOfCampaign }) => ({
   _id: _id,
   ages: ages.map(({ _id, name }) => ({ value: _id, label: name })),
@@ -18,7 +19,7 @@ const getFormatedNumber = (number) => number ? number?.toLocaleString() : number
 
 const parseDate = (date, dateFormat = 'DD/MM/YYYY') => date ? dayjs(new Date(date)).format(dateFormat) : ''
 
-const parseUTCDate = (date, dateFormat = 'DD/MM/YYYY') => date ? dayjs(new Date(date)).utc().format(dateFormat) : ''
+const parseUTCDate = (date, dateFormat = 'DD/MM/YYYY') => date ? dayjs(new Date(date)).utc().local().format(dateFormat) : ''
 
 const clearPhone = (phone) => phone.replace('+', '')
 

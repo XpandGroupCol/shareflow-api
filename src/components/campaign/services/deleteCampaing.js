@@ -1,14 +1,14 @@
 const Activity = require('../../../models/Activity')
 const Campaign = require('../../../models/Campaign')
 
-const deleteCampaing = async (id) => {
+const deleteCampaing = async ({ id, userId }) => {
   const data = await Campaign.findByIdAndUpdate(id, { isDelete: true }, { new: true })
 
   try {
     await Activity.create({
       data: { isDelete: true },
-      createBy: data?._user?._id,
-      updateBy: data?._user?._id,
+      createBy: data?.user,
+      updateBy: userId,
       campaignId: data?._id,
       type: 'delete'
     })

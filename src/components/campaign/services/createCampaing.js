@@ -2,7 +2,7 @@ const Activity = require('../../../models/Activity')
 const Campaign = require('../../../models/Campaign')
 const { uploadS3File } = require('../../../utils/aws/S3')
 
-const createCampaing = async ({ body, file, user, userName }) => {
+const createCampaing = async ({ body, file, userId }) => {
   if (file) {
     const logo = await uploadS3File({
       fileName: file.originalname,
@@ -15,13 +15,13 @@ const createCampaing = async ({ body, file, user, userName }) => {
   const lastCampaign = await Campaign.findOne().sort([['createdAt', -1]]).limit(1)
 
   const number = lastCampaign?.orderNumber ?? 1
-  const data = await Campaign.create({ ...body, user, orderNumber: number + 1 })
+  const data = await Campaign.create({ ...body, user: userId, orderNumber: number + 1 })
 
   try {
     await Activity.create({
       data: body,
-      createBy: user,
-      updateBy: user,
+      createBy: userId,
+      updateBy: userId,
       campaignId: data?._id,
       type: 'create'
     })

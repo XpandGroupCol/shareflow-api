@@ -5,7 +5,7 @@ const { createPdf } = require('../../../utils/pdf')
 const { sendSengridEmail } = require('../../../utils/sendGrid')
 const { leanById } = require('../../../utils/transformData')
 
-const updateCampaign = async ({ id, status, template, emailSubject, text }) => {
+const campaignFlow = async ({ id, status, template, emailSubject, text, userId }) => {
   if (!id) throw boom.notFound()
 
   const campaign = await Campaign.findByIdAndUpdate(id, { status }, { new: true })
@@ -36,8 +36,8 @@ const updateCampaign = async ({ id, status, template, emailSubject, text }) => {
     await Activity.create({
       data: { status },
       type: 'update',
-      createBy: campaign?._user?._id,
-      updateBy: campaign?._user?._id,
+      createBy: campaign?.user?._id,
+      updateBy: userId,
       campaignId: campaign?._id
     })
   } catch (e) {
@@ -46,4 +46,4 @@ const updateCampaign = async ({ id, status, template, emailSubject, text }) => {
   return { campaign, send }
 }
 
-module.exports = updateCampaign
+module.exports = campaignFlow
