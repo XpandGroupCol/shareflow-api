@@ -69,7 +69,7 @@ const getPublishersByTargetId = async ({ target = null, miniBudget = null, sex, 
             pricePerUnit: format?.pricePerUnit || '',
             targetCategories: format?.target?.category || '',
             groupBy: publisher?.publisher || '',
-            isVideo: format?.isVideo || ''
+            isVideo: format?.isVideo || false
           })
         })
       }
