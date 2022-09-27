@@ -42,6 +42,20 @@ ActivitySchema.virtual('ages', {
   justOne: false
 })
 
+ActivitySchema.virtual('target', {
+  ref: 'Target',
+  localField: 'data.target',
+  foreignField: '_id',
+  justOne: false
+})
+
+ActivitySchema.virtual('locations', {
+  ref: 'Location',
+  localField: 'data.locations',
+  foreignField: '_id',
+  justOne: false
+})
+
 const Activity = model('Activity', ActivitySchema)
 
 module.exports = Activity

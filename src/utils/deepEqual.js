@@ -15,7 +15,7 @@ const deepEqual = (obj1, obj2) => {
   if (_.isEqual(obj1, obj2)) return {}
 
   for (const key in obj1) {
-    if (cloneObj2[key]) {
+    if (cloneObj2[key] !== null || cloneObj2[key] !== undefined) {
       delete cloneObj2[key]
     }
   }
@@ -48,9 +48,14 @@ const deepEqual = (obj1, obj2) => {
         const arrayProp1 = isMongoId(arr1[i])
         const arrayProp2 = isMongoId(arr2[i])
 
+        if (!arr1[i]) {
+          arr.push(arr2[i])
+          break
+        }
+
         if (isObject(arrayProp1 || arrayProp2)) {
-          const value = deepEqual(arrayProp2, arrayProp1)
-          if (value) arr.push(value)
+          const value = deepEqual(arrayProp1, arrayProp2)
+          if (value) arr.push({ ...value, label: arrayProp2?.label })
           continue
         }
 

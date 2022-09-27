@@ -49,27 +49,27 @@ const getPublishersByTargetId = async ({ target = null, miniBudget = null, sex, 
 
   if (publishers.length) {
     publishers.map(publisher => {
-      if (publisher.formats.length) {
+      if (publisher?.formats?.length) {
         publisher.formats.filter(({ target: t }) =>
           t._id.toString() === target
         ).map(format => {
           return data.push({
             id: `${publisher._id}-${format._id}`,
-            publisherId: publisher._id,
-            miniBudget: publisher?.miniBudget,
-            formatId: format._id,
-            logo: publisher.logo || '',
-            label: `${publisher.publisher || ''} - ${format.format.name || ''}`,
-            width: format.format.width,
-            height: format.format.height,
-            mimetype: format.format.type || '',
-            publisherCategory: publisher.category || '',
-            biddingModel: format.biddingModel || '',
-            device: format.device || '',
-            pricePerUnit: format.pricePerUnit,
-            targetCategories: format.target.category,
-            groupBy: publisher.publisher || '',
-            isVideo: format.isVideo
+            publisherId: publisher?._id || '',
+            miniBudget: publisher?.miniBudget || '',
+            formatId: format?._id || '',
+            logo: publisher?.logo || '',
+            label: `${publisher.publisher || ''} - ${format?.format?.name || ''}`,
+            width: format?.format?.width || '',
+            height: format?.format?.height || '',
+            mimetype: format?.format?.type || '',
+            publisherCategory: publisher?.category || '',
+            biddingModel: format?.biddingModel || '',
+            device: format?.device || '',
+            pricePerUnit: format?.pricePerUnit || '',
+            targetCategories: format?.target?.category || '',
+            groupBy: publisher?.publisher || '',
+            isVideo: format?.isVideo || ''
           })
         })
       }
