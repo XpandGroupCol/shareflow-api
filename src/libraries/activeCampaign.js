@@ -5,7 +5,7 @@ const options = {
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
-    'Api-Token': process.env.ACTIVE_CAMPAIGN_KEY
+    'Api-Token': 'e7bcaf60a3b1848a77beb74483673001fa3c5c5d078c68308d275382d5812ba50d15212d'
   }
 }
 
@@ -23,15 +23,29 @@ const addTag = async (id) => {
   }
 }
 
+const addContactToList = async (id) => {
+  try {
+    await fetcher('https://xpandgroup.api-us1.com/api/3/contactLists', {
+      contactList: {
+        list: 19,
+        contact: id,
+        status: 1
+      }
+    })
+  } catch (e) {
+    return Promise.reject(e)
+  }
+}
+
 const createLead = async (contact) => {
   try {
     const payload = { contact }
     const { data: user } = await fetcher('https://xpandgroup.api-us1.com/api/3/contacts', payload)
     if (!user?.contact?.id) return false
     await addTag(user?.contact?.id)
+    await addContactToList(user?.contact?.id)
     return user?.contact?.id
   } catch (e) {
-    console.log(e)
     return null
   }
 }
