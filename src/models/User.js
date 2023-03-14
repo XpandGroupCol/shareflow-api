@@ -109,7 +109,7 @@ const userSchema = new Schema({
   percentage: {
     type: Number,
     required: true,
-    default: 15
+    default: 0
   },
   balance: {
     type: Number,
