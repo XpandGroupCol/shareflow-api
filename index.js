@@ -15,7 +15,7 @@ const app = express()
 
 app.use(cors())
 app.use(express.json())
-app.get('/', (_, res) => res.send('Shareflow - v1.1.0'))
+app.get('/', (_, res) => res.send(`${process.env.NODE_ENV}: v1.5.0`))
 
 app.use('/v1', adminRouter)
 app.use('/v1', siteRouter)
